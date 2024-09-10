@@ -29,7 +29,7 @@ function App() {
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/directory' element={<Members />} />
           <Route path='/services' element={<Services />} />
-          <Route path='/Arrivals' element={<Arrivals />} />
+          <Route path='/arrivals' element={<Arrivals />} />
         </Routes>
       </Router>
       {/* <Footer label='(c) Anagkazo Lite 2023' style={{position: 'fixed', bottom: 10}}></Footer> */}
