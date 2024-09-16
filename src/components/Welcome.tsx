@@ -8,7 +8,7 @@ import { verifyStudent } from '../services/UserManagement';
 const Welcome: FC = () => {
   const navigate = useNavigate();
   const [indexNumber, setIndexNumber] = useState('');
-  const verifyIndexNumberMutation = useMutation((indexNumber: number) => verifyStudent(indexNumber), {
+  const verifyIndexNumberMutation = useMutation((indexNumber: string) => verifyStudent(indexNumber), {
     onSuccess: (data) => {
       console.log(data)
       // if (data.already_exists) {
@@ -23,7 +23,7 @@ const Welcome: FC = () => {
     e.preventDefault();
 
     if (indexNumber) {
-      verifyIndexNumberMutation.mutate(Number(indexNumber));
+      verifyIndexNumberMutation.mutate(indexNumber);
     }
   };
 
