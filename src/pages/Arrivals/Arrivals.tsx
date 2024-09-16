@@ -18,7 +18,7 @@ const Arrivals = () => {
     const webcamRef = useRef(null);
     const capture = useCallback(() => {
         if (webcamRef.current) {
-            const imageSrc = webcamRef.current.getScreenshot();
+            // const imageSrc = webcamRef.current.getScreenshot();
         }
     },
     [webcamRef]
