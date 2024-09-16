@@ -1,7 +1,8 @@
+import MyNavBar from "../../components/NavBar";
 const Arrivals = () => {
     return (
         <>
-            <h1>Arrivals</h1>
+            <MyNavBar prevPage="dashboard" currentPage="Arrivals" />
         </>
     )
 }

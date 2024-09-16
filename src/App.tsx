@@ -7,6 +7,7 @@ import Dashboard from './pages/Home/Dashboard'
 import Members from './pages/Directory/Members'
 import Services from './pages/Services/Services'
 import Arrivals from './pages/Arrivals/Arrivals'
+import Directory from './pages/Directory/Directory'
 
 function App() {
   const queryClient = new QueryClient({
@@ -25,11 +26,13 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route path='/' element={<Welcome />} />
-          <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/directory' element={<Members />} />
-          <Route path='/services' element={<Services />} />
-          <Route path='/arrivals' element={<Arrivals />} />
+            <Route path='/' element={<Welcome />} />
+            <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/directory' element={<Directory />} />
+            <Route path='/directory/members' element={<Members />} />
+            <Route path='/services' element={<Services />} />
+            <Route path='/arrivals' element={<Arrivals />} />
+        
         </Routes>
       </Router>
       {/* <Footer label='(c) Anagkazo Lite 2023' style={{position: 'fixed', bottom: 10}}></Footer> */}

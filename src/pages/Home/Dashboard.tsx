@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { IPastoralPoint, IUserManager } from '../../interfaces/ServerResponse';
-import { Grid, Space, FloatingBubble, Modal, Image, ActionSheet, Dialog  } from 'antd-mobile'
+import { Grid, Space, FloatingBubble, Modal, Image, ActionSheet, Dialog, Popover  } from 'antd-mobile'
 
 import { SystemQRcodeOutline, AddOutline, MoreOutline, TeamOutline } from 'antd-mobile-icons'
 
@@ -73,16 +73,23 @@ const Dashboard = () => {
     
     const actions: Action[] = [
         {
-            text: 'Home', key: 'home', 
+            text: 'Home', key: 'home',
+
         },
         {
             text: 'Directory', key: 'directory', 
+            onClick: () => {
+                navigate('/directory')
+            }
         },
         {
             text: 'Services', key: 'services', 
         },
         {
             text: 'Arrivals', key: 'arrivals', 
+            onClick: () => {
+                navigate('/arrivals')
+            }
         },
         {
             text: 'Logout', key: 'logout', danger: true,
@@ -105,26 +112,6 @@ const Dashboard = () => {
             }
         }
     ]
-
-    let requestCount = 0;
-    const decode = (decoded: string) => {
-        if (requestCount > 0) return;
-        requestCount++;
-        let attnInfo = JSON.parse(decoded) as IAttendanceRequestInfo
-        mutate(attnInfo)
-        Modal.clear();
-
-        Dialog.alert({
-            title: attnInfo.event,
-            content: 'Attendance marked successfully',
-            confirmText: 'OK!',
-            onConfirm: () => {
-                requestCount = 0;
-            }
-        
-        })
-
-    }
 
     const handleClick = (label: string) => {
         switch(label) {
@@ -193,8 +180,8 @@ const Dashboard = () => {
                 </Grid.Item>
             </Grid>
 
-            <Space direction='horizontal' style={{marginTop: 30,}}>
-                <Grid columns={2} gap={2}>
+            <Space direction='horizontal' style={{marginTop: 30, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <Grid columns={2} gap={2} style={{fontFamily: 'Verdana, sans-serif', fontSize: 14}}>
                     <Grid.Item>
                         Avg Attendance
                     </Grid.Item>
@@ -203,18 +190,24 @@ const Dashboard = () => {
                     </Grid.Item>
                 </Grid>
             </Space>
-
-            <FloatingBubble
-                style={{
-                    '--initial-position-bottom': '24px',
-                    '--initial-position-right': '24px',
-                    '--edge-distance': '24px',
-                    '--z-index': '10px'
-                }}
-               onClick={() => {}}
-            >
-            <AddOutline  fontSize={32} />
-        </FloatingBubble>
+            
+            <Popover.Menu
+                actions={actions}
+                placement='top'
+                trigger='click'
+                >
+                <FloatingBubble
+                    style={{
+                        '--initial-position-bottom': '24px',
+                        '--initial-position-right': '24px',
+                        '--edge-distance': '24px',
+                        '--z-index': '10px'
+                    }}
+                    onClick={() => {}}
+                >
+                    <AddOutline  fontSize={32} />
+                </FloatingBubble>
+        </Popover.Menu>
         <ActionSheet
             visible={visible}
             actions={actions}
