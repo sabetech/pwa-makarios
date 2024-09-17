@@ -1,7 +1,8 @@
 import { useState, useContext, useEffect, useRef } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { IUserManager } from '../../interfaces/ServerResponse';
-import { NavBar, List, FloatingBubble, Modal, Form, Stepper, Button, DatePicker, ImageUploader } from 'antd-mobile'
+import MyNavBar from '../../components/NavBar';
+import { List, FloatingBubble, Modal, Form, Stepper, Button, DatePicker, ImageUploader } from 'antd-mobile'
 import { CheckOutline, AddOutline  } from 'antd-mobile-icons';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
@@ -84,8 +85,7 @@ const BussingDetails = () => {
 
     return (
         <>
-           <NavBar onBack={() => navigate("/dashboard")} style={{'--height': '60px', backgroundColor: '#b12340', color:'white'}} > Bussing Detail </NavBar>
-           
+            <MyNavBar prevPage={"dashboard"} currentPage={"Bussing Detail"} /> 
             <List header={'Bussing Total:' + bussingTotal}>
                 {
                     numberBussed.map((bussing: IBussing) => 

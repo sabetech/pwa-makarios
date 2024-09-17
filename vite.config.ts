@@ -11,9 +11,9 @@ export default defineConfig({
     },
     includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Anagkazo App Lite',
-        short_name: 'AnagkazoLite',
-        description: 'This is a lite version of Anagkazo App',
+        name: 'Makarios Admin',
+        short_name: 'makarios-admin',
+        description: 'This is used to track ministerial activities for the makarios dominiation!',
         theme_color: '#ffffff',
         icons: [
           {
@@ -31,6 +31,18 @@ export default defineConfig({
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
+          }
+        ],
+        screenshots: [
+          {
+            src: 'screenshot-1.png',
+            sizes: '796x1702',
+            type: 'image/png'
+          },
+          {
+            src: 'screenshot-2.png',
+            sizes: '792x1754',
+            type: 'image/png'
           }
         ]
       },

@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { IPastoralPoint, IUserManager } from '../../interfaces/ServerResponse';
-import { Grid, Space, FloatingBubble, Modal, Image, ActionSheet, Dialog, Popover  } from 'antd-mobile'
+import { Grid, Space, FloatingBubble, Modal, Image, ActionSheet } from 'antd-mobile'
 
-import { SystemQRcodeOutline, AddOutline, MoreOutline, TeamOutline } from 'antd-mobile-icons'
+import { SystemQRcodeOutline, MoreOutline, TeamOutline } from 'antd-mobile-icons'
 
 import { ValueCard } from '../../components/dashboard/ValueCard';
 import { useNavigate } from 'react-router-dom';
@@ -191,23 +191,19 @@ const Dashboard = () => {
                 </Grid>
             </Space>
             
-            <Popover.Menu
-                actions={actions}
-                placement='top'
-                trigger='click'
-                >
-                <FloatingBubble
-                    style={{
-                        '--initial-position-bottom': '24px',
-                        '--initial-position-right': '24px',
-                        '--edge-distance': '24px',
-                        '--z-index': '10px'
-                    }}
-                    onClick={() => {}}
-                >
-                    <AddOutline  fontSize={32} />
-                </FloatingBubble>
-        </Popover.Menu>
+            
+        <FloatingBubble
+            style={{
+                '--initial-position-bottom': '24px',
+                '--initial-position-right': '24px',
+                '--edge-distance': '24px',
+                '--z-index': '10px'
+            }}
+            onClick={() => {setVisible(true)}}
+        >
+            <MoreOutline fontSize={32} color={'white'} />
+        </FloatingBubble>
+        
         <ActionSheet
             visible={visible}
             actions={actions}

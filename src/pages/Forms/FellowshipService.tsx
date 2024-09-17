@@ -1,5 +1,6 @@
 import { useState, RefObject, useContext } from 'react';
-import { NavBar, Form, Button, DatePicker, Stepper, ImageUploader, Input, Dialog, Toast } from 'antd-mobile'
+import { Form, Button, DatePicker, Stepper, ImageUploader, Input, Dialog, Toast } from 'antd-mobile'
+import MyNavBar from '../../components/NavBar';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import type { DatePickerRef } from 'antd-mobile/es/components/date-picker'
@@ -64,8 +65,7 @@ const FellowshipServiceForm = () => {
 
     return (
         <>
-           <NavBar onBack={() => navigate("/fellowship")} style={{'--height': '60px', backgroundColor: '#b12340', color:'white'}} > Fellowship Service Form </NavBar>
-
+           <MyNavBar prevPage={"fellowship"} currentPage={"Fellowship Service Form"} />           
            <Form
                 form={fellowshipservice}
                 layout='horizontal'

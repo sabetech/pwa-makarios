@@ -9,6 +9,7 @@ import { TFellowshipService, TCancelFellowshipService } from '../../types/fellow
 import { getFellowshipServices, cancelFellowshipService } from '../../services/FellowshipService';
 import { getUserFriendlyDateFormat } from '../../utils/helper'
 import dayjs from 'dayjs';
+import MyNavBar from '../../components/NavBar';
 
 
 
@@ -17,12 +18,12 @@ const FellowshipServiceDetails = () => {
     const { user } = useContext(UserContext) as IUserManager;
     const [fellowshipCancelForm] = Form.useForm();
 
-    const {data: fellowshipServices, isFetching, isSuccess} = useQuery<ServerResponse>(
-        {
-            queryKey: ['fellowship_services'],
-            queryFn: () => getFellowshipServices(user?.id as number)
-        },
-    );
+    // const {data: fellowshipServices, isFetching, isSuccess} = useQuery<ServerResponse>(
+    //     {
+    //         queryKey: ['fellowship_services'],
+    //         queryFn: () => getFellowshipServices(user?.id as number)
+    //     },
+    // );
 
     const { mutate: cancelService } = useMutation({
         mutationFn: async (cancelFellowshipInfo: TCancelFellowshipService) => {
@@ -31,10 +32,10 @@ const FellowshipServiceDetails = () => {
     });
 
     const handleFillServiceForm = () => {
-        navigate('/fellowship-service-form');
+        navigate('/fellowship/fill-form');
     }
 
-    console.log("Fellowship services", fellowshipServices);
+    // console.log("Fellowship services", fellowshipServices);
 
     const onFellowshipServiceCancel = () => {
         console.log(
@@ -82,14 +83,14 @@ const FellowshipServiceDetails = () => {
     }
 
     return (
-        <>
-           <NavBar onBack={() => navigate("/dashboard")} style={{'--height': '60px', backgroundColor: '#b12340', color:'white'}} > Fellowship Service Detail </NavBar>
+        <>        
+           <MyNavBar prevPage={"dashboard"} currentPage={"Fellowship Service Detail"} />           
             {/* Use virtual list in the future */}
-            {
+            {/* {
                 isFetching && <SpinLoading />
-            }
+            } */}
             <List header='Attendance Average: 0 | Offering Average: 0'>
-                {
+                {/* {
                     isSuccess &&
                     fellowshipServices.data.map( (fellowshipService: TFellowshipService) => 
                         { return fellowshipService.cancel_service_reason == null 
@@ -119,7 +120,7 @@ const FellowshipServiceDetails = () => {
                         } 
                     )
                 }
-                
+                 */}
             </List>
             <Space direction='horizontal' justify='center' align='center' block>
                 <Button block shape='rectangular' color='primary' size='large' onClick={handleFillServiceForm}>
