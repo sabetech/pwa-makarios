@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import * as api from './API/AnagkazoAPI';
+import * as api from './API/MakariosAPI';
 import { IAttendanceRequestInfo } from '../interfaces/Attendance';
 
 export const postAttendance = async (indexnumber: number = 701274, attendanceInfo: IAttendanceRequestInfo): Promise<AxiosResponse> => {

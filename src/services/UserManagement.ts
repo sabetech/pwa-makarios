@@ -1,5 +1,5 @@
 import { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import * as api from './API/AnagkazoAPI';
+import * as api from './API/MakariosAPI';
 
 export const verifyStudent = async (email: string): Promise<AxiosResponse> => {
 
@@ -30,4 +30,8 @@ export const verifyStudent = async (email: string): Promise<AxiosResponse> => {
 
 export const authenticateStudent = async(indexnumber: number, passcode: string): Promise<AxiosResponse> => {
     return (await api.post('/authenticate', {index_number: indexnumber, passcode: passcode}, {}));
+}
+
+export const loginUser = async(email: string, password: string): Promise<AxiosResponse> => {
+    return (await api.post('/login', {email: email, password: password}, {}));
 }

@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import * as api from './API/AnagkazoAPI';
+import * as api from './API/MakariosAPI';
 import { FellowshipServiceFormFields } from '../types/fellowshipFormFields';
 
 export const postFellowshipService = async (studentID: number, fellowshipServiceForm: FellowshipServiceFormFields): Promise<AxiosResponse> => {

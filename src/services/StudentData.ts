@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import * as api from './API/AnagkazoAPI';
+import * as api from './API/MakariosAPI';
 import { IBussingInfo } from '../interfaces/BussingInfo';
 
 export const getPastoralPoint = async (indexnumber: number = 701274): Promise<AxiosResponse> => {
