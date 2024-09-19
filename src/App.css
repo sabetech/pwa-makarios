@@ -18,6 +18,14 @@
   font-size: 14px;
 }
 
+a:link,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none; 
+  color: #570A22;
+}
+
 .shake-animation {
   animation: skew-x-shakeng 1s ease-in-out;
 }

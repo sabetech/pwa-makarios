@@ -11,6 +11,8 @@ import Directory from './pages/Directory/Directory'
 import BussingDetails from './pages/Detail/BussingDetail'
 import FellowshipServiceDetails from './pages/Detail/FellowshipServiceDetail'
 import FellowshipServiceForm from './pages/Forms/FellowshipService'
+import ForgotPassword from './pages/Auth/ForgotPassword'
+import Register from './pages/Auth/Register'
 
 function App() {
   const queryClient = new QueryClient({
@@ -30,6 +32,10 @@ function App() {
       <Router>
         <Routes>
             <Route path='/' element={<Welcome />} />
+            <Route path='/login' element={<Welcome />} />
+            <Route path='/register' element={ <Register /> } />
+            <Route path='/forgot-password' element={ <ForgotPassword /> } />
+
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/bussing' element={<BussingDetails />} />
             <Route path='/fellowship' element={<FellowshipServiceDetails />} />
@@ -38,6 +44,8 @@ function App() {
             <Route path='/directory/members' element={<Members />} />
             <Route path='/services' element={<Services />} />
             <Route path='/arrivals' element={<Arrivals />} />
+
+            
         
         </Routes>
       </Router>

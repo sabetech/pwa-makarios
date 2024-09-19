@@ -10,11 +10,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as StorageKeys from '../../constants/StorageKeys';
 import "./Auth.css";
 
-const Welcome: React.FC = () => {
+const Register: React.FC = () => {
     const emailTextRef = useRef(null);
-    const passwordTextRef = useRef(null);
     const [emailText, setEmailText] = useState<string>('');
-    const [passwordText, setPasswordText] = useState<string>('');
     const [isFormEmpty, setFormEmpty] = useState<boolean>(false);
     const { storeUser } = useContext(UserContext) as IUserManager;
     const navigate = useNavigate();
@@ -31,9 +29,21 @@ const Welcome: React.FC = () => {
     },[]);
 
     const { mutate, isLoading } = useMutation({
-        mutationFn: async ( {email, password}: {email: string, password: string} ) => { 
-            console.log("email::", email)
-            console.log("password::", password)
+        mutationFn: async (email: string) => { 
+            const response = await verifyStudent(email);
+            if (response.status === ResponseCodes.OK) {
+                
+                console.log(response.data.user);
+                
+                storeUser(response.data.user as User)
+                localStorage.setItem(StorageKeys.USER, JSON.stringify(response.data.user))
+
+                if (response.data.user.already_exists) {
+                    navigate('/dashboard')
+                } else {
+                    navigate('/dashboard')
+                }
+            }
         },
         onSuccess: () => {
             Toast.show({
@@ -57,24 +67,18 @@ const Welcome: React.FC = () => {
     });
 
     const onLogin = () => {
-       
-        if (emailText.length < 1 || passwordText.length < 1) {
+        if (emailText.length < 1) {
             setFormEmpty(true)
             setTimeout(() => {
                 setFormEmpty(false)
             },500)
-            return
         }
         
-        mutate({email: emailText, password: passwordText})
+        mutate(emailText)
     }
 
     const onEmailTextChange = (text: string) => {
         setEmailText(text)
-    }
-
-    const onPasswordTextChange = (text: string) => {
-        setPasswordText(text)
     }
 
     return (
@@ -82,7 +86,7 @@ const Welcome: React.FC = () => {
             <SafeArea position='top' />
             <Space direction='vertical' align='center' style={{ '--gap': '40px' }} block>
 
-                <h1 style={{textAlign: 'center', marginRight: 20, marginLeft: 20}}>Welcome to Makarios Admin</h1>
+                <h1 style={{textAlign: 'center', marginRight: 20, marginLeft: 20}}>Register</h1>
                 <Image 
                     src={makarios_logo} 
                     width={170} height={170} fit='contain'
@@ -90,11 +94,19 @@ const Welcome: React.FC = () => {
                 <Form layout='vertical'
                     footer={
                         <Button loading={isLoading} color='primary' loadingText='Verifying' block size={"large"} onClick={onLogin}>
-                            Login
+                            Register
                         </Button>
                     }
                     style={{width: '300px'}}
                 >
+                    <Form.Item  
+                        label='Full Name' 
+                        name='name' 
+                        className={isFormEmpty ? 'shake-animation': undefined}
+                    >
+                        <Input ref={emailTextRef} onChange={onEmailTextChange} placeholder='makarios.member@gmail.com' clearable />
+                    </Form.Item>
+                    
                     <Form.Item  
                         label='Email' 
                         name='email' 
@@ -107,14 +119,20 @@ const Welcome: React.FC = () => {
                         name='password' 
                         className={isFormEmpty ? 'shake-animation': undefined}
                     >
-                        <Input ref={passwordTextRef} type='password' placeholder='xxxxxx' onChange={onPasswordTextChange} clearable />   
+                        <Input type='password' placeholder='xxxxxx' clearable />   
+                    </Form.Item>
+                    <Form.Item  
+                        label='Confirm Password' 
+                        name='c_password' 
+                        className={isFormEmpty ? 'shake-animation': undefined}
+                    >
+                        <Input type='password' placeholder='xxxxxxxxx' clearable />   
                     </Form.Item>
                 </Form>
-                <Link to="/forgot-password" style={{marginTop: 5}}>Forgot Password?</Link>
-                <Link to="/register" style={{marginTop: 5}}>Don't have an Account? Register</Link>
+                <Link to="/login" style={{marginTop: 5}}>Got an Account? Login</Link>
             </Space>
     </div>
     );
 }
 
-export default Welcome;
+export default Register;

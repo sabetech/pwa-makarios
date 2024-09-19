@@ -10,11 +10,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as StorageKeys from '../../constants/StorageKeys';
 import "./Auth.css";
 
-const Welcome: React.FC = () => {
+const ForgotPassword: React.FC = () => {
     const emailTextRef = useRef(null);
-    const passwordTextRef = useRef(null);
     const [emailText, setEmailText] = useState<string>('');
-    const [passwordText, setPasswordText] = useState<string>('');
     const [isFormEmpty, setFormEmpty] = useState<boolean>(false);
     const { storeUser } = useContext(UserContext) as IUserManager;
     const navigate = useNavigate();
@@ -31,9 +29,21 @@ const Welcome: React.FC = () => {
     },[]);
 
     const { mutate, isLoading } = useMutation({
-        mutationFn: async ( {email, password}: {email: string, password: string} ) => { 
-            console.log("email::", email)
-            console.log("password::", password)
+        mutationFn: async (email: string) => { 
+            const response = await verifyStudent(email);
+            if (response.status === ResponseCodes.OK) {
+                
+                console.log(response.data.user);
+                
+                storeUser(response.data.user as User)
+                localStorage.setItem(StorageKeys.USER, JSON.stringify(response.data.user))
+
+                if (response.data.user.already_exists) {
+                    navigate('/dashboard')
+                } else {
+                    navigate('/dashboard')
+                }
+            }
         },
         onSuccess: () => {
             Toast.show({
@@ -57,40 +67,35 @@ const Welcome: React.FC = () => {
     });
 
     const onLogin = () => {
-       
-        if (emailText.length < 1 || passwordText.length < 1) {
+        if (emailText.length < 1) {
             setFormEmpty(true)
             setTimeout(() => {
                 setFormEmpty(false)
             },500)
-            return
         }
         
-        mutate({email: emailText, password: passwordText})
+        mutate(emailText)
     }
 
     const onEmailTextChange = (text: string) => {
         setEmailText(text)
     }
 
-    const onPasswordTextChange = (text: string) => {
-        setPasswordText(text)
-    }
-
     return (
         <div style={{width: "100%"}}>
             <SafeArea position='top' />
-            <Space direction='vertical' align='center' style={{ '--gap': '40px' }} block>
+            <Space direction='vertical' align='center' style={{ '--gap': '70px' }} block>
 
-                <h1 style={{textAlign: 'center', marginRight: 20, marginLeft: 20}}>Welcome to Makarios Admin</h1>
+                <h1 style={{textAlign: 'center', marginRight: 20, marginLeft: 20}}>Forgot Password</h1>
                 <Image 
                     src={makarios_logo} 
-                    width={170} height={170} fit='contain'
+                    width={200} height={200} fit='contain'
                 />
+
                 <Form layout='vertical'
                     footer={
                         <Button loading={isLoading} color='primary' loadingText='Verifying' block size={"large"} onClick={onLogin}>
-                            Login
+                            Send Reset Link
                         </Button>
                     }
                     style={{width: '300px'}}
@@ -102,19 +107,11 @@ const Welcome: React.FC = () => {
                     >
                         <Input ref={emailTextRef} onChange={onEmailTextChange} placeholder='makarios.member@gmail.com' clearable />
                     </Form.Item>
-                    <Form.Item  
-                        label='Password' 
-                        name='password' 
-                        className={isFormEmpty ? 'shake-animation': undefined}
-                    >
-                        <Input ref={passwordTextRef} type='password' placeholder='xxxxxx' onChange={onPasswordTextChange} clearable />   
-                    </Form.Item>
                 </Form>
-                <Link to="/forgot-password" style={{marginTop: 5}}>Forgot Password?</Link>
-                <Link to="/register" style={{marginTop: 5}}>Don't have an Account? Register</Link>
+                <Link to="/">Back to login</Link>
             </Space>
     </div>
     );
 }
 
-export default Welcome;
+export default ForgotPassword;
