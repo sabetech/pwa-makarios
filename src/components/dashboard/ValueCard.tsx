@@ -1,4 +1,3 @@
-import { SystemQRcodeOutline } from 'antd-mobile-icons'
 import { EventHandler } from "react";
 
 type ValueCardProps = {
@@ -9,12 +8,12 @@ type ValueCardProps = {
 }
 
 export const ValueCard: React.FC<ValueCardProps> = ({title, value, handleClick, Icon }) => <div style={{
-    backgroundColor: 'white',
-    width: '20vh',
-    height: '20vh',
-    borderRadius: 25,
+    backgroundColor: "white",
+    width: '12vh',
+    height: '12vh',
+    borderRadius: 20,
     marginLeft: 10,
-    marginTop: 50,
+    marginTop: 30,
     boxShadow: '1px 1px 8px 0px rgba(0,0,0,0.25)',
     display: 'flex',
     justifyContent: 'center',
@@ -24,7 +23,7 @@ export const ValueCard: React.FC<ValueCardProps> = ({title, value, handleClick, 
     onClick={handleClick}
 >
     <p style={{
-        fontSize: 82,
+        fontSize: 50,
         fontWeight: 700,
         margin: -10,
     }}>

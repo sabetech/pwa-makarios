@@ -35,3 +35,7 @@ export const authenticateStudent = async(indexnumber: number, passcode: string):
 export const loginUser = async(email: string, password: string): Promise<AxiosResponse> => {
     return (await api.post('/login', {email: email, password: password}, {}));
 }
+
+export const logoutUser = async(token: string): Promise<AxiosResponse> => {
+    return (await api.post('/logout', {}, {Authorization: 'Bearer ' + token}));
+}

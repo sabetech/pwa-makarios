@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../contexts/UserContext';
+import { logoutUser } from '../../services/UserManagement';
 import { IPastoralPoint, IUserManager } from '../../interfaces/ServerResponse';
 import { Grid, Space, FloatingBubble, Modal, Image, ActionSheet } from 'antd-mobile'
 
@@ -14,19 +15,40 @@ import { postAttendance } from '../../services/Attendance';
 import type {
     Action
 } from 'antd-mobile/es/components/action-sheet';
-import * as StorageKeys from "../../constants/StorageKeys"
+import { useSignOut } from "react-auth-kit";
 import { IAttendanceRequestInfo } from '../../interfaces/Attendance';
+import { useAuthUser, useAuthHeader } from "react-auth-kit";
 
 const Dashboard = () => {
-    
+    const auth = useAuthUser();
+    const authHeader = useAuthHeader()
+    const signOut = useSignOut();
     const navigate = useNavigate();
     const [_, setPastoralPoint] = useState<IPastoralPoint[]>([]);
     const [totalPoints, setTotalPoints] = useState<number>(0);
     const [visible, setVisible] = useState(false)
     const { user, storeUser } = useContext(UserContext) as IUserManager;
-    const {data: pastoralPoints, isLoading} = useQuery<ServerResponse>(['pastoral_points'], () => getPastoralPoint(user?.index_number as number));
-    const { data: bussingData, isLoading: bussingLoading } = useQuery<ServerResponse>(['bussing'], () => getBussing(user?.index_number as number));
+    const loggedInUser = auth()
+
+    console.log("User::", loggedInUser)
+
+    // const {data: pastoralPoints, isLoading} = useQuery<ServerResponse>(['pastoral_points'], () => getPastoralPoint(user?.index_number as number));
+    // const { data: bussingData, isLoading: bussingLoading } = useQuery<ServerResponse>(['bussing'], () => getBussing(user?.index_number as number));
     const [averageBussing, setAverageBussing] = useState<number>(0);
+
+    const { mutate: logout, isLoading: loggingOut } = useMutation({
+        mutationFn: async () => {
+            return await logoutUser(authHeader() as string);
+        },
+
+        onSuccess: () => {
+            signOut();
+            navigate('/');
+        },
+        onError: (error) => {
+            console.log(error)
+        }
+    })
 
     const { mutate, isLoading: scanning } = useMutation({
         mutationFn: async (values: IAttendanceRequestInfo) => {
@@ -41,35 +63,35 @@ const Dashboard = () => {
         }
     });
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (pastoralPoints?.data) {
-            const parameters = pastoralPoints.data?.data.map((pastoralPoint: IPastoralPoint) => {
-                return pastoralPoint
-            });
-            setPastoralPoint(parameters);
-            const myTotalPoints = pastoralPoints.data?.data.reduce((total: number, pastoralPoint: IPastoralPoint) => {
-                return total + pastoralPoint.pivot.points
-            }, 0)
-            setTotalPoints(myTotalPoints as number);
-        }
+    //     if (pastoralPoints?.data) {
+    //         const parameters = pastoralPoints.data?.data.map((pastoralPoint: IPastoralPoint) => {
+    //             return pastoralPoint
+    //         });
+    //         setPastoralPoint(parameters);
+    //         const myTotalPoints = pastoralPoints.data?.data.reduce((total: number, pastoralPoint: IPastoralPoint) => {
+    //             return total + pastoralPoint.pivot.points
+    //         }, 0)
+    //         setTotalPoints(myTotalPoints as number);
+    //     }
 
-    },[pastoralPoints])
+    // },[pastoralPoints])
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (bussingData?.data) {
-            const bussingDetails = bussingData.data?.data.map((bussing: IBussing) => {
-                return bussing;
-            });
+    //     if (bussingData?.data) {
+    //         const bussingDetails = bussingData.data?.data.map((bussing: IBussing) => {
+    //             return bussing;
+    //         });
 
-            const myAverageBussing = bussingDetails.reduce((total: number, bussing: IBussing) => {
-                return total + bussing.number_bussed
-            }, 0) / bussingDetails.length;
-            setAverageBussing(myAverageBussing.toFixed(0) as unknown as number);
-        }
+    //         const myAverageBussing = bussingDetails.reduce((total: number, bussing: IBussing) => {
+    //             return total + bussing.number_bussed
+    //         }, 0) / bussingDetails.length;
+    //         setAverageBussing(myAverageBussing.toFixed(0) as unknown as number);
+    //     }
 
-    }, [bussingData])
+    // }, [bussingData])
     
     const actions: Action[] = [
         {
@@ -101,9 +123,7 @@ const Dashboard = () => {
                     cancelText: 'No',
                     showCloseButton: true,
                     onConfirm: () => {
-                        localStorage.removeItem(StorageKeys.USER);
-                        storeUser(null as any);
-                        navigate('/');
+                        logout();
                     },
                     onCancel: () => {
                         setVisible(false)
@@ -158,25 +178,34 @@ const Dashboard = () => {
                         <div style={{marginTop: -30}}>
                             
                             <div style={{ height: "20%", width: "55vw", marginTop: 20}}>
-                                <p style={{ fontFamily: 'Verdana, sans-serif', fontSize: 25, margin: 0, color: 'white' }}>Hello, <strong>{user?.name.split(" ")[0]}</strong></p>
+                                <p style={{ fontFamily: 'Verdana, sans-serif', fontSize: 25, margin: 0, color: 'white' }}>Hello, <strong>{loggedInUser?.name.split(" ")[0]}</strong></p>
                                 </div>
                             <div style={{ height: "10%", width: "55vw", marginTop: 5}}>
                                 <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}></h1>
                             </div>
                             <div style={{ height: "10%", width: "55vw", marginTop: 5}}>
-                                <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}>Bacenta leader </h1>
+                                <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}> {loggedInUser?.roles[0].name} </h1>
                             </div>
                         </div>
                     </Space>
                     
                 </Space>
             </div>
-            <Grid columns={2} gap={2}>
+            <Grid columns={3} gap={2}>
                 <Grid.Item >
-                    <ValueCard key={"event_attendance"} title="Bacenta" value={1} handleClick={() => handleClick("bacenta")  } Icon={<SystemQRcodeOutline />}/>
+                    <ValueCard key={"event_attendance"} title="Churches" value={1} handleClick={() => handleClick("bacenta")  } Icon={<SystemQRcodeOutline />}/>
                 </Grid.Item>
                  <Grid.Item>
-                    <ValueCard key={"fellowship"} title="Fellowship" value={3} handleClick={() => handleClick("fellowship")} Icon={<TeamOutline />}/>
+                    <ValueCard key={"fellowship"} title="Streams" value={3} handleClick={() => handleClick("fellowship")} Icon={<TeamOutline />}/>
+                </Grid.Item>
+                <Grid.Item >
+                    <ValueCard key={"event_attendance"} title="Councils" value={7} handleClick={() => handleClick("bacenta")  } Icon={<SystemQRcodeOutline />}/>
+                </Grid.Item>
+                 <Grid.Item>
+                    <ValueCard key={"fellowship"} title="Bacentas" value={3} handleClick={() => handleClick("fellowship")} Icon={<TeamOutline />}/>
+                </Grid.Item>
+                <Grid.Item>
+                    <ValueCard key={"fellowship"} title="Fellowships" value={20} handleClick={() => handleClick("fellowship")} Icon={<TeamOutline />}/>
                 </Grid.Item>
             </Grid>
 
