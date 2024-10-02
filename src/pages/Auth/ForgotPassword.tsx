@@ -2,7 +2,6 @@ import { useState, useRef, useContext, useEffect } from 'react';
 import { Space, Image, Form, Input, SafeArea, Button, Toast } from "antd-mobile";
 import makarios_logo from "../../assets/makarios_log_trans_bg.png";
 import { useMutation } from 'react-query';
-import { verifyStudent } from '../../services/UserManagement';
 import { IUserManager, ResponseError, ServerResponse, User } from '../../interfaces/ServerResponse';
 import * as ResponseCodes from '../../constants/ResponseStatusCodes';
 import { UserContext } from '../../contexts/UserContext';
@@ -30,20 +29,7 @@ const ForgotPassword: React.FC = () => {
 
     const { mutate, isLoading } = useMutation({
         mutationFn: async (email: string) => { 
-            const response = await verifyStudent(email);
-            if (response.status === ResponseCodes.OK) {
-                
-                console.log(response.data.user);
-                
-                storeUser(response.data.user as User)
-                localStorage.setItem(StorageKeys.USER, JSON.stringify(response.data.user))
-
-                if (response.data.user.already_exists) {
-                    navigate('/dashboard')
-                } else {
-                    navigate('/dashboard')
-                }
-            }
+        
         },
         onSuccess: () => {
             Toast.show({

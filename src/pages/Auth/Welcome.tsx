@@ -2,7 +2,7 @@ import { useState, useRef, useContext, useEffect } from 'react';
 import { Space, Image, Form, Input, SafeArea, Button, Toast } from "antd-mobile";
 import makarios_logo from "../../assets/makarios_log_trans_bg.png";
 import { useMutation } from 'react-query';
-import { useSignIn } from 'react-auth-kit';
+import { useSignIn } from '../../hooks/AuthHooks';
 import { IUserManager, ResponseError, ServerResponse, User } from '../../interfaces/ServerResponse';
 import * as ResponseCodes from '../../constants/ResponseStatusCodes';
 import { UserContext } from '../../contexts/UserContext';
@@ -21,18 +21,6 @@ const Welcome: React.FC = () => {
     const navigate = useNavigate();
     
     const signIn = useSignIn()
-    
-
-    // useEffect(() => {
-
-    //     //log the user in if they are already logged in
-    //     if (localStorage.getItem(StorageKeys.USER)) {
-    //         const user = JSON.parse(localStorage.getItem(StorageKeys.USER) as string) as User;
-    //         storeUser(user);
-    //         navigate('/dashboard')
-    //     }
-
-    // },[]);
 
     const { mutate, isLoading } = useMutation({
         mutationFn: async ( {email, password}: {email: string, password: string} ) => { 
@@ -45,20 +33,18 @@ const Welcome: React.FC = () => {
 
                 const success = signIn({
                     token: response.data.data.token,
-                    expiresIn: 3600,
                     tokenType: 'Bearer',
-                    authState: response.data.data.user
+                    user: response.data.data.user
                 })
 
-                if (success) {
-                    navigate('/dashboard')
-                }else{
+                if (!success) {
                     hintUserError()
                 }
             }
             
         },
         onSuccess: () => {
+            navigate('/dashboard')
             Toast.show({
                 content: 'Login Successful',
                 duration: 1000,

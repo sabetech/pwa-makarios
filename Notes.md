@@ -1,0 +1,2 @@
+- Logout not navigating to login
+- for each route, check if is logged in and proceed

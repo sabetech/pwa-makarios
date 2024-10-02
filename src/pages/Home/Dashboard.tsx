@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { logoutUser } from '../../services/UserManagement';
 import { IPastoralPoint, IUserManager } from '../../interfaces/ServerResponse';
-import { Grid, Space, FloatingBubble, Modal, Image, ActionSheet } from 'antd-mobile'
-
+import { Grid, Space, FloatingBubble, Modal, Image, ActionSheet, Divider } from 'antd-mobile'
+import { useSignOut } from '../../hooks/AuthHooks';
 import { SystemQRcodeOutline, MoreOutline, TeamOutline } from 'antd-mobile-icons'
 
 import { ValueCard } from '../../components/dashboard/ValueCard';
@@ -15,53 +15,44 @@ import { postAttendance } from '../../services/Attendance';
 import type {
     Action
 } from 'antd-mobile/es/components/action-sheet';
-import { useSignOut } from "react-auth-kit";
+
 import { IAttendanceRequestInfo } from '../../interfaces/Attendance';
-import { useAuthUser, useAuthHeader } from "react-auth-kit";
+
+import HeaderPanel from '../../components/dashboard/HeaderPanel';
+import { getActions, ADMIN, SERVICES, DIRECTORY, ARRIVAL } from '../../constants/SidebarActions';
 
 const Dashboard = () => {
-    const auth = useAuthUser();
-    const authHeader = useAuthHeader()
+    // const auth = useAuthUser();
+    
     const signOut = useSignOut();
     const navigate = useNavigate();
     const [_, setPastoralPoint] = useState<IPastoralPoint[]>([]);
     const [totalPoints, setTotalPoints] = useState<number>(0);
     const [visible, setVisible] = useState(false)
     const { user, storeUser } = useContext(UserContext) as IUserManager;
-    const loggedInUser = auth()
+    // const loggedInUser = auth()
 
-    console.log("User::", loggedInUser)
+    // console.log("User::", loggedInUser)
 
     // const {data: pastoralPoints, isLoading} = useQuery<ServerResponse>(['pastoral_points'], () => getPastoralPoint(user?.index_number as number));
     // const { data: bussingData, isLoading: bussingLoading } = useQuery<ServerResponse>(['bussing'], () => getBussing(user?.index_number as number));
     const [averageBussing, setAverageBussing] = useState<number>(0);
 
     const { mutate: logout, isLoading: loggingOut } = useMutation({
-        mutationFn: async () => {
-            return await logoutUser(authHeader() as string);
-        },
+        // mutationFn: async () => {
+        //     return await logoutUser(authHeader() as string);
+        // },
 
         onSuccess: () => {
             signOut();
             navigate('/');
         },
         onError: (error) => {
+            signOut();
+            navigate('/');
             console.log(error)
         }
     })
-
-    const { mutate, isLoading: scanning } = useMutation({
-        mutationFn: async (values: IAttendanceRequestInfo) => {
-            return await postAttendance(user?.id as number, values)
-        },
-        retry: 3,
-        onSuccess: () => {
-
-        },
-        onError: (error) => {
-            console.log(error)
-        }
-    });
 
     // useEffect(() => {
 
@@ -92,27 +83,11 @@ const Dashboard = () => {
     //     }
 
     // }, [bussingData])
+
+
     
     const actions: Action[] = [
-        {
-            text: 'Home', key: 'home',
-
-        },
-        {
-            text: 'Directory', key: 'directory', 
-            onClick: () => {
-                navigate('/directory')
-            }
-        },
-        {
-            text: 'Services', key: 'services', 
-        },
-        {
-            text: 'Arrivals', key: 'arrivals', 
-            onClick: () => {
-                navigate('/arrivals')
-            }
-        },
+       ...getActions('Super Admin' as string),
         {
             text: 'Logout', key: 'logout', danger: true,
             onClick: () => {
@@ -131,12 +106,29 @@ const Dashboard = () => {
                 })
             }
         }
-    ]
+    ];
+
+    const onAction = (action: Action) => {
+        switch(action.key) {
+            case ADMIN:
+                navigate("/admin/portal");
+                break;
+            case DIRECTORY:
+                navigate('/directory');
+                break;
+            case SERVICES:
+                navigate('/services');
+                break;
+            case ARRIVAL:
+                navigate('/arrivals');
+                break;
+        }
+    }
 
     const handleClick = (label: string) => {
         switch(label) {
-            case 'attendance':
-                navigate("/attendance");
+            case 'churches':
+                navigate("/churches");
             break;
 
             case 'fellowship':
@@ -156,70 +148,43 @@ const Dashboard = () => {
 
     return (
         <>
-            <div style={{
-                width: '100%',
-                height: '20vh',                
-                background: "#570A22",
-                // background: 'linear-gradient(47deg, rgba(214,203,251,1) 0%, rgba(236,236,250,1) 100%)',
-                // backgroundImage: `url('https://t3.ftcdn.net/jpg/04/06/60/72/240_F_406607245_daS9yMQ9g8MMZz3XWf2LVXxFy5cAdLQ7.jpg')`,
-                borderBottomRightRadius: 15,
-                borderBottomLeftRadius: 15,
-                boxShadow: '1px 1px 40px 1px rgba(0,0,0,0.25)',
-                margin: 'auto'
-            }}>
-                <Space style={{ '--gap': '10px' }}>
-                    {/* https://via.placeholder.com/250 */}
-                    <div style={{width: "35vw", height: "90%", marginTop: 20, marginLeft: 20}}>
-                        <Image src='https://via.placeholder.com/200' fit='cover' style={{ width: "95%", borderRadius: 20 }} />
-                    </div>
-                    
-                    <Space direction='vertical'>
-                        <MoreOutline fontSize={32} color={'white'} style={{float:'right'}} onClick={() => setVisible(true)} />
-                        <div style={{marginTop: -30}}>
-                            
-                            <div style={{ height: "20%", width: "55vw", marginTop: 20}}>
-                                <p style={{ fontFamily: 'Verdana, sans-serif', fontSize: 25, margin: 0, color: 'white' }}>Hello, <strong>{loggedInUser?.name.split(" ")[0]}</strong></p>
-                                </div>
-                            <div style={{ height: "10%", width: "55vw", marginTop: 5}}>
-                                <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}></h1>
-                            </div>
-                            <div style={{ height: "10%", width: "55vw", marginTop: 5}}>
-                                <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}> {loggedInUser?.roles[0].name} </h1>
-                            </div>
-                        </div>
-                    </Space>
-                    
-                </Space>
-            </div>
+            <HeaderPanel setVisible={setVisible} loggedInUser={"fas"} />
+
             <Grid columns={3} gap={2}>
                 <Grid.Item >
-                    <ValueCard key={"event_attendance"} title="Churches" value={1} handleClick={() => handleClick("bacenta")  } Icon={<SystemQRcodeOutline />}/>
+                    <ValueCard key={"churches"} title="Churches" value={1} handleClick={() => handleClick("churches")  } Icon={<SystemQRcodeOutline />}/>
                 </Grid.Item>
-                 <Grid.Item>
-                    <ValueCard key={"fellowship"} title="Streams" value={3} handleClick={() => handleClick("fellowship")} Icon={<TeamOutline />}/>
+                 {/* <Grid.Item>
+                    <ValueCard key={"streams"} title="Streams" value={3} handleClick={() => handleClick("streams")} Icon={<TeamOutline />}/>
                 </Grid.Item>
                 <Grid.Item >
-                    <ValueCard key={"event_attendance"} title="Councils" value={7} handleClick={() => handleClick("bacenta")  } Icon={<SystemQRcodeOutline />}/>
+                    <ValueCard key={"councils"} title="Councils" value={7} handleClick={() => handleClick("councils")  } Icon={<SystemQRcodeOutline />}/>
                 </Grid.Item>
                  <Grid.Item>
-                    <ValueCard key={"fellowship"} title="Bacentas" value={3} handleClick={() => handleClick("fellowship")} Icon={<TeamOutline />}/>
+                    <ValueCard key={"bacentas"} title="Bacentas" value={3} handleClick={() => handleClick("bacentas")} Icon={<TeamOutline />}/>
                 </Grid.Item>
                 <Grid.Item>
-                    <ValueCard key={"fellowship"} title="Fellowships" value={20} handleClick={() => handleClick("fellowship")} Icon={<TeamOutline />}/>
-                </Grid.Item>
+                    <ValueCard key={"fellowships"} title="Fellowships" value={20} handleClick={() => handleClick("fellowship")} Icon={<TeamOutline />}/>
+                </Grid.Item> */}
             </Grid>
-
+            <Divider />
             <Space direction='horizontal' style={{marginTop: 30, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <Grid columns={2} gap={2} style={{fontFamily: 'Verdana, sans-serif', fontSize: 14}}>
                     <Grid.Item>
-                        Avg Attendance
+                        <Space direction='vertical'>
+                            <div>Avg Attendance</div>
+                            <div>0</div>
+                        </Space>
                     </Grid.Item>
                     <Grid.Item>
-                        Avg Weekly Income (Ghc)
+                        <Space direction='vertical'>
+                            <div>Avg Weekly Income (Ghc)</div>
+                            <div>0</div>
+                        </Space>
                     </Grid.Item>
                 </Grid>
             </Space>
-            
+            <Divider />
             
         <FloatingBubble
             style={{
@@ -237,6 +202,8 @@ const Dashboard = () => {
             visible={visible}
             actions={actions}
             onClose={() => setVisible(false)}
+            extra={`Logged in as: `}
+            onAction={onAction}
         />
         </>
     )
