@@ -1,9 +1,9 @@
 import { useState } from 'react';
 // import { UserContext } from '../../contexts/UserContext';
-// import { logoutUser } from '../../services/UserManagement';
+import { logoutUser } from '../../services/UserManagement';
 // import { IPastoralPoint, IUserManager } from '../../interfaces/ServerResponse';
 import { Grid, Space, FloatingBubble, Modal, ActionSheet, Divider } from 'antd-mobile'
-import { useSignOut, useAuthUser } from '../../hooks/AuthHooks';
+import { useSignOut, useAuthUser, useAuthToken } from '../../hooks/AuthHooks';
 import { MoreOutline } from 'antd-mobile-icons'
 
 // import { ValueCard } from '../../components/dashboard/ValueCard';
@@ -22,13 +22,13 @@ import HeaderPanel from '../../components/dashboard/HeaderPanel';
 import { getActions, ADMIN, SERVICES, DIRECTORY, ARRIVAL } from '../../constants/SidebarActions';
 
 const Dashboard = () => {
-    // const auth = useAuthUser();
+    const authToken = useAuthToken();
     
     const signOut = useSignOut();
     const navigate = useNavigate();
     const [visible, setVisible] = useState(false)
+    
     const loggedInUser = useAuthUser()
-    console.log("User::", loggedInUser())
     const user = loggedInUser()
 
     // const {data: pastoralPoints, isLoading} = useQuery<ServerResponse>(['pastoral_points'], () => getPastoralPoint(user?.index_number as number));
@@ -36,9 +36,9 @@ const Dashboard = () => {
     // const [averageBussing, setAverageBussing] = useState<number>(0);
 
     const { mutate: logout, isLoading: loggingOut } = useMutation({
-        // mutationFn: async () => {
-        //     return await logoutUser(authHeader() as string);
-        // },
+        mutationFn: async () => {
+            return await logoutUser(authToken as string);
+        },
 
         onSuccess: () => {
             signOut();

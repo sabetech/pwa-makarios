@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = import.meta.env.VITE_BASE_URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 import { getServerDateFormat } from '../../utils/helper';
 import { useAuthToken } from '../../hooks/AuthHooks';
 
@@ -16,7 +16,7 @@ const postWithFile = (url: string, data: any, headers: object) => {
         }
     });
     
-    return axios(BASE_URL+url, {
+    return axios(API_BASE_URL+url, {
          method: 'POST',
          headers: {
             'Content-Type': '"multipart/form-data"',
@@ -36,7 +36,7 @@ const post = (url: string, data: any, headers: object) => {
         formData.append(key, data[key]);
     });
     
-    return axios(BASE_URL+url, {
+    return axios(API_BASE_URL+url, {
          method: 'POST',
          headers: {
             'Content-Type': '"application/json"',
@@ -50,7 +50,7 @@ const post = (url: string, data: any, headers: object) => {
 const get = (url: string, headers: object) => {
     const authToken = useAuthToken();
 
-    return axios(BASE_URL+url, {
+    return axios(API_BASE_URL+url, {
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const get = (url: string, headers: object) => {
 const deleteRequest = (url: string, headers: object) => {
     const authToken = useAuthToken();
 
-    return axios(BASE_URL+url, {
+    return axios(API_BASE_URL+url, {
         method: 'DELETE',
         headers: {
         'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ const deleteRequest = (url: string, headers: object) => {
 const put = (url: string, data: any, headers: object) => {
     const authToken = useAuthToken();
 
-    return axios(BASE_URL+url, {
+    return axios(API_BASE_URL+url, {
         method: 'PUT',
         headers: {
         'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ const put = (url: string, data: any, headers: object) => {
 }
 
 const auth = (url: string, data: any, headers: object) => {
-    return axios(BASE_URL+url, {
+    return axios(API_BASE_URL+url, {
         method: 'POST',
         headers: {
             'Content-Type': '"application/json"',
