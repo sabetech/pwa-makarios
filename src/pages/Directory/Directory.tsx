@@ -15,14 +15,14 @@ const Directory = () => {
             }}
                 prefix={<TeamOutline />}
                 style={listStyle}
-                description={"10 Members"}
+                description={"0 Members"}
             >
                 Members
             </List.Item>
             <List.Item onClick={() => {}}
                 prefix={<MdOutlineChurch />}
                 style={listStyle}
-                description={"1 Bacenta"}
+                description={"0 Churches"}
             >
                 Churches
             </List.Item>

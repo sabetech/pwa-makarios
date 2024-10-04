@@ -1,9 +1,11 @@
 import { List, NavBar, Image, SearchBar, Button } from 'antd-mobile';
 import { useNavigate } from 'react-router-dom';
-import myData from '../../data/fake.json';
+import myData from '../../data/empty.json';
+import { useAuthUser } from '../../hooks/AuthHooks';
 const Members = () => {
-
+    const loggedInUser = useAuthUser()
     const navigate = useNavigate();
+    const user = loggedInUser()
 
     return (
     <>
@@ -14,9 +16,9 @@ const Members = () => {
         <SearchBar placeholder='Search for member by name' showCancelButton 
             style={{'--height': '60px', backgroundColor: '#570A22', color:'white', '--border-radius': '0px'}}
         />
-        <List header="Michael's Members - 6" style={{'--header-font-size': '20px'}}>
-        {
-        myData.map((member) => (
+        <List header={`${user.name}'s Members`} style={{'--header-font-size': '20px'}}>
+        {/* {
+        myData.length > 0 && myData.map((member) => (
             <List.Item
                 key={member._id}
                 onClick={() => {
@@ -34,7 +36,7 @@ const Members = () => {
                 {member.name}
             </List.Item>
         ))
-        }
+        } */}
         </List>
      
 

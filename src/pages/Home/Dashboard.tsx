@@ -1,22 +1,22 @@
-import { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../../contexts/UserContext';
-import { logoutUser } from '../../services/UserManagement';
-import { IPastoralPoint, IUserManager } from '../../interfaces/ServerResponse';
-import { Grid, Space, FloatingBubble, Modal, Image, ActionSheet, Divider } from 'antd-mobile'
-import { useSignOut } from '../../hooks/AuthHooks';
-import { SystemQRcodeOutline, MoreOutline, TeamOutline } from 'antd-mobile-icons'
+import { useState } from 'react';
+// import { UserContext } from '../../contexts/UserContext';
+// import { logoutUser } from '../../services/UserManagement';
+// import { IPastoralPoint, IUserManager } from '../../interfaces/ServerResponse';
+import { Grid, Space, FloatingBubble, Modal, ActionSheet, Divider } from 'antd-mobile'
+import { useSignOut, useAuthUser } from '../../hooks/AuthHooks';
+import { MoreOutline } from 'antd-mobile-icons'
 
-import { ValueCard } from '../../components/dashboard/ValueCard';
+// import { ValueCard } from '../../components/dashboard/ValueCard';
 import { useNavigate } from 'react-router-dom';
-import { useQuery, useMutation } from 'react-query';
-import { getPastoralPoint, getBussing } from '../../services/StudentData';
-import { ServerResponse, IBussing } from '../../interfaces/ServerResponse';
-import { postAttendance } from '../../services/Attendance';
+import { useMutation } from 'react-query';
+// import { getPastoralPoint, getBussing } from '../../services/StudentData';
+// import { ServerResponse, IBussing } from '../../interfaces/ServerResponse';
+// import { postAttendance } from '../../services/Attendance';
 import type {
     Action
 } from 'antd-mobile/es/components/action-sheet';
 
-import { IAttendanceRequestInfo } from '../../interfaces/Attendance';
+// import { IAttendanceRequestInfo } from '../../interfaces/Attendance';
 
 import HeaderPanel from '../../components/dashboard/HeaderPanel';
 import { getActions, ADMIN, SERVICES, DIRECTORY, ARRIVAL } from '../../constants/SidebarActions';
@@ -26,17 +26,14 @@ const Dashboard = () => {
     
     const signOut = useSignOut();
     const navigate = useNavigate();
-    const [_, setPastoralPoint] = useState<IPastoralPoint[]>([]);
-    const [totalPoints, setTotalPoints] = useState<number>(0);
     const [visible, setVisible] = useState(false)
-    const { user, storeUser } = useContext(UserContext) as IUserManager;
-    // const loggedInUser = auth()
-
-    // console.log("User::", loggedInUser)
+    const loggedInUser = useAuthUser()
+    console.log("User::", loggedInUser())
+    const user = loggedInUser()
 
     // const {data: pastoralPoints, isLoading} = useQuery<ServerResponse>(['pastoral_points'], () => getPastoralPoint(user?.index_number as number));
     // const { data: bussingData, isLoading: bussingLoading } = useQuery<ServerResponse>(['bussing'], () => getBussing(user?.index_number as number));
-    const [averageBussing, setAverageBussing] = useState<number>(0);
+    // const [averageBussing, setAverageBussing] = useState<number>(0);
 
     const { mutate: logout, isLoading: loggingOut } = useMutation({
         // mutationFn: async () => {
@@ -87,7 +84,7 @@ const Dashboard = () => {
 
     
     const actions: Action[] = [
-       ...getActions('Super Admin' as string),
+       ...getActions(user.roles.length > 0 ? user.roles[0].name : 'General'),
         {
             text: 'Logout', key: 'logout', danger: true,
             onClick: () => {
@@ -125,36 +122,36 @@ const Dashboard = () => {
         }
     }
 
-    const handleClick = (label: string) => {
-        switch(label) {
-            case 'churches':
-                navigate("/churches");
-            break;
+    // const handleClick = (label: string) => {
+    //     switch(label) {
+    //         case 'churches':
+    //             navigate("/churches");
+    //         break;
 
-            case 'fellowship':
-                navigate("/fellowship");    
-            break;
+    //         case 'fellowship':
+    //             navigate("/fellowship");    
+    //         break;
 
-            case 'bacenta':
-                navigate("/bussing");
-            break;
+    //         case 'bacenta':
+    //             navigate("/bussing");
+    //         break;
 
-            case 'pastoral_point':
-                navigate("/pastoral_point")
-            break;
-        }
+    //         case 'pastoral_point':
+    //             navigate("/pastoral_point")
+    //         break;
+    //     }
         
-    }
+    // }
 
     return (
         <>
-            <HeaderPanel setVisible={setVisible} loggedInUser={"fas"} />
+            <HeaderPanel setVisible={setVisible} loggedInUser={ user } />
 
             <Grid columns={3} gap={2}>
-                <Grid.Item >
+                {/* <Grid.Item >
                     <ValueCard key={"churches"} title="Churches" value={1} handleClick={() => handleClick("churches")  } Icon={<SystemQRcodeOutline />}/>
                 </Grid.Item>
-                 {/* <Grid.Item>
+                 <Grid.Item>
                     <ValueCard key={"streams"} title="Streams" value={3} handleClick={() => handleClick("streams")} Icon={<TeamOutline />}/>
                 </Grid.Item>
                 <Grid.Item >

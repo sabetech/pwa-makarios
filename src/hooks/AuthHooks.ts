@@ -21,6 +21,10 @@ export const useSignIn = () => {
     };
 }
 
+export const useAuthUser = () => {
+    return (): TUser => JSON.parse(localStorage.getItem(StorageKeys.USER) ?? "{}") as TUser;
+}
+
 export const useAuthToken = () => {
     return localStorage.getItem(StorageKeys.TOKEN);
 }

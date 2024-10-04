@@ -8,7 +8,6 @@ import * as ResponseCodes from '../../constants/ResponseStatusCodes';
 import { UserContext } from '../../contexts/UserContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../services/UserManagement';
-import * as StorageKeys from '../../constants/StorageKeys';
 import "./Auth.css";
 
 const Welcome: React.FC = () => {
@@ -43,7 +42,9 @@ const Welcome: React.FC = () => {
             }
             
         },
+       
         onSuccess: () => {
+            console.log("Login Successful")
             navigate('/dashboard')
             Toast.show({
                 content: 'Login Successful',

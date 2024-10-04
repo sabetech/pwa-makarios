@@ -1,10 +1,11 @@
 
 import { Image, Space } from 'antd-mobile'
 import { MoreOutline } from 'antd-mobile-icons'
+import { TUser } from '../../types/user'
 
 type HeaderPanelProps = {
     setVisible: (value: boolean) => void
-    loggedInUser: any
+    loggedInUser: TUser
 }
 const HeaderPanel:React.FC<HeaderPanelProps> = ({setVisible, loggedInUser}) => {
 
@@ -32,13 +33,13 @@ const HeaderPanel:React.FC<HeaderPanelProps> = ({setVisible, loggedInUser}) => {
                     <div style={{marginTop: -30}}>
                         
                         <div style={{ height: "20%", width: "55vw", marginTop: 20}}>
-                            <p style={{ fontFamily: 'Verdana, sans-serif', fontSize: 25, margin: 0, color: 'white' }}>Hello, <strong>{"ping"}</strong></p>
+                            <p style={{ fontFamily: 'Verdana, sans-serif', fontSize: 25, margin: 0, color: 'white' }}>Hello, <strong>{ loggedInUser.name.substring(0, loggedInUser.name.indexOf(" ")) }</strong></p>
                             </div>
                         <div style={{ height: "10%", width: "55vw", marginTop: 5}}>
                             <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}></h1>
                         </div>
                         <div style={{ height: "10%", width: "55vw", marginTop: 5}}>
-                            <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}> {"loggedInUser?.roles[0].name"} </h1>
+                            <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}> {loggedInUser.roles.length > 0 ? loggedInUser.roles[0].name : 'No Role'} </h1>
                         </div>
                     </div>
                 </Space>

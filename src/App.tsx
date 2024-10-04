@@ -49,7 +49,7 @@ function App() {
                   // TODO: Add protected routes
                   useIsAuthenticated() ? 
                   <Route>
-                    <Route path='*' element={<Dashboard />} />
+                    {/* <Route path='*' element={<Dashboard />} /> */}
                     <Route path='/dashboard' element={<Dashboard />} />
                     <Route path='/bussing' element={<BussingDetails />} />
                     <Route path='/fellowship' element={<FellowshipServiceDetails />} />

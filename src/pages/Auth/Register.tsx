@@ -3,11 +3,10 @@ import { Space, Image, Form, Input, SafeArea, Button, Toast } from "antd-mobile"
 import makarios_logo from "../../assets/makarios_log_trans_bg.png";
 import { useMutation } from 'react-query';
 import { registerUser } from '../../services/UserManagement';
-import { IUserManager, ResponseError, ServerResponse, User } from '../../interfaces/ServerResponse';
+import { ResponseError } from '../../interfaces/ServerResponse';
 import * as ResponseCodes from '../../constants/ResponseStatusCodes';
-import { UserContext } from '../../contexts/UserContext';
+
 import { Link, useNavigate } from 'react-router-dom';
-import * as StorageKeys from '../../constants/StorageKeys';
 import "./Auth.css";
 
 type TUserRegister = {
@@ -66,19 +65,53 @@ const Register: React.FC = () => {
                     position: 'top'
                 })
             }
-            console.log('error', error.response?.data)
+
+            //TODO:: Fix the list of validation message from the server
+            if (error.response?.status === ResponseCodes.BAD_REQUEST) {
+                console.log("Error::", error.response.data.data.email[0])
+                
+                Toast.show({
+                    content: error.response.data.data.email[0],
+                    duration: 4000,
+                    icon: 'fail',
+                    position: 'top'
+                })
+            }
         }
     });
 
     const onRegister = (values: TUserRegister) => {
-        // if (emailText.length < 1) {
-        //     setFormEmpty(true)
-        //     setTimeout(() => {
-        //         setFormEmpty(false)
-        //     },500)
-        // } //TODO: Validate later
+       //validate the form
+       console.log(values);
+       if (values.name === undefined || values.email === undefined || values.password === undefined || values.c_password === undefined) {
+        
+            hintUserError();
+           return Toast.show({
+               content: 'Please fill in all fields',
+               duration: 4000,
+               icon: 'fail',
+               position: 'top'
+           })
+       }
+
+        if (values.password !== values.c_password) {
+            hintUserError();
+            return Toast.show({
+                content: 'Passwords do not match',
+                duration: 4000,
+                icon: 'fail',
+                position: 'top'
+            })
+        }
         
         mutate(values)
+    }
+
+    const hintUserError = () => {
+        setFormEmpty(true)
+        setTimeout(() => {
+            setFormEmpty(false)
+        }, 1000)
     }
 
     // const onEmailTextChange = (text: string) => {
