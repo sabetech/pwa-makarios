@@ -40,12 +40,16 @@ const Register: React.FC = () => {
             const response = await registerUser(name, email, password, c_password);
             if (response.status === ResponseCodes.OK) {
                 
-                console.log(response.data.user);
+                console.log(response.data.data.name);
                 
                 // storeUser(response.data.user as User)
                 // localStorage.setItem(StorageKeys.USER, JSON.stringify(response.data.user))
 
-               navigate('/dashboard')
+               navigate('/set-photo', {
+                state: {
+                    name: response.data.data.name
+                }
+               });
             }
         },
         onSuccess: () => {
@@ -124,6 +128,7 @@ const Register: React.FC = () => {
             <Space direction='vertical' align='center' style={{ '--gap': '40px' }} block>
 
                 <h1 style={{textAlign: 'center', marginRight: 20, marginLeft: 20}}>Register</h1>
+
                 <Image 
                     src={makarios_logo} 
                     width={170} height={170} fit='contain'
