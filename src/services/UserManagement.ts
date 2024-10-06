@@ -16,3 +16,8 @@ export const logoutUser = async(token: string): Promise<AxiosResponse> => {
 export const registerUser = async(name:string, email: string, password: string, c_password:string): Promise<AxiosResponse> => {
     return (await api.post('/register', {name: name, email: email, password: password, c_password: c_password}, {}));
 }
+
+export const uploadUserPhoto = async(formData: any): Promise<AxiosResponse> => {
+    
+    return (await api.postWithFile('/users/upload-photo', formData, {}));
+}

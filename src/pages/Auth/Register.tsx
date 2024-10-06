@@ -8,6 +8,7 @@ import * as ResponseCodes from '../../constants/ResponseStatusCodes';
 
 import { Link, useNavigate } from 'react-router-dom';
 import "./Auth.css";
+import { useSignIn } from '../../hooks/AuthHooks';
 
 type TUserRegister = {
     name: string,
@@ -23,6 +24,7 @@ const Register: React.FC = () => {
     // const { storeUser } = useContext(UserContext) as IUserManager;
     const navigate = useNavigate();
     const [form] = Form.useForm()
+    const signIn = useSignIn();
 
     // useEffect(() => {
 
@@ -40,14 +42,15 @@ const Register: React.FC = () => {
             const response = await registerUser(name, email, password, c_password);
             if (response.status === ResponseCodes.OK) {
                 
-                console.log(response.data.data.name);
+                signIn({
+                    token: response.data.data.token,
+                    tokenType: 'Bearer',
+                    user: response.data.data.user
+                })
                 
-                // storeUser(response.data.user as User)
-                // localStorage.setItem(StorageKeys.USER, JSON.stringify(response.data.user))
-
                navigate('/set-photo', {
                 state: {
-                    name: response.data.data.name
+                    user: response.data.data.user
                 }
                });
             }

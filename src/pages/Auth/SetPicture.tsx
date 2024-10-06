@@ -1,8 +1,12 @@
-import { useState, useRef, useCallback, useEffect } from "react";
-import { Space, Image, Form, Input, SafeArea, Button, Toast } from "antd-mobile";
+import { useState, useRef, useCallback } from "react";
+import { Space, Image, SafeArea, Button, Toast } from "antd-mobile";
 import { useLocation } from "react-router-dom";
 import { UploadOutline, CameraOutline } from 'antd-mobile-icons'
 import Webcam from "react-webcam";
+import { useAuthUser, useUserImageUpload } from "../../hooks/AuthHooks";
+import { convertBase64ToFile } from "../../utils/helper";
+import { useNavigate } from "react-router-dom";
+import * as StorageKeys from '../../constants/StorageKeys';
 
 const SetPicture = () => {
     const [showWebCam, setShowWebcam] = useState(false);
@@ -10,9 +14,11 @@ const SetPicture = () => {
     const [defaultImage, setDefaultImage] = useState('/404');
     const webcamRef = useRef<Webcam>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-
+    const {mutate: upload, isLoading, isSuccess: isFinishedUpload, isError, data } = useUserImageUpload();
     const location = useLocation();
+    const [file, setFile] = useState<File>();
+    const navigate = useNavigate()
+    const user = useAuthUser()()
 
     const capture = useCallback(() => {
         if (webcamRef.current) {
@@ -37,6 +43,17 @@ const SetPicture = () => {
     }
   }
 
+  if (isFinishedUpload) {
+    user.img_url = data.data.image_url;
+    localStorage.setItem(StorageKeys.USER, JSON.stringify(user));
+    navigate('/dashboard');
+  }
+
+  if (isError) {
+    console.log("isError", isError)
+  }
+
+
   const handleUploadButton = () => {
     if (showWebCam) {
         setShowWebcam(false);
@@ -54,6 +71,7 @@ const SetPicture = () => {
         const file = event.target.files[0];
         if (file && file.type.startsWith('image/')) {
             const imageUrl = URL.createObjectURL(file);
+            setFile(file);
             setDefaultImage(imageUrl); 
             setPictureLoaded(true);
 
@@ -64,12 +82,26 @@ const SetPicture = () => {
   };
 
   const handleSubmitPicture = () => {
+    console.log("ABOUT to UPload::", defaultImage)
     if (pictureLoaded) {
-        //upload picture to cloudinary
-        //TODO
-        
+        if (defaultImage.startsWith('blob')) {
+            console.log("file", file)
+            upload({
+                user_id: location.state.user.id,
+                image:file
+            })
+        }
 
-
+        if (defaultImage.startsWith('data')) {
+            const myfile = convertBase64ToFile(defaultImage, location.state.user.name)
+           console.log("file", myfile)
+            upload({
+                user_id: location.state.user.id,
+                image: myfile
+            })
+        }
+    
+        return;
 
         
     }else{
@@ -87,7 +119,7 @@ const SetPicture = () => {
                 <Space direction='vertical' align='center' style={{ '--gap': '40px' }} block>
 
                     <h1 style={{textAlign: 'center', marginRight: 20, marginLeft: 20, color:'#570A22'}} >Almost done!</h1>
-                    <h2 style={{color: '#570A22', marginLeft: 30, marginRight: 30, textAlign: 'center'}}>Hello <em>{ location.state.name } </em>!</h2>
+                    <h2 style={{color: '#570A22', marginLeft: 30, marginRight: 30, textAlign: 'center'}}>Hello <em>{ location.state.user.name } </em>!</h2>
                     <h2 style={{color: '#570A22', marginLeft: 30, marginRight: 30, textAlign: 'center'}}>Upload a picture or take a selfie!</h2>
                     {
                         showWebCam ? 
@@ -135,7 +167,7 @@ const SetPicture = () => {
                     }}>
                         Cancel
                     </Button>
-                    <Button size="large" color="primary" fill='solid'  onClick={() => handleSubmitPicture()}>
+                    <Button size="large" color="primary" fill='solid' loading={isLoading} loadingText="Submitting" onClick={() => handleSubmitPicture()}>
                         Submit
                     </Button>
                     </Space>

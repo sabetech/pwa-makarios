@@ -1,19 +1,15 @@
 import axios from 'axios';
 const API_BASE_URL = import.meta.env.VITE_BASE_URL
+
 import { getServerDateFormat } from '../../utils/helper';
 import { useAuthToken } from '../../hooks/AuthHooks';
 
 const postWithFile = (url: string, data: any, headers: object) => {
     const formData = new FormData();
-    console.log("BEFORE FORM DATA:::    ", data)
     const authToken = useAuthToken();
-    
+
     Object.keys(data).forEach(key => {
-        if (key === "date") {
-            formData.append(key, getServerDateFormat(data[key]));
-        }else{
-            formData.append(key, data[key]);
-        }
+        formData.append(key, data[key]);
     });
     
     return axios(API_BASE_URL+url, {
@@ -26,6 +22,22 @@ const postWithFile = (url: string, data: any, headers: object) => {
          data: formData
        });
 }
+
+// const uploadToCloudinary = (data: any) => {
+//     const formData = new FormData();
+
+//     Object.keys(data).forEach(key => {
+//         formData.append(key, data[key]);
+//     });
+
+//     return axios(CLOUDINARY_URL, {
+//         method: 'POST',
+//         headers: {
+//            'Content-Type': '"multipart/form-data"',
+//         },
+//         data: formData
+//       });
+// }
 
 const post = (url: string, data: any, headers: object) => {
     const authToken = useAuthToken();
@@ -102,7 +114,7 @@ const auth = (url: string, data: any, headers: object) => {
     });
 }
 
-export { postWithFile, post, get, deleteRequest, put, auth}
+export { postWithFile, post, get, deleteRequest, put, auth };
 
 
 

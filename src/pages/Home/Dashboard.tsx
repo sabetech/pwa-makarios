@@ -147,7 +147,7 @@ const Dashboard = () => {
         <>
             <HeaderPanel setVisible={setVisible} loggedInUser={ user } />
 
-            <Grid columns={3} gap={2}>
+            <Grid columns={3} gap={2} style={{marginTop: '10vh'}}>
                 {/* <Grid.Item >
                     <ValueCard key={"churches"} title="Churches" value={1} handleClick={() => handleClick("churches")  } Icon={<SystemQRcodeOutline />}/>
                 </Grid.Item>
