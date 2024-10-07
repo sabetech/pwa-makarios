@@ -35,7 +35,9 @@ export function convertBase64ToFile(base64String: string, fileName: string): Fil
 
   const [mimePart, base64Data] = base64String.split(',');
 
-  const mime = mimePart.match(/:(.*?);/)[1];
+  const tmp = mimePart.match(/:(.*?);/)
+
+  const mime = tmp ? tmp[1] : 'text/plain';
     
   // Decode the base64 string into a binary array
   const byteCharacters = atob(base64Data);
