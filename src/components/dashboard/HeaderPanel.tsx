@@ -9,6 +9,7 @@ type HeaderPanelProps = {
 }
 const HeaderPanel:React.FC<HeaderPanelProps> = ({setVisible, loggedInUser}) => {
 
+    console.log("loggedUser::", loggedInUser)
 
     return (
         <div style={{

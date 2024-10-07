@@ -8,7 +8,7 @@ import * as ResponseCodes from '../../constants/ResponseStatusCodes';
 
 import { Link, useNavigate } from 'react-router-dom';
 import "./Auth.css";
-import { useSignIn } from '../../hooks/AuthHooks';
+import { useSignIn, useSignOut } from '../../hooks/AuthHooks';
 
 type TUserRegister = {
     name: string,
@@ -18,30 +18,19 @@ type TUserRegister = {
 }
 
 const Register: React.FC = () => {
+    useSignOut()();
+
     const emailTextRef = useRef(null);
-    // const [emailText, setEmailText] = useState<string>(''); //TODO: Validate later
     const [isFormEmpty, setFormEmpty] = useState<boolean>(false);
-    // const { storeUser } = useContext(UserContext) as IUserManager;
+    
     const navigate = useNavigate();
     const [form] = Form.useForm()
     const signIn = useSignIn();
-
-    // useEffect(() => {
-
-    //     //log the user in if they are already logged in
-    //     if (localStorage.getItem(StorageKeys.USER)) {
-    //         const user = JSON.parse(localStorage.getItem(StorageKeys.USER) as string) as User;
-    //         storeUser(user);
-    //         navigate('/dashboard')
-    //     }
-
-    // },[]);
 
     const { mutate, isLoading } = useMutation({
         mutationFn: async ({name, email, password, c_password}: TUserRegister) => { 
             const response = await registerUser(name, email, password, c_password);
             if (response.status === ResponseCodes.OK) {
-                
                 signIn({
                     token: response.data.data.token,
                     tokenType: 'Bearer',

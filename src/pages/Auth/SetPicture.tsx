@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Space, Image, SafeArea, Button, Toast } from "antd-mobile";
 import { useLocation } from "react-router-dom";
 import { UploadOutline, CameraOutline } from 'antd-mobile-icons'
@@ -43,11 +43,16 @@ const SetPicture = () => {
     }
   }
 
-  if (isFinishedUpload) {
-    user.img_url = data.data.image_url;
-    localStorage.setItem(StorageKeys.USER, JSON.stringify(user));
-    navigate('/dashboard');
-  }
+  useEffect(() => {
+    if (isFinishedUpload) {
+    
+        navigate('/dashboard', {
+            state: {
+                user: data.data
+            }
+        });
+      }
+  },[isFinishedUpload])
 
   if (isError) {
     console.log("isError", isError)
@@ -62,8 +67,7 @@ const SetPicture = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
         }
-    }    
-    
+    }
   }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,7 +123,7 @@ const SetPicture = () => {
                 <Space direction='vertical' align='center' style={{ '--gap': '40px' }} block>
 
                     <h1 style={{textAlign: 'center', marginRight: 20, marginLeft: 20, color:'#570A22'}} >Almost done!</h1>
-                    <h2 style={{color: '#570A22', marginLeft: 30, marginRight: 30, textAlign: 'center'}}>Hello <em>{ location.state.user.name } </em>!</h2>
+                    <h2 style={{color: '#570A22', marginLeft: 30, marginRight: 30, textAlign: 'center'}}>Hello <em>{ user.name } </em>!</h2>
                     <h2 style={{color: '#570A22', marginLeft: 30, marginRight: 30, textAlign: 'center'}}>Upload a picture or take a selfie!</h2>
                     {
                         showWebCam ? 

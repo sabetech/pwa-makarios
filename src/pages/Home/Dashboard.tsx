@@ -5,10 +5,11 @@ import { logoutUser } from '../../services/UserManagement';
 import { Grid, Space, FloatingBubble, Modal, ActionSheet, Divider } from 'antd-mobile'
 import { useSignOut, useAuthUser, useAuthToken } from '../../hooks/AuthHooks';
 import { MoreOutline } from 'antd-mobile-icons'
-
+import { useLocation } from 'react-router-dom';
 // import { ValueCard } from '../../components/dashboard/ValueCard';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
+import * as StorageKeys from '../../constants/StorageKeys';
 // import { getPastoralPoint, getBussing } from '../../services/StudentData';
 // import { ServerResponse, IBussing } from '../../interfaces/ServerResponse';
 // import { postAttendance } from '../../services/Attendance';
@@ -23,19 +24,21 @@ import { getActions, ADMIN, SERVICES, DIRECTORY, ARRIVAL } from '../../constants
 
 const Dashboard = () => {
     const authToken = useAuthToken();
-    
+    const location = useLocation();
     const signOut = useSignOut();
     const navigate = useNavigate();
     const [visible, setVisible] = useState(false)
     
+    if (location?.state?.user != null) {
+        localStorage.setItem(StorageKeys.USER, JSON.stringify(location.state.user));
+    }
+
     const loggedInUser = useAuthUser()
     const user = loggedInUser()
 
-    // const {data: pastoralPoints, isLoading} = useQuery<ServerResponse>(['pastoral_points'], () => getPastoralPoint(user?.index_number as number));
-    // const { data: bussingData, isLoading: bussingLoading } = useQuery<ServerResponse>(['bussing'], () => getBussing(user?.index_number as number));
-    // const [averageBussing, setAverageBussing] = useState<number>(0);
+    
 
-    const { mutate: logout, isLoading: loggingOut } = useMutation({
+    const { mutate: logout } = useMutation({
         mutationFn: async () => {
             return await logoutUser(authToken as string);
         },
@@ -50,38 +53,6 @@ const Dashboard = () => {
             console.log(error)
         }
     })
-
-    // useEffect(() => {
-
-    //     if (pastoralPoints?.data) {
-    //         const parameters = pastoralPoints.data?.data.map((pastoralPoint: IPastoralPoint) => {
-    //             return pastoralPoint
-    //         });
-    //         setPastoralPoint(parameters);
-    //         const myTotalPoints = pastoralPoints.data?.data.reduce((total: number, pastoralPoint: IPastoralPoint) => {
-    //             return total + pastoralPoint.pivot.points
-    //         }, 0)
-    //         setTotalPoints(myTotalPoints as number);
-    //     }
-
-    // },[pastoralPoints])
-
-    // useEffect(() => {
-
-    //     if (bussingData?.data) {
-    //         const bussingDetails = bussingData.data?.data.map((bussing: IBussing) => {
-    //             return bussing;
-    //         });
-
-    //         const myAverageBussing = bussingDetails.reduce((total: number, bussing: IBussing) => {
-    //             return total + bussing.number_bussed
-    //         }, 0) / bussingDetails.length;
-    //         setAverageBussing(myAverageBussing.toFixed(0) as unknown as number);
-    //     }
-
-    // }, [bussingData])
-
-
     
     const actions: Action[] = [
        ...getActions(user.roles.length > 0 ? user.roles[0].name : 'General'),
