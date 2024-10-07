@@ -8,6 +8,7 @@ import * as ResponseCodes from '../../constants/ResponseStatusCodes';
 
 import { Link, useNavigate } from 'react-router-dom';
 import "./Auth.css";
+import { useSignIn, useSignOut } from '../../hooks/AuthHooks';
 
 type TUserRegister = {
     name: string,
@@ -17,35 +18,30 @@ type TUserRegister = {
 }
 
 const Register: React.FC = () => {
+    useSignOut()();
+
     const emailTextRef = useRef(null);
-    // const [emailText, setEmailText] = useState<string>(''); //TODO: Validate later
     const [isFormEmpty, setFormEmpty] = useState<boolean>(false);
-    // const { storeUser } = useContext(UserContext) as IUserManager;
+    
     const navigate = useNavigate();
     const [form] = Form.useForm()
-
-    // useEffect(() => {
-
-    //     //log the user in if they are already logged in
-    //     if (localStorage.getItem(StorageKeys.USER)) {
-    //         const user = JSON.parse(localStorage.getItem(StorageKeys.USER) as string) as User;
-    //         storeUser(user);
-    //         navigate('/dashboard')
-    //     }
-
-    // },[]);
+    const signIn = useSignIn();
 
     const { mutate, isLoading } = useMutation({
         mutationFn: async ({name, email, password, c_password}: TUserRegister) => { 
             const response = await registerUser(name, email, password, c_password);
             if (response.status === ResponseCodes.OK) {
+                signIn({
+                    token: response.data.data.token,
+                    tokenType: 'Bearer',
+                    user: response.data.data.user
+                })
                 
-                console.log(response.data.user);
-                
-                // storeUser(response.data.user as User)
-                // localStorage.setItem(StorageKeys.USER, JSON.stringify(response.data.user))
-
-               navigate('/dashboard')
+               navigate('/set-photo', {
+                state: {
+                    user: response.data.data.user
+                }
+               });
             }
         },
         onSuccess: () => {
@@ -124,6 +120,7 @@ const Register: React.FC = () => {
             <Space direction='vertical' align='center' style={{ '--gap': '40px' }} block>
 
                 <h1 style={{textAlign: 'center', marginRight: 20, marginLeft: 20}}>Register</h1>
+
                 <Image 
                     src={makarios_logo} 
                     width={170} height={170} fit='contain'

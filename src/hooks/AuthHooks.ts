@@ -1,5 +1,7 @@
 import { TUser } from "../types/user";
 import * as StorageKeys from "../constants/StorageKeys";
+import { useMutation } from "react-query";
+import * as apiClient from "../services/UserManagement";
 
 type signInType = {
     token: string,
@@ -45,4 +47,25 @@ export const useIsAuthenticated = () => {
     }
 
     return true
+}
+
+const _uploadImage = async (image: any) => {
+    const { data } = await apiClient.uploadUserPhoto(image)
+    return data;
+};
+
+export const useUserImageUpload = () => {
+
+    return useMutation(
+        {
+            mutationFn: (values: any) => _uploadImage(values),
+            onSuccess: (data) => {
+               console.log("Data::", data)
+            },
+            onError: (error) => {
+                
+            }
+        }
+    )
+
 }

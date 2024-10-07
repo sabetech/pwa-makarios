@@ -18,7 +18,6 @@ const _getChurches = async () => {
 
 export const useAddChurch = () => {
     
-
     return useMutation(async (churchInfo: TChurchInfo) => _addChurch(churchInfo), {
         onSuccess: (churchresponse) => {
             // invalidate the query cache for 'churches'
