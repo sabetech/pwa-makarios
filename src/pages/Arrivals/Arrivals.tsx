@@ -3,7 +3,7 @@ import MyNavBar from "../../components/NavBar";
 import { NoticeBar, Steps, Space, Form, DatePicker, Button } from "antd-mobile";
 import {InformationCircleOutline, CheckCircleFill, ClockCircleFill, CameraOutline, UploadOutline } from 'antd-mobile-icons'
 import { FaBusAlt } from "react-icons/fa";
-import { TbCapture } from "react-icons/tb";
+// import { TbCapture } from "react-icons/tb";
 
 import Webcam from "react-webcam";
 
@@ -63,6 +63,7 @@ const Arrivals = () => {
                         <UploadOutline /> Upload from your phone
                     </Button>
                 </Space> */}
+                
                 <Space style={{display: 'flex', alignContent: 'center', justifyContent: 'center', margin: '30px'}}>
                     <Webcam 
                         videoConstraints={{

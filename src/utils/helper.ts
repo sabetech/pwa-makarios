@@ -25,3 +25,29 @@ export function isTimeGreaterThan(time1: string, time2: string): boolean {
 
     return false;
 }
+
+export function convertBlobToFile(blob: Blob, fileName: string): File {
+    
+    return new File([blob], fileName, {type: blob.type});
+}
+
+export function convertBase64ToFile(base64String: string, fileName: string): File {
+
+  const [mimePart, base64Data] = base64String.split(',');
+
+  const mime = mimePart.match(/:(.*?);/)[1];
+    
+  // Decode the base64 string into a binary array
+  const byteCharacters = atob(base64Data);
+  const byteNumbers = new Array(byteCharacters.length);
+
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+
+  const byteArray = new Uint8Array(byteNumbers);
+
+  // Create a Blob from the binary data
+  const blob = new Blob([byteArray], { type: mime });
+  return convertBlobToFile(blob, fileName);
+}

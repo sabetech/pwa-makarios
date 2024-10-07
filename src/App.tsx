@@ -22,6 +22,7 @@ import Streams from './pages/Streams/Index'
 import AddStream from './pages/Streams/AddStream'
 
 import { useIsAuthenticated } from './hooks/AuthHooks'
+import SetPicture from './pages/Auth/SetPicture'
 
 function App() {
   const queryClient = new QueryClient({
@@ -43,6 +44,7 @@ function App() {
                 <Route path='/' element={<Welcome />} />
                 <Route path='/login' element={<Welcome />} />
                 <Route path='/register' element={ <Register /> } />
+                <Route path='/set-photo' element={ <SetPicture /> } />
                 <Route path='/forgot-password' element={ <ForgotPassword /> } />
 
                 {
