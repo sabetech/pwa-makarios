@@ -8,7 +8,6 @@ import Members from './pages/Directory/Members'
 import Services from './pages/Services/Services'
 import Arrivals from './pages/Arrivals/Arrivals'
 import Directory from './pages/Directory/Directory'
-import BussingDetails from './pages/Detail/BussingDetail'
 import FellowshipServiceDetails from './pages/Detail/FellowshipServiceDetail'
 import FellowshipServiceForm from './pages/Forms/FellowshipService'
 import ForgotPassword from './pages/Auth/ForgotPassword'
@@ -53,7 +52,6 @@ function App() {
                   <Route>
                     {/* <Route path='*' element={<Dashboard />} /> */}
                     <Route path='/dashboard' element={<Dashboard />} />
-                    <Route path='/bussing' element={<BussingDetails />} />
                     <Route path='/fellowship' element={<FellowshipServiceDetails />} />
                     <Route path='/fellowship/fill-form' element={<FellowshipServiceForm />} />
                     <Route path='/directory' element={<Directory />} />
