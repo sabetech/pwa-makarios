@@ -2,12 +2,13 @@ import { useState, useRef, useContext, useEffect } from 'react';
 import { Space, Image, Form, Input, SafeArea, Button, Toast } from "antd-mobile";
 import makarios_logo from "../../assets/makarios_log_trans_bg.png";
 import { useMutation } from 'react-query';
-import { IUserManager, ResponseError, ServerResponse, User } from '../../interfaces/ServerResponse';
+import { IUserManager, ResponseError } from '../../interfaces/ServerResponse';
 import * as ResponseCodes from '../../constants/ResponseStatusCodes';
 import { UserContext } from '../../contexts/UserContext';
 import { Link, useNavigate } from 'react-router-dom';
 import * as StorageKeys from '../../constants/StorageKeys';
 import "./Auth.css";
+import { TUser } from '../../types/user';
 
 const ForgotPassword: React.FC = () => {
     const emailTextRef = useRef(null);
@@ -20,7 +21,7 @@ const ForgotPassword: React.FC = () => {
 
         //log the user in if they are already logged in
         if (localStorage.getItem(StorageKeys.USER)) {
-            const user = JSON.parse(localStorage.getItem(StorageKeys.USER) as string) as User;
+            const user = JSON.parse(localStorage.getItem(StorageKeys.USER) as string) as TUser;
             storeUser(user);
             navigate('/dashboard')
         }
