@@ -136,7 +136,7 @@ const Welcome: React.FC = () => {
                     </Form.Item>
                 </Form>
                 <Link to="/forgot-password" style={{marginTop: 5}}>Forgot Password?</Link>
-                <Link to="/register" style={{marginTop: 5}}>Don't have an Account? Register</Link>
+                <Link to="/register" style={{marginTop: 5, marginBottom: 20}}>Don't have an Account? Register</Link>
             </Space>
     </div>
     );

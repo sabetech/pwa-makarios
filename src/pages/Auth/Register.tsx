@@ -166,7 +166,7 @@ const Register: React.FC = () => {
                         <Input type='password' placeholder='xxxxxxxxx' clearable />   
                     </Form.Item>
                 </Form>
-                <Link to="/login" style={{marginTop: 5}}>Got an Account? Login</Link>
+                <Link to="/login" style={{marginTop: 5, marginBottom: 20}}>Got an Account? Login</Link>
             </Space>
     </div>
     );
