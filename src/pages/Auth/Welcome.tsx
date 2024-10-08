@@ -3,12 +3,13 @@ import { Space, Image, Form, Input, SafeArea, Button, Toast } from "antd-mobile"
 import makarios_logo from "../../assets/makarios_log_trans_bg.png";
 import { useMutation } from 'react-query';
 import { useSignIn } from '../../hooks/AuthHooks';
-import { IUserManager, ResponseError, ServerResponse, User } from '../../interfaces/ServerResponse';
+import { IUserManager, ResponseError } from '../../interfaces/ServerResponse';
 import * as ResponseCodes from '../../constants/ResponseStatusCodes';
 import { UserContext } from '../../contexts/UserContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../services/UserManagement';
 import "./Auth.css";
+import { TUserResponse } from '../../types/user';
 
 const Welcome: React.FC = () => {
     const emailTextRef = useRef(null);
@@ -22,11 +23,9 @@ const Welcome: React.FC = () => {
     const signIn = useSignIn()
 
     const { mutate, isLoading } = useMutation({
-        mutationFn: async ( {email, password}: {email: string, password: string} ) => { 
+        mutationFn: async ( {email, password}: {email: string, password: string} ): Promise<TUserResponse> => { 
             
             const response = await loginUser(email, password);
-
-            console.log("Response::", response)
 
             if (response.status === ResponseCodes.OK) {
 
@@ -40,12 +39,23 @@ const Welcome: React.FC = () => {
                     hintUserError()
                 }
             }
-            
+            return response.data;
         },
        
-        onSuccess: () => {
-            console.log("Login Successful")
-            navigate('/dashboard')
+        onSuccess: (responseData: TUserResponse) => {
+
+            console.log("response ", responseData)
+
+            storeUser(responseData.data.user)
+            if (responseData.data.user.img_url) {
+                navigate('/dashboard')
+            }else {
+                navigate('/set-photo', {
+                    state: {
+                        user: responseData.data.user
+                    }
+                });
+            }
             Toast.show({
                 content: 'Login Successful',
                 duration: 1000,

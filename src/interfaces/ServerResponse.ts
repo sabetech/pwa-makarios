@@ -1,3 +1,5 @@
+import { TUser } from "../types/user";
+
 export interface ServerResponse<T = any> {
     status: number;
     data: T;
@@ -9,22 +11,10 @@ export interface ResponseError {
     response?: ServerResponse;
 }
 
-export interface User {
-    id? : number;
-    index_number: number;
-    name: string;
-    phone: string;
-    class: string;
-    country: string;
-    email_address?: string;
-    date_of_birth?: string;
-    already_exists?: boolean;
-    passcode?: number; //this is illegal. Rewrite the whole auth system
-}
 
 export interface IUserManager {
-    user: User | null;
-    storeUser(user: User): void;
+    user: TUser | null;
+    storeUser(user: TUser): void;
 }
 
 interface Pivot {
