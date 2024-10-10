@@ -1,5 +1,5 @@
 import { useState, useRef, useContext, useEffect } from 'react';
-import { Space, Image, Form, Input, SafeArea, Button, Toast } from "antd-mobile";
+import { Space, Image, Form, Input, SafeArea, Button, Toast, Footer } from "antd-mobile";
 import makarios_logo from "../../assets/makarios_log_trans_bg.png";
 import { useMutation } from 'react-query';
 import { useSignIn } from '../../hooks/AuthHooks';
@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../services/UserManagement';
 import "./Auth.css";
 import { TUserResponse } from '../../types/user';
+import packageInfo from '../../../package.json';
 
 const Welcome: React.FC = () => {
     const emailTextRef = useRef(null);
@@ -137,6 +138,7 @@ const Welcome: React.FC = () => {
                 </Form>
                 <Link to="/forgot-password" style={{marginTop: 5}}>Forgot Password?</Link>
                 <Link to="/register" style={{marginTop: 5, paddingBottom: 30}}>Don't have an Account? Register</Link>
+                <Footer label={`Version: ${packageInfo.version}`}></Footer>
             </Space>
     </div>
     );
