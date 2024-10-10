@@ -86,10 +86,10 @@ const SetPicture = () => {
   };
 
   const handleSubmitPicture = () => {
-    console.log("ABOUT to UPload::", defaultImage)
+    
     if (pictureLoaded) {
         if (defaultImage.startsWith('blob')) {
-            console.log("file", file)
+            
             upload({
                 user_id: location.state.user.id,
                 image:file
@@ -98,7 +98,7 @@ const SetPicture = () => {
 
         if (defaultImage.startsWith('data')) {
             const myfile = convertBase64ToFile(defaultImage, location.state.user.name)
-           console.log("file", myfile)
+           
             upload({
                 user_id: location.state.user.id,
                 image: myfile

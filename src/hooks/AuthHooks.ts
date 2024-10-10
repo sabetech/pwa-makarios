@@ -42,6 +42,7 @@ export const useSignOut = () => {
 export const useIsAuthenticated = () => {
 
     const token = localStorage.getItem(StorageKeys.TOKEN);
+    console.log("token", token)
     if (token === null) {
         return false
     }

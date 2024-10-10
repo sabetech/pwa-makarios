@@ -22,6 +22,7 @@ import AddStream from './pages/Streams/AddStream'
 
 import { useIsAuthenticated } from './hooks/AuthHooks'
 import SetPicture from './pages/Auth/SetPicture'
+import ProtectedRoute from './pages/Auth/ProtectedRoute'
 
 function App() {
   const queryClient = new QueryClient({
@@ -48,9 +49,8 @@ function App() {
 
                 {
                   // TODO: Add protected routes
-                  useIsAuthenticated() ? 
-                  <Route>
-                    {/* <Route path='*' element={<Dashboard />} /> */}
+                 
+                  <Route element={<ProtectedRoute />}>
                     <Route path='/dashboard' element={<Dashboard />} />
                     <Route path='/fellowship' element={<FellowshipServiceDetails />} />
                     <Route path='/fellowship/fill-form' element={<FellowshipServiceForm />} />
@@ -68,7 +68,6 @@ function App() {
 
                     <Route path='/admin/portal' element={<AdminPortal />} />
                   </Route>
-                   : <Route path='*' element={<Welcome />} />
                 }
                   
                 
