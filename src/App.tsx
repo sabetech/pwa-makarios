@@ -4,7 +4,7 @@ import UserProvider from './contexts/UserContext'
 import Welcome from './pages/Auth/Welcome'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Dashboard from './pages/Home/Dashboard'
-import Members from './pages/Directory/Members'
+import Members from './pages/Members/Members'
 import Services from './pages/Services/Services'
 import Arrivals from './pages/Arrivals/Arrivals'
 import Directory from './pages/Directory/Directory'
@@ -23,6 +23,8 @@ import AddStream from './pages/Streams/AddStream'
 import { useIsAuthenticated } from './hooks/AuthHooks'
 import SetPicture from './pages/Auth/SetPicture'
 import ProtectedRoute from './pages/Auth/ProtectedRoute'
+import Stream from './pages/Streams/Stream'
+import AddMember from './pages/Members/AddMember'
 
 function App() {
   const queryClient = new QueryClient({
@@ -56,21 +58,22 @@ function App() {
                     <Route path='/fellowship/fill-form' element={<FellowshipServiceForm />} />
                     <Route path='/directory' element={<Directory />} />
                     <Route path='/directory/members' element={<Members />} />
-                    <Route path='/services' element={<Services />} />
-                    <Route path='/arrivals' element={<Arrivals />} />
+                    <Route path='/directory/members/add' element={<AddMember />} />
+                    <Route path='/directory/members/:id' element={<Members />} />
+
+                    <Route path='/directory/churches' element={<Churches />} />
+                    <Route path='/directory/churches/add' element={<AddChurchform />} />
+                    <Route path='/directory/churches/:id' element={<Church />} />
+                    <Route path='/directory/churches/:church_id/streams/add' element={<AddStream />} />
+                    <Route path='/directory/churches/:church_id/streams' element={<Streams />} />
+                    <Route path='/directory/churches/:church_id/streams/:stream_id' element={<Stream />} />
                     
-                    <Route path='/churches' element={<Churches />} />
-                    <Route path='/church' element={<Church />} />
-                    <Route path='/churches/add' element={<AddChurchform />} />
-
-                    <Route path='/streams' element={<Streams />} />
-                    <Route path='/streams/add' element={<AddStream />} />
-
+                    <Route path='/services' element={<Services />} />
+                    <Route path='/arrivals' element={<Arrivals />} />                    
                     <Route path='/admin/portal' element={<AdminPortal />} />
                   </Route>
                 }
-                  
-                
+                                
             </Routes>
           </Router>
           {/* <Footer label='(c) Anagkazo Lite 2023' style={{position: 'fixed', bottom: 10}}></Footer> */}
