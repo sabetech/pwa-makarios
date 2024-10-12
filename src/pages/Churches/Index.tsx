@@ -15,7 +15,7 @@ const Index = () => {
     }
 
     const handleChurchClick = (church: TChurchInfo) => {
-        navigate("/church", {state: {
+        navigate(`${church.id}`, {state: {
             church
         }});
     }
@@ -24,7 +24,7 @@ const Index = () => {
 
     return (
         <>
-            <MyNavBar prevPage="dashboard" currentPage="Churches" />
+            <MyNavBar prevPage="admin/portal" currentPage="Churches" />
             <List header="Churches" style={{'--header-font-size': '20px'}}>
             {
                 churches && churches.data.map((church: TChurchInfo) => (
@@ -33,7 +33,7 @@ const Index = () => {
                     }}
                         // prefix={<TeamOutline />}
                         style={listStyle}
-                        description={church.name}
+                        description={church.description}
                     >
                         {church.name}
                     </List.Item>

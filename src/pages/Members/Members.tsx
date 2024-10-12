@@ -11,7 +11,7 @@ const Members = () => {
     <>
         <NavBar 
         onBack={() => navigate("/directory")} style={{'--height': '60px', backgroundColor: '#570A22', color:'white'}} 
-        right={<Button color={"default"}>Add New</Button>}
+        right={<Button color={"default"} onClick={() => navigate("/directory/members/add")}>Add New</Button>}
         > Members </NavBar>
         <SearchBar placeholder='Search for member by name' showCancelButton 
             style={{'--height': '60px', backgroundColor: '#570A22', color:'white', '--border-radius': '0px'}}

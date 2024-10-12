@@ -24,7 +24,7 @@ const AddChurchform = () => {
 
     return (
         <>
-        <MyNavBar prevPage="churches" currentPage="Add New Church" />
+        <MyNavBar prevPage="directory/churches" currentPage="Add New Church" />
         <Form
             name='add-church-form'
             onFinish={onFinish}

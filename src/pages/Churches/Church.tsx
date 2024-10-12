@@ -1,20 +1,22 @@
 import { Grid, Card, Divider, Space, Button } from 'antd-mobile'
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import MyNavBar from "../../components/NavBar";
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useNavigate } from 'react-router-dom';
+import HeaderPanel from '../../components/HeaderPanel';
 
 const Church = () => {
     const location = useLocation();
     const navigate = useNavigate();
-
+    const { id } = useParams();
     const handleStreamClick = () => {
-        navigate('/streams')
+        navigate('streams')
     }
 
     return (
         <>
-            <MyNavBar prevPage="churches" currentPage={location.state.church.name}/>
+            <MyNavBar prevPage="directory/churches" currentPage={location.state.church.name}/>
+            <HeaderPanel title={location.state.church.name} />
             <Grid columns={2} gap={8} style={{marginTop: 20, marginLeft: 30, marginRight: 20}}>
                 <Grid.Item>
                     <Card title={"Members"} style={{fontSize: 20}}> 800 </Card>
