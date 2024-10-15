@@ -2,7 +2,7 @@ import { TStream } from "./stream";
 import { TUser } from "./user";
 
 export type TCouncil = {
-    id?: number,
+    id: number,
     name: string,
     description: string,
     leader?: TUser,

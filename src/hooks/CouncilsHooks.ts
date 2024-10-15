@@ -17,7 +17,7 @@ const _getCouncils = async () => {
     return data
 }
 
-export const useAddStream = () => {
+export const useAddCouncil = () => {
     
     return useMutation(async (council: TCouncil) => _addCouncil(council), {
         onSuccess: (councilResponse) => {
@@ -33,8 +33,8 @@ export const useAddStream = () => {
     });
 }
 
-export const useGetCouncil = () => {
-    return  useQuery( 
+export const useGetCouncils = () => {
+    return  useQuery<TCouncil[]>( 
         { 
             queryKey: [queryKeys.COUNCIL_LIST_KEY],
             queryFn: async () => {
