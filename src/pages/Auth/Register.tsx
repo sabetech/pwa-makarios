@@ -5,6 +5,7 @@ import { useMutation } from 'react-query';
 import { registerUser } from '../../services/UserManagement';
 import { ResponseError } from '../../interfaces/ServerResponse';
 import * as ResponseCodes from '../../constants/ResponseStatusCodes';
+import { useGetCouncils } from '../../hooks/CouncilsHooks';
 
 import { Link, useNavigate } from 'react-router-dom';
 import "./Auth.css";
@@ -141,7 +142,7 @@ const Register: React.FC = () => {
                         name='name' 
                         className={isFormEmpty ? 'shake-animation': undefined}
                     >
-                        <Input ref={emailTextRef} placeholder='makarios.member@gmail.com' clearable />
+                        <Input ref={emailTextRef} placeholder='Kwame Makarios' clearable />
                     </Form.Item>
                     
                     <Form.Item  

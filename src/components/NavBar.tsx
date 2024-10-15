@@ -11,7 +11,7 @@ const MyNavBar:React.FC<Navprops> = ({prevPage, currentPage}) => {
     const navigate = useNavigate();
 
     return (
-        <NavBar onBack={() => navigate(`/${prevPage}`)} style={{'--height': '60px', backgroundColor: '#570A22', color:'white'}} > {currentPage} </NavBar>
+        <NavBar onBack={() => navigate(-1)} style={{'--height': '60px', backgroundColor: '#570A22', color:'white'}} > {currentPage} </NavBar>
     )
 }
 

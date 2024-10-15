@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { TeamOutline } from 'antd-mobile-icons'
 import { MdOutlineChurch } from "react-icons/md";
 import { BsStars } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const Directory = () => {
     const navigate = useNavigate();
@@ -10,22 +11,26 @@ const Directory = () => {
     return (<>
         <NavBar onBack={() => navigate("/dashboard")} style={{'--height': '60px', backgroundColor: '#570A22', color:'white'}} > Directory </NavBar>
         <List header="Michael's Directory" style={{'--header-font-size': '20px'}}>
-            <List.Item  onClick={() => {
-                navigate("/directory/members")
-            }}
-                prefix={<TeamOutline />}
-                style={listStyle}
-                description={"0 Members"}
-            >
-                Members
-            </List.Item>
-            <List.Item onClick={() => {}}
-                prefix={<MdOutlineChurch />}
-                style={listStyle}
-                description={"0 Churches"}
-            >
-                Churches
-            </List.Item>
+            <Link to="/directory/members">
+                <List.Item  onClick={() => {
+                    navigate("/directory/members")
+                }}
+                    prefix={<TeamOutline />}
+                    style={listStyle}
+                    description={"0 Members"}
+                >
+                    Members
+                </List.Item>
+            </Link>
+            <Link to="/directory/churches">
+                <List.Item onClick={() => {}}
+                    prefix={<MdOutlineChurch />}
+                    style={listStyle}
+                    description={"0 Churches"}
+                >
+                    Churches
+                </List.Item>
+            </Link>
             <List.Item onClick={() => {}}
                 prefix={<BsStars />}
                 style={listStyle}
