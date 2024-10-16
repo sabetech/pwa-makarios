@@ -2,7 +2,7 @@ import { EventHandler } from "react";
 
 type ValueCardProps = {
     title: string,
-    value: number,
+    value: number | string,
     handleClick: EventHandler<any>,
     Icon: any
 }
