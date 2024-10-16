@@ -1,13 +1,14 @@
 import { AxiosResponse } from 'axios';
-import { TMember } from '../types/member'; 
+import { TMemberRequest } from '../types/member'; 
 import * as api from './API/MakariosAPI';
 
-export const addMember = async (member: TMember): Promise<AxiosResponse> => {
-    return (await api.post('/member', member, {}));
+export const addMember = async (member: TMemberRequest): Promise<AxiosResponse> => {
+    
+    return (await api.postWithFile('/members', member, {}));
 }
 
 export const getMembers = async (): Promise<AxiosResponse> => {
-    return (await api.get('/streams', {}));
+    return (await api.get('/members', {}));
 }
 
 // export const getStream = async (id: number): Promise<AxiosResponse> => {

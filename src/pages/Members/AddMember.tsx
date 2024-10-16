@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Form, Button, Input, Radio, Space, Divider, TextArea, DatePicker } from "antd-mobile"
+import { Form, Button, Input, Radio, Space, Divider, TextArea, DatePicker, Toast } from "antd-mobile"
 import CurrentLocation from "../../components/CurrentLocation"
 import { Coordinates } from "../../types/location";
 
@@ -8,6 +8,9 @@ import Autocomplete from "../../components/Autocomplete";
 import dayjs from "dayjs";
 import { useGetBacentas } from "../../hooks/BacentaHooks";
 import { useGetBasontas } from "../../hooks/BasontaHooks";
+import UploadComponent from "../../components/UploadImage";
+import { useAddMember } from "../../hooks/MemberHooks";
+import { useNavigate } from "react-router-dom";
 
 
 const startDate = dayjs('01-01-2000', 'DD-MM-YYYY'); // Using a custom date format
@@ -19,24 +22,56 @@ const AddMember = () => {
     const [bacenta, setBacenta] = useState({});
     const [basonta, setBasonta] = useState({});
     const [location, setLocation] = useState<Coordinates>({ lat: null, lng: null });
+    const [memberName, setMemberName] = useState("");
+    const [picture, setPicture] = useState<File>();
+    const navigate = useNavigate()
 
     const { data:bacentas } = useGetBacentas();
     const { data: basontas } = useGetBasontas();
 
+    const {mutate: addMember, isLoading: isAdding, isSuccess } = useAddMember()
+
     const onFinish = (_values: any) => {
         console.log('form', form.getFieldsValue())
         console.log('values', _values)
+        
+        if (!bacenta || !basonta) {
+            return Toast.show({
+                content: 'Please select a bacenta and basonta',
+                duration: 4000,
+                icon: 'fail',
+                position: 'top'
+            })
+        }
+
+        if (!picture) {
+            return Toast.show({
+                content: 'Please select a picture',
+                duration: 4000,
+                icon: 'fail',
+                position: 'top'
+            })
+        }
 
         const request = {
             ..._values,
-            date_of_birth: date,
+            date_of_birth: dayjs(date).format("YYYY-MM-DD"),
             bacenta_id: (bacenta as any).id,
             basonta_id: (basonta as any).id,
-            location: location
+            location: location.lat ? `${location.lat}, ${location.lng}` : "",
+            picture: picture
         }
 
         console.log("Save member request ::", request)
 
+        addMember(request)
+    }
+
+    if (isSuccess) {
+        Toast.show({
+            content: 'Member Added Successfully',
+        });
+        navigate("/directory/members");
     }
 
     return (
@@ -47,7 +82,7 @@ const AddMember = () => {
                  form={form}
                  onFinish={onFinish}
                  footer={
-                    <Button block type='submit' color='primary' size='large'>
+                    <Button block type='submit' color='primary' size='large' loading={isAdding}>
                       Save
                     </Button>
                   }
@@ -56,8 +91,9 @@ const AddMember = () => {
                 <Form.Item
                     name='member_name'
                     label='Member Name'
+                    rules={[{ required: true, message: 'Please enter member name' }]}
                 >
-                    <Input placeholder="Adwoa Oluwaseun" />
+                    <Input placeholder="Adwoa Oluwaseun" onChange={(val) => setMemberName(val)}/>
                 </Form.Item>
 
                 <Form.Item
@@ -81,6 +117,7 @@ const AddMember = () => {
                 </Form.Item>
                 <Form.Item
                     label='Date of Birth'
+                    rules={[{ required: true, message: 'Please select date of birth' }]}
                 >
                     <Button onClick={() => setShowDateSelector(true)} fill={'none'} style={{color: 'brown'}}>{dayjs(date).format('ddd, DD-MMM-YYYY')}</Button>
                     <DatePicker
@@ -100,6 +137,17 @@ const AddMember = () => {
                     />
                 </Form.Item>
                 <Form.Item
+                    name='gender'
+                    label='Gender'
+                >
+                    <Radio.Group>
+                        <Space direction='vertical'>
+                            <Radio value='male'>Male</Radio>
+                            <Radio value='female'>Female</Radio>
+                        </Space>
+                    </Radio.Group>
+                </Form.Item>
+                <Form.Item
                     name='marital_status'
                     label='Marital Status'
                 >
@@ -113,6 +161,7 @@ const AddMember = () => {
                 <Form.Item
                     name='occupation'
                     label='Occupation'
+                    rules={[{ required: true, message: 'Please enter member occupation' }]}
                 >
                     <Input placeholder="Student" />
                 </Form.Item>
@@ -158,6 +207,12 @@ const AddMember = () => {
                         placeholder="Select Basonta"
                     />
                     
+                </Form.Item>
+                
+                <Form.Item
+                    label='Upload Picture'
+                >
+                <UploadComponent onImageLoaded={setPicture} filename={memberName} />
                 </Form.Item>
 
             </Form>

@@ -6,15 +6,12 @@ import { Space,Toast, Button } from "antd-mobile";
 import { useMutation } from 'react-query';
 import { convertBase64ToFile } from "../../src/utils/helper";
 
-const [file, setFile] = useState<File>();
-
 type UploadProps = {
-    user_id: number,
-    useUpload: Function
+    onImageLoaded: (image: File) => void
+    filename: string
 }
 const UploadComponent:React.FC<UploadProps> = ({
-    user_id,
-    
+    onImageLoaded, filename
 }) => {
 
     const [showWebCam, setShowWebcam] = useState(false);
@@ -22,10 +19,7 @@ const UploadComponent:React.FC<UploadProps> = ({
     const [defaultImage, setDefaultImage] = useState('/404');
     const webcamRef = useRef<Webcam>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const {mutate: upload, isLoading, isSuccess: isFinishedUpload, isError, data } = useMutation(
-        {}
-    );
-
+   
     const capture = useCallback(() => {
         if (webcamRef.current) {
             const imageSrc = webcamRef.current.getScreenshot();
@@ -33,6 +27,10 @@ const UploadComponent:React.FC<UploadProps> = ({
             setShowWebcam(false)
             if (imageSrc) {
                 setDefaultImage(imageSrc);
+                const myfile = convertBase64ToFile(imageSrc, filename)
+                if (myfile) {
+                        onImageLoaded(myfile)
+                    }
                 setPictureLoaded(true);
             }
         }
@@ -45,7 +43,7 @@ const UploadComponent:React.FC<UploadProps> = ({
         const file = event.target.files[0];
         if (file && file.type.startsWith('image/')) {
             const imageUrl = URL.createObjectURL(file);
-            setFile(file);
+            onImageLoaded(file)
             setDefaultImage(imageUrl); 
             setPictureLoaded(true);
 
@@ -63,37 +61,6 @@ const UploadComponent:React.FC<UploadProps> = ({
         if (fileInputRef.current) {
             fileInputRef.current.click();
         }
-    }
-  }
-
-  const handleSubmitPicture = () => {
-    
-    if (pictureLoaded) {
-        if (defaultImage.startsWith('blob')) {
-            
-            upload({
-                user_id: user_id,
-                image:file
-            })
-        }
-
-        if (defaultImage.startsWith('data')) {
-            const myfile = convertBase64ToFile(defaultImage, location.state.user.name)
-           
-            upload({
-                user_id: location.state.user.id,
-                image: myfile
-            })
-        }
-    
-        return;
-
-        
-    }else{
-        Toast.show({
-            icon: 'fail',
-            content: 'Please take a picture or upload a picture'
-        })
     }
   }
   
@@ -153,9 +120,6 @@ const UploadComponent:React.FC<UploadProps> = ({
                         setDefaultImage('/404');
                     }}>
                         Cancel
-                    </Button>
-                    <Button size="large" color="primary" fill='solid' loading={isLoading} loadingText="Submitting" onClick={() => handleSubmitPicture()}>
-                        Submit
                     </Button>
                     </Space>
                     }

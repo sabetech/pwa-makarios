@@ -12,9 +12,7 @@ const Directory = () => {
         <NavBar onBack={() => navigate("/dashboard")} style={{'--height': '60px', backgroundColor: '#570A22', color:'white'}} > Directory </NavBar>
         <List header="Michael's Directory" style={{'--header-font-size': '20px'}}>
             <Link to="/directory/members">
-                <List.Item  onClick={() => {
-                    navigate("/directory/members")
-                }}
+                <List.Item 
                     prefix={<TeamOutline />}
                     style={listStyle}
                     description={"0 Members"}
