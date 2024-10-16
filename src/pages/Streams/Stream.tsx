@@ -1,5 +1,5 @@
 import { Grid, Card, Divider, Space, Button } from 'antd-mobile'
-import { useLocation } from "react-router-dom";
+
 import MyNavBar from "../../components/NavBar";
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,7 +7,7 @@ import HeaderPanel from '../../components/HeaderPanel';
 import { useGetStream } from '../../hooks/StreamHooks';
 
 const Stream = () => {
-    const location = useLocation();
+    
     const navigate = useNavigate();
     const {stream_id} = useParams();
 
@@ -17,7 +17,7 @@ const Stream = () => {
     
     if (!stream_id) {
         navigate('/streams')
-        return 
+        return <></>
     }
     const {data: stream} = useGetStream(parseInt(stream_id))
     console.log("stream", stream)
