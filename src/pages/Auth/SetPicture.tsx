@@ -6,7 +6,6 @@ import Webcam from "react-webcam";
 import { useAuthUser, useUserImageUpload } from "../../hooks/AuthHooks";
 import { convertBase64ToFile } from "../../utils/helper";
 import { useNavigate } from "react-router-dom";
-import * as StorageKeys from '../../constants/StorageKeys';
 
 const SetPicture = () => {
     const [showWebCam, setShowWebcam] = useState(false);
