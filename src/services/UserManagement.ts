@@ -21,3 +21,8 @@ export const uploadUserPhoto = async(formData: any): Promise<AxiosResponse> => {
     
     return (await api.postWithFile('/users/upload-photo', formData, {}));
 }
+
+export const uploadMemberPhoto = async(formData: any): Promise<AxiosResponse> => {
+    
+    return (await api.postWithFile('/members/upload-photo', formData, {}));
+}

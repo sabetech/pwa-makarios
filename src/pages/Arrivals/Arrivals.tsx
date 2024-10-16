@@ -53,16 +53,6 @@ const Arrivals = () => {
                     </Button>
                   }
             >
-
-                {/* <Form.Header>Take a selfie with your helpers on the field</Form.Header> */}
-                {/* <Space style={{display: 'flex', justifyContent: 'center', alignContent: 'center', marginTop: '30px'}}>
-                    <Button color='primary' fill='outline' >
-                        <CameraOutline /> Take A picture
-                    </Button>
-                    <Button color='primary' fill='outline' >
-                        <UploadOutline /> Upload from your phone
-                    </Button>
-                </Space> */}
                 
                 <Space style={{display: 'flex', alignContent: 'center', justifyContent: 'center', margin: '30px'}}>
                     <Webcam 

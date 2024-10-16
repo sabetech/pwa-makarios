@@ -1,24 +1,25 @@
-import { useState, useRef, useCallback, useEffect } from "react";
-import { Space, Image, SafeArea, Button, Toast } from "antd-mobile";
-import { useLocation } from "react-router-dom";
+import { Image } from 'antd-mobile';
 import { UploadOutline, CameraOutline } from 'antd-mobile-icons'
 import Webcam from "react-webcam";
-import { useAuthUser, useUserImageUpload } from "../../hooks/AuthHooks";
-import { convertBase64ToFile } from "../../utils/helper";
-import { useNavigate } from "react-router-dom";
+import { useRef, useState, useCallback } from "react";
+import { Space,Toast, Button } from "antd-mobile";
+import { useMutation } from 'react-query';
+import { convertBase64ToFile } from "../../src/utils/helper";
 
-const SetPicture = () => {
+type UploadProps = {
+    onImageLoaded: (image: File) => void
+    filename: string
+}
+const UploadComponent:React.FC<UploadProps> = ({
+    onImageLoaded, filename
+}) => {
+
     const [showWebCam, setShowWebcam] = useState(false);
     const [pictureLoaded, setPictureLoaded] = useState(false);
     const [defaultImage, setDefaultImage] = useState('/404');
     const webcamRef = useRef<Webcam>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const {mutate: upload, isLoading, isSuccess: isFinishedUpload, isError, data } = useUserImageUpload();
-    const location = useLocation();
-    const [file, setFile] = useState<File>();
-    const navigate = useNavigate()
-    const user = useAuthUser()()
-
+   
     const capture = useCallback(() => {
         if (webcamRef.current) {
             const imageSrc = webcamRef.current.getScreenshot();
@@ -26,37 +27,31 @@ const SetPicture = () => {
             setShowWebcam(false)
             if (imageSrc) {
                 setDefaultImage(imageSrc);
+                const myfile = convertBase64ToFile(imageSrc, filename)
+                if (myfile) {
+                        onImageLoaded(myfile)
+                    }
                 setPictureLoaded(true);
             }
         }
     },
     [webcamRef]
   );
-  
-  const showWebCamHandler = () => {
 
-    if (showWebCam) {
-        capture()
-    }else {
-        setShowWebcam(true)
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const imageUrl = URL.createObjectURL(file);
+            onImageLoaded(file)
+            setDefaultImage(imageUrl); 
+            setPictureLoaded(true);
+
+        } else {
+            Toast.show("Please upload an image file");
+        }
     }
-  }
-
-  useEffect(() => {
-    if (isFinishedUpload) {
-    
-        navigate('/dashboard', {
-            state: {
-                user: data.data
-            }
-        });
-      }
-  },[isFinishedUpload])
-
-  if (isError) {
-    console.log("isError", isError)
-  }
-
+  };
 
   const handleUploadButton = () => {
     if (showWebCam) {
@@ -68,64 +63,20 @@ const SetPicture = () => {
         }
     }
   }
+  
+  const showWebCamHandler = () => {
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-        const file = event.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-            const imageUrl = URL.createObjectURL(file);
-            setFile(file);
-            setDefaultImage(imageUrl); 
-            setPictureLoaded(true);
-
-        } else {
-            Toast.show("Please upload an image file");
-        }
-    }
-  };
-
-  const handleSubmitPicture = () => {
-    
-    if (pictureLoaded) {
-        if (defaultImage.startsWith('blob')) {
-            
-            upload({
-                user_id: location.state.user.id,
-                image:file
-            })
-        }
-
-        if (defaultImage.startsWith('data')) {
-            const myfile = convertBase64ToFile(defaultImage, location.state.user.name)
-           
-            upload({
-                user_id: location.state.user.id,
-                image: myfile
-            })
-        }
-    
-        return;
-
-        
-    }else{
-        Toast.show({
-            icon: 'fail',
-            content: 'Please take a picture or upload a picture'
-        })
+    if (showWebCam) {
+        capture()
+    }else {
+        setShowWebcam(true)
     }
   }
-  
-    return (
-        <>
-            <div style={{width: "100%"}}>
-                <SafeArea position='top' />
-                <Space direction='vertical' align='center' style={{ '--gap': '40px' }} block>
 
-                    <h1 style={{textAlign: 'center', marginRight: 20, marginLeft: 20, color:'#570A22'}} >Almost done!</h1>
-                    <h2 style={{color: '#570A22', marginLeft: 30, marginRight: 30, textAlign: 'center'}}>Hello <em>{ user.name } </em>!</h2>
-                    <h2 style={{color: '#570A22', marginLeft: 30, marginRight: 30, textAlign: 'center'}}>Upload a picture or take a selfie!</h2>
-                    {
-                        showWebCam ? 
+    return (<>
+        <Space direction='vertical' align='center' style={{ '--gap': '40px' }} block>
+        {
+                    showWebCam ? 
                         <Space style={{display: 'flex', alignContent: 'center', justifyContent: 'center', margin: '30px'}}>
                             <Webcam 
                                 videoConstraints={{
@@ -170,15 +121,10 @@ const SetPicture = () => {
                     }}>
                         Cancel
                     </Button>
-                    <Button size="large" color="primary" fill='solid' loading={isLoading} loadingText="Submitting" onClick={() => handleSubmitPicture()}>
-                        Submit
-                    </Button>
                     </Space>
                     }
-                </Space>
-            </div>
-        </>
-    );
+        </Space>
+    </>)
 }
 
-export default SetPicture;
+export default UploadComponent;
