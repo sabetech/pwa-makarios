@@ -4,13 +4,19 @@ import { TeamOutline } from 'antd-mobile-icons'
 import { MdOutlineChurch } from "react-icons/md";
 import { BsStars } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { useAuthUser } from '../../hooks/AuthHooks';
 
 const Directory = () => {
     const navigate = useNavigate();
+    const loggedInUser = useAuthUser()
+
+    const user = loggedInUser()
 
     return (<>
         <NavBar onBack={() => navigate("/dashboard")} style={{'--height': '60px', backgroundColor: '#570A22', color:'white'}} > Directory </NavBar>
-        <List header="Michael's Directory" style={{'--header-font-size': '20px'}}>
+        <List header={`${user.name}'s Directory`} style={{'--header-font-size': '20px'}}>
+            {
+            user.roles[0] && user.roles[0].name === 'Overseer' && (
             <Link to="/directory/members">
                 <List.Item 
                     prefix={<TeamOutline />}
@@ -19,7 +25,7 @@ const Directory = () => {
                 >
                     Members
                 </List.Item>
-            </Link>
+            </Link>)}
             <Link to="/directory/churches">
                 <List.Item onClick={() => {}}
                     prefix={<MdOutlineChurch />}
