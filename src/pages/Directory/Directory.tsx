@@ -12,16 +12,19 @@ const Directory = () => {
 
     const user = loggedInUser()
 
+    console.log("user::", user)
+
     return (<>
         <NavBar onBack={() => navigate("/dashboard")} style={{'--height': '60px', backgroundColor: '#570A22', color:'white'}} > Directory </NavBar>
         <List header={`${user.name}'s Directory`} style={{'--header-font-size': '20px'}}>
             {
-            (user.roles[0] && 
-            user.roles[0].name === 'Bacenta Leader') ||
-            user.roles[0].name === 'Overseer' ||
-            user.roles[0].name === 'Bishop' ||
-            user.roles[0].name === 'Super Admin' 
-            && (
+            (user.roles.length > 0 &&
+                user.roles[0] && 
+            user.roles[0]?.name === 'Bacenta Leader') ||
+            user.roles[0]?.name === 'Overseer' ||
+            user.roles[0]?.name === 'Bishop' ||
+            user.roles[0]?.name === 'Super Admin' 
+            ? (
             <Link to="/directory/members">
                 <List.Item 
                     prefix={<TeamOutline />}
@@ -30,7 +33,7 @@ const Directory = () => {
                 >
                     Members
                 </List.Item>
-            </Link>)}
+            </Link>): null}
             <Link to="/directory/churches">
                 <List.Item onClick={() => {}}
                     prefix={<MdOutlineChurch />}
