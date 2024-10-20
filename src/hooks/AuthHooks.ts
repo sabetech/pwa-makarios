@@ -1,7 +1,8 @@
 import { TUser } from "../types/user";
 import * as StorageKeys from "../constants/StorageKeys";
-import { useMutation } from "react-query";
+import { QueryFunction, useMutation, useQuery } from "react-query";
 import * as apiClient from "../services/UserManagement";
+import { useState } from "react";
 
 type signInType = {
     token: string,
@@ -70,3 +71,25 @@ export const useUserImageUpload = () => {
     )
 
 }
+
+const _getUser = async (email: string) => {
+
+    const { data } = await apiClient.getUser(email)
+    return data.data
+}
+
+export const useGetUser = (email: string) => {
+    return  useQuery<TUser>( 
+        { 
+            queryKey: [email],
+            queryFn: async () => {
+                return await _getUser(email)
+            },
+            enabled: false
+        })
+}
+
+const useLazyQuery = (key: string, fn: QueryFunction<any, any>, options: any) => {
+    const [enabled, setEnabled] = useState(false)
+    return [() => setEnabled(true), useQuery(key, fn, { ...options, enabled })]
+  }

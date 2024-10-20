@@ -26,3 +26,7 @@ export const uploadMemberPhoto = async(formData: any): Promise<AxiosResponse> =>
     
     return (await api.postWithFile('/members/upload-photo', formData, {}));
 }
+
+export const getUser = async(email: string): Promise<AxiosResponse> => {
+    return (await api.get(`/user?email=${email}`, {}));
+}

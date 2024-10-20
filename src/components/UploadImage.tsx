@@ -9,14 +9,15 @@ import { convertBase64ToFile } from "../../src/utils/helper";
 type UploadProps = {
     onImageLoaded: (image: File) => void
     filename: string
+    defaultImageUrl?: string
 }
 const UploadComponent:React.FC<UploadProps> = ({
-    onImageLoaded, filename
+    onImageLoaded, filename, defaultImageUrl
 }) => {
 
     const [showWebCam, setShowWebcam] = useState(false);
     const [pictureLoaded, setPictureLoaded] = useState(false);
-    const [defaultImage, setDefaultImage] = useState('/404');
+    const [defaultImage, setDefaultImage] = useState(defaultImageUrl ?? '/404');
     const webcamRef = useRef<Webcam>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
    
@@ -90,7 +91,7 @@ const UploadComponent:React.FC<UploadProps> = ({
                                 style={{borderRadius: 40, marginRight: '5%', marginLeft: '5%'}}
                             />
                         </Space>:
-                    <Image src={defaultImage} style={{borderRadius: 40, marginRight: '5%', marginLeft: '5%'}} />
+                    <Image src={defaultImage} style={{borderRadius: 40, marginRight: '5%', marginLeft: '5%'}} width={300} height={300} fit='cover' />
                     }
                     
                     {  
