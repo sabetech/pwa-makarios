@@ -85,7 +85,8 @@ export const useGetUser = (email: string) => {
             queryFn: async () => {
                 return await _getUser(email)
             },
-            enabled: false
+            enabled: false,
+            retry: 0
         })
 }
 

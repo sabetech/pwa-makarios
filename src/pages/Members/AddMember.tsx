@@ -39,7 +39,8 @@ const AddMember = () => {
     const onFinish = (_values: any) => {
         console.log('form', form.getFieldsValue())
         console.log('values', _values)
-        
+        _values.email = email
+        // console.log("EMAIL HERE", email)
         if (existigUser && existigUser?.img_url  && existigUser.img_url.length > 0) {
             _values.img_url = existigUser?.img_url
         }else {
@@ -52,8 +53,6 @@ const AddMember = () => {
                 })
             }
         }
-
-        
 
         const request = {
             ..._values,

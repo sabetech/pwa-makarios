@@ -10,3 +10,6 @@
     - Image
     - email
     - phone
+
+Notes from Demo
+- 
