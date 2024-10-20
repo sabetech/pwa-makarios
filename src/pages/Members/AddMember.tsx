@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { Form, Button, Input, Radio, Space, Divider, TextArea, DatePicker, Toast } from "antd-mobile"
+import { useEffect, useState } from "react"
+import { Form, Button, Input, Radio, Space, Divider, TextArea, DatePicker, Toast, SpinLoading, Image } from "antd-mobile"
 import CurrentLocation from "../../components/CurrentLocation"
 import { Coordinates } from "../../types/location";
 
@@ -11,6 +11,8 @@ import { useGetBasontas } from "../../hooks/BasontaHooks";
 import UploadComponent from "../../components/UploadImage";
 import { useAddMember } from "../../hooks/MemberHooks";
 import { useNavigate } from "react-router-dom";
+import { useGetUser } from "../../hooks/AuthHooks";
+import { TUser } from "../../types/user";
 
 
 const startDate = dayjs('01-01-2000', 'DD-MM-YYYY'); // Using a custom date format
@@ -23,6 +25,8 @@ const AddMember = () => {
     const [basonta, setBasonta] = useState({});
     const [location, setLocation] = useState<Coordinates>({ lat: null, lng: null });
     const [memberName, setMemberName] = useState("");
+    const [email, setEmail] = useState("");
+    const [existigUser, setExistingUser] = useState<TUser>();
     const [picture, setPicture] = useState<File>();
     const navigate = useNavigate()
 
@@ -30,28 +34,26 @@ const AddMember = () => {
     const { data: basontas } = useGetBasontas();
 
     const {mutate: addMember, isLoading: isAdding, isSuccess } = useAddMember()
+    const { data: user, refetch, isLoading: isFetchingUser, isSuccess: isUserLoaded } = useGetUser(email)
 
     const onFinish = (_values: any) => {
         console.log('form', form.getFieldsValue())
         console.log('values', _values)
         
-        if (!bacenta || !basonta) {
-            return Toast.show({
-                content: 'Please select a bacenta and basonta',
-                duration: 4000,
-                icon: 'fail',
-                position: 'top'
-            })
+        if (existigUser && existigUser?.img_url  && existigUser.img_url.length > 0) {
+            _values.img_url = existigUser?.img_url
+        }else {
+            if (!picture) {
+                return Toast.show({
+                    content: 'Please select a picture',
+                    duration: 4000,
+                    icon: 'fail',
+                    position: 'top'
+                })
+            }
         }
 
-        if (!picture) {
-            return Toast.show({
-                content: 'Please select a picture',
-                duration: 4000,
-                icon: 'fail',
-                position: 'top'
-            })
-        }
+        
 
         const request = {
             ..._values,
@@ -73,6 +75,29 @@ const AddMember = () => {
         });
         navigate("/directory/members");
     }
+
+    const lookupEmail = (email: string) => {
+
+        setEmail(email)
+
+    }
+
+    useEffect(() => {
+        if (email.length > 0) {
+            refetch()
+        }
+    }, [email])
+
+    useEffect(() => {
+        if (isUserLoaded) {
+            if (user) {
+                console.log("USER??", user)
+                setExistingUser(user)
+            }
+
+        }
+    }, [isUserLoaded])
+
 
     return (
         <>
@@ -113,7 +138,8 @@ const AddMember = () => {
                     name='email'
                     label='Member Email'
                 >
-                    <Input placeholder="adwoamansah@mail.com" />
+                    <Input placeholder="adwoamansah@mail.com" onBlur={(e) => lookupEmail(e.target.value)}/>
+                    {isFetchingUser && <SpinLoading color='primary' />}
                 </Form.Item>
                 <Form.Item
                     label='Date of Birth'
@@ -139,6 +165,7 @@ const AddMember = () => {
                 <Form.Item
                     name='gender'
                     label='Gender'
+                    rules={[{ required: true, message: 'Please select gender' }]}
                 >
                     <Radio.Group>
                         <Space direction='vertical'>
@@ -150,6 +177,7 @@ const AddMember = () => {
                 <Form.Item
                     name='marital_status'
                     label='Marital Status'
+                    rules={[{ required: true, message: 'Please select marital status' }]}
                 >
                     <Radio.Group>
                         <Space direction='vertical'>
@@ -212,7 +240,12 @@ const AddMember = () => {
                 <Form.Item
                     label='Upload Picture'
                 >
-                <UploadComponent onImageLoaded={setPicture} filename={memberName} />
+                    {
+                        isUserLoaded && user.img_url ? <Image src={user.img_url} width={300} height={300} fit='cover' /> 
+                        :
+                        <UploadComponent onImageLoaded={setPicture} filename={memberName} />
+                    }
+                
                 </Form.Item>
 
             </Form>
