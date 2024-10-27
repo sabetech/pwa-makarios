@@ -20,7 +20,8 @@ import AddChurchform from './pages/Churches/AddChurchForm'
 import Streams from './pages/Streams/Index'
 import AddStream from './pages/Streams/AddStream'
 
-import { useIsAuthenticated } from './hooks/AuthHooks'
+import Index from './pages/Regions/Index'
+
 import SetPicture from './pages/Auth/SetPicture'
 import ProtectedRoute from './pages/Auth/ProtectedRoute'
 import Stream from './pages/Streams/Stream'
@@ -54,6 +55,13 @@ function App() {
                  
                   <Route element={<ProtectedRoute />}>
                     <Route path='/dashboard' element={<Dashboard />} />
+                    <Route path='/dashboard/churches' element={<Churches />} />
+                    <Route path='/dashboard/churches/:id' element={<Churches />} />
+                    <Route path='/dashboard/streams' element={<Streams />} />
+                    <Route path='/dashboard/streams/:stream_id' element={<Stream />} />
+                    
+                    <Route path='/dashboard/regions' element={<Index />}/>
+
                     <Route path='/fellowship' element={<FellowshipServiceDetails />} />
                     <Route path='/fellowship/fill-form' element={<FellowshipServiceForm />} />
                     <Route path='/directory' element={<Directory />} />
@@ -62,11 +70,14 @@ function App() {
                     <Route path='/directory/members/:id' element={<Members />} />
 
                     <Route path='/directory/churches' element={<Churches />} />
+                    
                     <Route path='/directory/churches/add' element={<AddChurchform />} />
                     <Route path='/directory/churches/:id' element={<Church />} />
                     <Route path='/directory/churches/:church_id/streams/add' element={<AddStream />} />
                     <Route path='/directory/churches/:church_id/streams' element={<Streams />} />
+                    
                     <Route path='/directory/churches/:church_id/streams/:stream_id' element={<Stream />} />
+                    
                     
                     <Route path='/services' element={<Services />} />
                     <Route path='/arrivals' element={<Arrivals />} />                    

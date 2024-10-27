@@ -1,5 +1,5 @@
 import MyNavBar from "../../components/NavBar"
-import { List, FloatingBubble } from 'antd-mobile';
+import { List, FloatingBubble, Avatar } from 'antd-mobile';
 import { AddOutline } from 'antd-mobile-icons'
 import { useNavigate } from "react-router-dom";
 import { useGetStreams } from '../../hooks/StreamHooks';
@@ -13,6 +13,8 @@ const Index = () => {
 
     const {data: streams} = useGetStreams()
 
+    console.log("streams", streams)
+
     return (
         <>
             <MyNavBar prevPage="directory/churches" currentPage="Streams" />
@@ -23,9 +25,9 @@ const Index = () => {
                         onClick={() => {
                             navigate(`${stream.id}`)
                         }}
-                        // prefix={<TeamOutline />}
+                        prefix={<Avatar src={stream.overseer?.img_url ?? '/404'} style={{'--border-radius': '50%'}}/>}
                         style={listStyle}
-                        description={`${stream.meeting_time} on ${stream.meeting_day}`}
+                        description={`${stream.church.name}: ${stream.meeting_day} by ${stream.overseer?.name}`}
                     >
                         {stream.name}
                     </List.Item>

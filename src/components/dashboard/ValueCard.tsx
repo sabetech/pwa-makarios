@@ -4,7 +4,7 @@ type ValueCardProps = {
     title: string,
     value: number | string,
     handleClick: EventHandler<any>,
-    Icon: any
+    Icon?: any
 }
 
 export const ValueCard: React.FC<ValueCardProps> = ({title, value, handleClick, Icon }) => <div style={{

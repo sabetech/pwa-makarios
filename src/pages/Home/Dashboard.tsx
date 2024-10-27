@@ -6,7 +6,7 @@ import { Grid, Space, FloatingBubble, Modal, ActionSheet, Divider } from 'antd-m
 import { useSignOut, useAuthUser, useAuthToken } from '../../hooks/AuthHooks';
 import { MoreOutline } from 'antd-mobile-icons'
 import { useLocation } from 'react-router-dom';
-// import { ValueCard } from '../../components/dashboard/ValueCard';
+import { ValueCard } from '../../components/dashboard/ValueCard';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import * as StorageKeys from '../../constants/StorageKeys';
@@ -36,7 +36,7 @@ const Dashboard = () => {
     const loggedInUser = useAuthUser()
     const user = loggedInUser()
 
-    
+    console.log("user::", user)
 
     const { mutate: logout } = useMutation({
         mutationFn: async () => {
@@ -93,47 +93,73 @@ const Dashboard = () => {
         }
     }
 
-    // const handleClick = (label: string) => {
-    //     switch(label) {
-    //         case 'churches':
-    //             navigate("/churches");
-    //         break;
-
-    //         case 'fellowship':
-    //             navigate("/fellowship");    
-    //         break;
-
-    //         case 'bacenta':
-    //             navigate("/bussing");
-    //         break;
-
-    //         case 'pastoral_point':
-    //             navigate("/pastoral_point")
-    //         break;
-    //     }
+    const handleClick = (label: string) => {
+        switch(label) {
+            case 'churches':
+                navigate("/dashboard/churches");
+            break;
+            case 'streams':
+                navigate("/dashboard/streams");
+            break;
+            case 'regions':
+                navigate("/dashboard/regions");
+            break;
+        }
         
-    // }
+    }
 
     return (
         <>
             <HeaderPanel setVisible={setVisible} loggedInUser={ user } />
 
-            <Grid columns={3} gap={2} style={{marginTop: '10vh'}}>
-                {/* <Grid.Item >
-                    <ValueCard key={"churches"} title="Churches" value={1} handleClick={() => handleClick("churches")  } Icon={<SystemQRcodeOutline />}/>
-                </Grid.Item>
-                 <Grid.Item>
-                    <ValueCard key={"streams"} title="Streams" value={3} handleClick={() => handleClick("streams")} Icon={<TeamOutline />}/>
-                </Grid.Item>
+            <Grid columns={3} gap={2} style={{marginTop: '5vh'}}>
+                {
+                user.permissions.length > 0 &&
+                user.hasPermission?.({name: 'view churches'}) &&
+                (<>
                 <Grid.Item >
-                    <ValueCard key={"councils"} title="Councils" value={7} handleClick={() => handleClick("councils")  } Icon={<SystemQRcodeOutline />}/>
+                    <ValueCard key={"churches"} title="Church" value={1} handleClick={() => handleClick("churches")  } />
                 </Grid.Item>
-                 <Grid.Item>
-                    <ValueCard key={"bacentas"} title="Bacentas" value={3} handleClick={() => handleClick("bacentas")} Icon={<TeamOutline />}/>
-                </Grid.Item>
+                </>)
+                }
+                { 
+                user.permissions.length > 0 &&
+                user.hasPermission?.({name: 'view streams'}) &&
+                (
+                <>
                 <Grid.Item>
-                    <ValueCard key={"fellowships"} title="Fellowships" value={20} handleClick={() => handleClick("fellowship")} Icon={<TeamOutline />}/>
-                </Grid.Item> */}
+                    <ValueCard key={"streams"} title="Streams" value={3} handleClick={() => handleClick("streams")} />
+                </Grid.Item>
+                </>
+                )
+                }
+                {
+                user.permissions.length > 0 &&
+                user.hasPermission?.({name: 'view regions'}) && 
+                <>
+                <Grid.Item >
+                    <ValueCard key={"regions"} title="Regions" value={7} handleClick={() => handleClick("regions")  } />
+                </Grid.Item>
+                </>
+                }
+                {
+                user.permissions.length > 0 &&
+                user.hasPermission?.({name: 'view zones'}) && 
+                <>
+                 <Grid.Item>
+                    <ValueCard key={"zones"} title="Zones" value={7} handleClick={() => handleClick("zones")} />
+                </Grid.Item>
+                </>
+                }
+                {
+                 user.permissions.length > 0 &&
+                 user.hasPermission?.({name: 'view bacentas'}) && 
+                <>
+                <Grid.Item>
+                   <ValueCard key={"bacentas"} title="Bacentas" value={7} handleClick={() => handleClick("bacentas")} />
+               </Grid.Item>
+               </>
+                }
             </Grid>
             <Divider />
             <Space direction='horizontal' style={{marginTop: 30, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
