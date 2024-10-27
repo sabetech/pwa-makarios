@@ -8,6 +8,6 @@ export type TStream = {
     meeting_time?: string,
     is_active: boolean,
     church: TChurchInfo,
-    stream_overseer_id?: TUser,
+    overseer: TUser,
     stream_admin_id?: TUser,
 }

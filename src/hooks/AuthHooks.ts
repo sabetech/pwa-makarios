@@ -1,4 +1,4 @@
-import { TUser } from "../types/user";
+import { TUser, TPermission, TRole } from "../types/user";
 import * as StorageKeys from "../constants/StorageKeys";
 import { QueryFunction, useMutation, useQuery } from "react-query";
 import * as apiClient from "../services/UserManagement";
@@ -25,7 +25,17 @@ export const useSignIn = () => {
 }
 
 export const useAuthUser = () => {
-    return (): TUser => JSON.parse(localStorage.getItem(StorageKeys.USER) ?? "{}") as TUser;
+
+    return (): TUser => {
+        const user = JSON.parse(localStorage.getItem(StorageKeys.USER) ?? "{}") as TUser;
+        user.hasPermission = (permission: TPermission) => {
+            return user.permissions.map((p: TPermission) => p.name).includes(permission.name);
+        }
+        user.hasRole = (role: TRole) => {
+            return user.roles.map((r: TRole) => r.name).includes(role.name);
+        }
+        return user
+    };
 }
 
 export const useAuthToken = () => {
