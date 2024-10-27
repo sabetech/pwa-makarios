@@ -18,7 +18,7 @@ const Directory = () => {
         <NavBar onBack={() => navigate("/dashboard")} style={{'--height': '60px', backgroundColor: '#570A22', color:'white'}} > Directory </NavBar>
         <List header={`${user.name}'s Directory`} style={{'--header-font-size': '20px'}}>
             {    
-            user?.hasPermission?.({ name: "View Members" }) ? (
+            user?.hasPermission?.({ name: "view members" }) ? (
             <Link to="/directory/members">
                 <List.Item 
                     prefix={<TeamOutline />}
