@@ -7,7 +7,7 @@ const Members = () => {
     const navigate = useNavigate();
     const user = loggedInUser()
 
-    const { data:members } = useGetMembers()
+    const { data:members, isLoading } = useGetMembers()
 
 console.log("members::", members)
     return (
@@ -20,7 +20,7 @@ console.log("members::", members)
             style={{'--height': '60px', backgroundColor: '#570A22', color:'white', '--border-radius': '0px'}}
         />
         <List header={`${user.name}'s Members`} style={{'--header-font-size': '20px'}}>
-        {
+        {isLoading ? <List.Item>Loading...</List.Item> :
         members && members.length > 0 && members.map((member) => (
             <List.Item
                 key={member.id}
