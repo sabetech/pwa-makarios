@@ -38,8 +38,6 @@ console.log("members::", members)
         ))
         }
         </List>
-     
-
     </>
 )
 }
