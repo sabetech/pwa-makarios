@@ -13,6 +13,8 @@ import { useAddMember } from "../../hooks/MemberHooks";
 import { useNavigate } from "react-router-dom";
 import { useGetUser } from "../../hooks/AuthHooks";
 import { TUser } from "../../types/user";
+import { TBacenta } from "../../types/bacenta";
+import { TBasonta } from "../../types/basonta";
 
 
 const startDate = dayjs('01-01-2000', 'DD-MM-YYYY'); // Using a custom date format
@@ -21,8 +23,8 @@ const AddMember = () => {
     const [form] = Form.useForm()
     const [showDateSelector, setShowDateSelector] = useState(false)
     const [date, setDate] = useState<Date>(calendarDefault);
-    const [bacenta, setBacenta] = useState({});
-    const [basonta, setBasonta] = useState({});
+    const [bacenta, setBacenta] = useState<TBacenta>();
+    const [basonta, setBasonta] = useState<TBasonta>();
     const [location, setLocation] = useState<Coordinates>({ lat: null, lng: null });
     const [memberName, setMemberName] = useState("");
     const [email, setEmail] = useState("");
@@ -40,7 +42,7 @@ const AddMember = () => {
         console.log('form', form.getFieldsValue())
         console.log('values', _values)
         _values.email = email
-        // console.log("EMAIL HERE", email)
+        
         if (existigUser && existigUser?.img_url  && existigUser.img_url.length > 0) {
             _values.img_url = existigUser?.img_url
         }else {
@@ -54,17 +56,26 @@ const AddMember = () => {
             }
         }
 
+        if (bacenta === undefined) {
+            return Toast.show({
+                content: 'Please select a Bacenta',
+                duration: 4000,
+                icon: 'fail',
+                position: 'top'
+            })
+        }
+
         const request = {
             ..._values,
             date_of_birth: dayjs(date).format("YYYY-MM-DD"),
-            bacenta_id: (bacenta as any).id,
-            basonta_id: (basonta as any).id,
+            bacenta_id: bacenta.id,
+            basonta_id: basonta?.id ?? 0,
             location: location.lat ? `${location.lat}, ${location.lng}` : "",
             picture: picture
         }
 
         console.log("Save member request ::", request)
-
+        
         addMember(request)
     }
 
@@ -209,17 +220,17 @@ const AddMember = () => {
 
                 <Form.Item
                     
-                    label='Select Fellowship'
-                    rules={[{ required: true, message: 'Please select Fellowhip!' }]}
+                    label='Select Bacenta'
+                    rules={[{ required: true, message: 'Please select Bacenta!' }]}
                 >
                     <Autocomplete
-                        items={bacentas ? bacentas.map((bacenta) => ({ id: bacenta.id, name: bacenta.name })): []}
+                        items={bacentas ? bacentas.map((bacenta) => ({ id: bacenta.id, name: bacenta.name } as TBacenta)): []}
                         onItemSelected={(item) => {
-                                setBacenta(item)
+                                setBacenta(item as TBacenta)
                             }}
-                        placeholder="Select Fellowship"
+                        placeholder="Select Bacenta"
                     />
-                    <Input value="fellowshp" type={"hidden"} />
+                    <Input value="bacenta" type={"hidden"} />
                 </Form.Item>
                 <Form.Item
                     
@@ -229,7 +240,7 @@ const AddMember = () => {
                     <Autocomplete
                         items={basontas ? basontas.map((basonta) => ({ id: basonta.id, name: basonta.name })): []}
                         onItemSelected={(item) => {
-                                setBasonta(item)
+                                setBasonta(item as TBasonta)
                             }}
                         placeholder="Select Basonta"
                     />
