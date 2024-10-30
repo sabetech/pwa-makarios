@@ -233,7 +233,6 @@ const AddMember = () => {
                     <Input value="bacenta" type={"hidden"} />
                 </Form.Item>
                 <Form.Item
-                    
                     label="Basonta"
                     rules={[{ required: true, message: 'Please select your basonta!' }]}
                 >
