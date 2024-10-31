@@ -5,9 +5,12 @@ export type TUser = {
     roles: TRole[]
     permissions: TPermission[]
     id?: number
+    isLeaderOf?: string
     created_at?: string
+    
     hasPermission?: (permission: TPermission) => boolean
     hasRole?: (role: TRole) => boolean
+    
 }
 
 export type TRole = {

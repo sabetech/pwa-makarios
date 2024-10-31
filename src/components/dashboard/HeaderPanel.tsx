@@ -40,7 +40,7 @@ const HeaderPanel:React.FC<HeaderPanelProps> = ({setVisible, loggedInUser}) => {
                                 <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}> {loggedInUser.roles.length > 0 ? loggedInUser.roles[0].name : 'No Role'} </h1>
                             </div>
                             <div style={{ height: "10%", width: "55vw", marginTop: 5}}>
-                                <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}></h1>
+                                <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}>{loggedInUser.isLeaderOf}</h1>
                             </div>
                     </div>
                 </Space>
