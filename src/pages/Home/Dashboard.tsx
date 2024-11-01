@@ -10,9 +10,8 @@ import { ValueCard } from '../../components/dashboard/ValueCard';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import * as StorageKeys from '../../constants/StorageKeys';
-// import { getPastoralPoint, getBussing } from '../../services/StudentData';
-// import { ServerResponse, IBussing } from '../../interfaces/ServerResponse';
-// import { postAttendance } from '../../services/Attendance';
+import { useGetDashboardSummaries } from '../../hooks/DashboardSummaryHooks';
+
 import type {
     Action
 } from 'antd-mobile/es/components/action-sheet';
@@ -36,7 +35,10 @@ const Dashboard = () => {
     const loggedInUser = useAuthUser()
     const user = loggedInUser()
 
-    console.log("user::", user)
+    // const dashboardCards
+    const {data: dashboardSummary} = useGetDashboardSummaries()
+
+    console.log("Dashboard summary::", dashboardSummary)
 
     const { mutate: logout } = useMutation({
         mutationFn: async () => {
@@ -93,20 +95,20 @@ const Dashboard = () => {
         }
     }
 
-    const handleClick = (label: string) => {
-        switch(label) {
-            case 'churches':
-                navigate("/dashboard/churches");
-            break;
-            case 'streams':
-                navigate("/dashboard/streams");
-            break;
-            case 'regions':
-                navigate("/dashboard/regions");
-            break;
-        }
+    // const handleClick = (label: string) => {
+    //     switch(label) {
+    //         case 'churches':
+    //             navigate("/dashboard/churches");
+    //         break;
+    //         case 'streams':
+    //             navigate("/dashboard/streams");
+    //         break;
+    //         case 'regions':
+    //             navigate("/dashboard/regions");
+    //         break;
+    //     }
         
-    }
+    // }
 
     return (
         <>
@@ -114,51 +116,13 @@ const Dashboard = () => {
 
             <Grid columns={3} gap={2} style={{marginTop: '5vh'}}>
                 {
-                user.permissions.length > 0 &&
-                user.hasPermission?.({name: 'view churches'}) &&
-                (<>
-                <Grid.Item >
-                    <ValueCard key={"churches"} title="Church" value={1} handleClick={() => handleClick("churches")  } />
-                </Grid.Item>
-                </>)
-                }
-                { 
-                user.permissions.length > 0 &&
-                user.hasPermission?.({name: 'view streams'}) &&
-                (
-                <>
-                <Grid.Item>
-                    <ValueCard key={"streams"} title="Streams" value={3} handleClick={() => handleClick("streams")} />
-                </Grid.Item>
-                </>
-                )
-                }
-                {
-                user.permissions.length > 0 &&
-                user.hasPermission?.({name: 'view regions'}) && 
-                <>
-                <Grid.Item >
-                    <ValueCard key={"regions"} title="Regions" value={7} handleClick={() => handleClick("regions")  } />
-                </Grid.Item>
-                </>
-                }
-                {
-                user.permissions.length > 0 &&
-                user.hasPermission?.({name: 'view zones'}) && 
-                <>
-                 <Grid.Item>
-                    <ValueCard key={"zones"} title="Zones" value={7} handleClick={() => handleClick("zones")} />
-                </Grid.Item>
-                </>
-                }
-                {
-                 user.permissions.length > 0 &&
-                 user.hasPermission?.({name: 'view bacentas'}) && 
-                <>
-                <Grid.Item>
-                   <ValueCard key={"bacentas"} title="Bacentas" value={7} handleClick={() => handleClick("bacentas")} />
-               </Grid.Item>
-               </>
+                    dashboardSummary && dashboardSummary?.length > 0 &&
+                    dashboardSummary.map((summary: any, index: number) => 
+                     (
+                        <Grid.Item key={index}>
+                            <ValueCard key={index} title={summary.name} value={summary.count} handleClick={() => {}} />
+                        </Grid.Item>
+                    ))
                 }
             </Grid>
             <Divider />

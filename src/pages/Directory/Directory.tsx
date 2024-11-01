@@ -5,12 +5,14 @@ import { MdOutlineChurch } from "react-icons/md";
 import { BsStars } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { useAuthUser } from '../../hooks/AuthHooks';
+import { useGetMembers } from '../../hooks/MemberHooks';
 
 const Directory = () => {
     const navigate = useNavigate();
     const loggedInUser = useAuthUser()
 
-    const user = loggedInUser()
+    const user = loggedInUser();
+    const { data:members, isLoading } = useGetMembers()
 
     console.log("user::", user)
 
@@ -23,7 +25,7 @@ const Directory = () => {
                 <List.Item 
                     prefix={<TeamOutline />}
                     style={listStyle}
-                    description={"0 Members"}
+                    description={!isLoading ? `${members?.length ?? 0} Member(s)` : "Loading..."}
                 >
                     Members
                 </List.Item>
