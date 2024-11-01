@@ -32,16 +32,12 @@ const HeaderPanel:React.FC<HeaderPanelProps> = ({setVisible, loggedInUser}) => {
                 <Space direction='vertical'>
                     <MoreOutline fontSize={32} color={'white'} style={{float:'right'}} onClick={() => setVisible(true)} />
                     <div style={{marginTop: -30}}>
-                        
                         <div style={{ height: "20%", width: "55vw", marginTop: 20}}>
-                            <p style={{ fontFamily: 'Verdana, sans-serif', fontSize: 25, margin: 0, color: 'white' }}>Hello, <strong>{ loggedInUser.name.substring(0, loggedInUser.name.indexOf(" ")) }</strong></p>
-                            </div>
-                            <div style={{ height: "10%", width: "55vw", marginTop: 5}}>
-                                <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}> {loggedInUser.roles.length > 0 ? loggedInUser.roles[0].name : 'No Role'} </h1>
-                            </div>
-                            <div style={{ height: "10%", width: "55vw", marginTop: 5}}>
-                                <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}>{loggedInUser.isLeaderOf}</h1>
-                            </div>
+                            <p style={{ fontFamily: 'Verdana, sans-serif', fontSize: 25, margin: 0, color: 'white' }}>Hi, <strong>{ loggedInUser.name.substring(0, loggedInUser.name.indexOf(" ")) }</strong></p>
+                        </div>
+                        <div style={{ height: "10%", width: "55vw", marginTop: 5}}>
+                            <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}> {loggedInUser.roles.length > 0 ? loggedInUser.roles[0].name + ' - ' + loggedInUser.isLeaderOf : 'No Role'} </h1>
+                        </div>
                     </div>
                 </Space>
                 

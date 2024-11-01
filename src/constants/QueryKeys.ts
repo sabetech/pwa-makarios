@@ -5,3 +5,4 @@ export const STREAM_ITEM_KEY = 'stream';
 export const BACENTA_LIST_KEY = 'bacentas';
 export const BASONTA_LIST_KEY = 'basontas';
 export const MEMBER_LIST_KEY = 'members';
+export const DASHBOARD_SUMMARY_KEY = 'dashboardSummary';

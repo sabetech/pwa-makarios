@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 import * as apiClient from '../services/Council';
 import * as queryKeys from '../constants/QueryKeys';
-import { TStream } from '../types/stream';
 import { TCouncil } from '../types/council';
 
 
