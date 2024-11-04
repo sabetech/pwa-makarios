@@ -13,3 +13,7 @@
 
 Notes from Demo
 - 
+
+Emmanuel Sam password
+$2y$12$k30g7tXne0r.w.KwX2MLJerCk0vmgcQ8yULtfURc3zLXL4wBbv4c2
+
