@@ -56,7 +56,7 @@ function App() {
                   <Route element={<ProtectedRoute />}>
                     <Route path='/dashboard' element={<Dashboard />} />
                     <Route path='/dashboard/churches' element={<Churches />} />
-                    <Route path='/dashboard/churches/:id' element={<Churches />} />
+                    <Route path='/dashboard/churches/:id' element={<Church />} />
                     <Route path='/dashboard/streams' element={<Streams />} />
                     <Route path='/dashboard/streams/:stream_id' element={<Stream />} />
                     
