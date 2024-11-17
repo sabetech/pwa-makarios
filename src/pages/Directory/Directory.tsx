@@ -30,6 +30,8 @@ const Directory = () => {
                     Members
                 </List.Item>
             </Link>): null}
+            {
+            user?.hasPermission?.({name: "view churches"}) ? (    
             <Link to="/directory/churches">
                 <List.Item onClick={() => {}}
                     prefix={<MdOutlineChurch />}
@@ -38,7 +40,9 @@ const Directory = () => {
                 >
                     Churches
                 </List.Item>
-            </Link>
+            </Link>) : null
+            }
+
             <List.Item onClick={() => {}}
                 prefix={<BsStars />}
                 style={listStyle}

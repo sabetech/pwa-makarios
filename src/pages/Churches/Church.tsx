@@ -4,6 +4,7 @@ import MyNavBar from "../../components/NavBar";
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import HeaderPanel from '../../components/HeaderPanel';
+import { useGetMembers } from '../../hooks/MemberHooks';
 
 const Church = () => {
     const location = useLocation();
@@ -13,13 +14,16 @@ const Church = () => {
         navigate('streams')
     }
 
+    const {data: members} = useGetMembers()
+
+
     return (
         <>
             <MyNavBar prevPage="directory/churches" currentPage={location.state.church.name}/>
             <HeaderPanel title={location.state.church.name} />
             <Grid columns={2} gap={8} style={{marginTop: 20, marginLeft: 30, marginRight: 20}}>
                 <Grid.Item>
-                    <Card title={"Members"} style={{fontSize: 20}}> 800 </Card>
+                    <Card title={"Members"} style={{fontSize: 20}}> { typeof members !== 'undefined' ? members.length : 0 } </Card>
                 </Grid.Item>
                 <Grid.Item>
                     <Card title={"Streams"} style={{fontSize: 20}}
@@ -28,10 +32,10 @@ const Church = () => {
                 </Grid.Item>
 
                 <Grid.Item>
-                    <Card title={"Governors"} style={{fontSize: 20}}> 0 </Card>
+                    <Card title={"Regions"} style={{fontSize: 20}}> 0 </Card>
                 </Grid.Item>
                 <Grid.Item>
-                    <Card title={"Pastors"} style={{fontSize: 20}}> 0 </Card>
+                    <Card title={"Zones"} style={{fontSize: 20}}> 0 </Card>
                 </Grid.Item>
             </Grid>
             
