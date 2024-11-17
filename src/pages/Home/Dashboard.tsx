@@ -10,6 +10,7 @@ import { ValueCard } from '../../components/dashboard/ValueCard';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import * as StorageKeys from '../../constants/StorageKeys';
+import * as App from '../../constants/App';
 import { useGetDashboardSummaries } from '../../hooks/DashboardSummaryHooks';
 
 import type {
@@ -95,20 +96,20 @@ const Dashboard = () => {
         }
     }
 
-    // const handleClick = (label: string) => {
-    //     switch(label) {
-    //         case 'churches':
-    //             navigate("/dashboard/churches");
-    //         break;
-    //         case 'streams':
-    //             navigate("/dashboard/streams");
-    //         break;
-    //         case 'regions':
-    //             navigate("/dashboard/regions");
-    //         break;
-    //     }
+    const handleClick = (label: string) => {
+        switch(label.toLowerCase()) {
+            case App.CHURCHES:
+                navigate("/dashboard/churches");
+            break;
+            case App.STREAMS:
+                navigate("/dashboard/streams");
+            break;
+            case App.REGIONS:
+                navigate("/dashboard/regions");
+            break;
+        }
         
-    // }
+    }
 
     return (
         <>
@@ -120,7 +121,7 @@ const Dashboard = () => {
                     dashboardSummary.map((summary: any, index: number) => 
                      (
                         <Grid.Item key={index}>
-                            <ValueCard key={index} title={summary.name} value={summary.count} handleClick={() => {}} />
+                            <ValueCard key={index} title={summary.name} value={summary.count} handleClick={() => {handleClick(summary.name)}} />
                         </Grid.Item>
                     ))
                 }

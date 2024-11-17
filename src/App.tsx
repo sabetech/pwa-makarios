@@ -26,6 +26,7 @@ import SetPicture from './pages/Auth/SetPicture'
 import ProtectedRoute from './pages/Auth/ProtectedRoute'
 import Stream from './pages/Streams/Stream'
 import AddMember from './pages/Members/AddMember'
+import Region from './pages/Regions/Region'
 
 function App() {
   const queryClient = new QueryClient({
@@ -56,11 +57,12 @@ function App() {
                   <Route element={<ProtectedRoute />}>
                     <Route path='/dashboard' element={<Dashboard />} />
                     <Route path='/dashboard/churches' element={<Churches />} />
-                    <Route path='/dashboard/churches/:id' element={<Churches />} />
+                    <Route path='/dashboard/churches/:id' element={<Church />} />
                     <Route path='/dashboard/streams' element={<Streams />} />
                     <Route path='/dashboard/streams/:stream_id' element={<Stream />} />
                     
                     <Route path='/dashboard/regions' element={<Index />}/>
+                    <Route path='/dashboard/regions/:id' element={<Region />}/>
 
                     <Route path='/fellowship' element={<FellowshipServiceDetails />} />
                     <Route path='/fellowship/fill-form' element={<FellowshipServiceForm />} />

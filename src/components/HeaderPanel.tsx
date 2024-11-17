@@ -6,7 +6,7 @@ type HeaderProps = {
     title: string
 }
 
-const HeaderPanel:React.FC<HeaderProps> = () => {
+const HeaderPanel:React.FC<HeaderProps> = ({title}) => {
 
 
     return (
@@ -27,7 +27,7 @@ const HeaderPanel:React.FC<HeaderProps> = () => {
                     <div style={{marginTop: -10, marginLeft: 20}}>
                         
                         <div style={{ height: "20%", width: "90%", marginTop: 20}}>
-                            <p style={{ fontFamily: 'Verdana, sans-serif', fontSize: 25, margin: 0, color: 'black' }}><strong>Word of Life Cathedral</strong></p>
+                            <p style={{ fontFamily: 'Verdana, sans-serif', fontSize: 25, margin: 0, color: 'black' }}><strong>{title}</strong></p>
                             </div>
                         <div style={{ height: "10%", width: "55vw", marginTop: 5}}>
                             {/* <h1 style={{ fontFamily: 'Verdana, sans-serif', fontSize: 14, fontWeight: 400, margin: 0, color: 'white' }}> The Word of Life Cathedral </h1> */}
