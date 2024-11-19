@@ -20,7 +20,7 @@ const Stream = () => {
         navigate('/streams')
         return <></>
     }
-    const {data: stream} = useGetStream(parseInt(stream_id))
+    const {data: stream, isLoading} = useGetStream(parseInt(stream_id))
     console.log("stream", stream)
 
     const{data: members} = useGetMembers({stream_id: stream?.id?? 0});
@@ -32,6 +32,9 @@ const Stream = () => {
         <>
             <MyNavBar prevPage="directory/churches" currentPage={`${stream?.name?? "Unknown Stream"} Stream `}/>
             <HeaderPanel title={`${stream?.name ?? "Unknown Stream"} Stream`} />
+            {
+                isLoading && <div>Loading...</div>
+            }
             <Grid columns={2} gap={8} style={{marginTop: 20, marginLeft: 30, marginRight: 20}}>
                 <Grid.Item>
                     <Card title={"Members"} style={{fontSize: 20}}> {members?.length} </Card>

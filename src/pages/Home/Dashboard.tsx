@@ -37,7 +37,7 @@ const Dashboard = () => {
     const user = loggedInUser()
 
     // const dashboardCards
-    const {data: dashboardSummary} = useGetDashboardSummaries()
+    const {data: dashboardSummary, isLoading} = useGetDashboardSummaries()
 
     console.log("Dashboard summary::", dashboardSummary)
 
@@ -114,6 +114,10 @@ const Dashboard = () => {
     return (
         <>
             <HeaderPanel setVisible={setVisible} loggedInUser={ user } />
+
+            {
+                isLoading && <div>Loading...</div>
+            }
 
             <Grid columns={3} gap={2} style={{marginTop: '5vh'}}>
                 {
