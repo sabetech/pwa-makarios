@@ -59,6 +59,7 @@ function App() {
                     <Route path='/dashboard/churches' element={<Churches />} />
                     <Route path='/dashboard/churches/:id' element={<Church />} />
                     <Route path='/dashboard/churches/:id/streams' element={<Streams />} />
+                    <Route path='/dashboard/churches/:id/streams/:stream_id' element={<Stream />} />
                     <Route path='/dashboard/streams' element={<Streams />} />
                     <Route path='/dashboard/streams/:stream_id' element={<Stream />} />
                     

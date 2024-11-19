@@ -5,6 +5,7 @@ import { BarChart, Bar, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 
 import { useNavigate, useParams } from 'react-router-dom';
 import HeaderPanel from '../../components/HeaderPanel';
 import { useGetStream } from '../../hooks/StreamHooks';
+import { useGetMembers } from '../../hooks/MemberHooks';
 
 const Stream = () => {
     
@@ -21,28 +22,31 @@ const Stream = () => {
     }
     const {data: stream} = useGetStream(parseInt(stream_id))
     console.log("stream", stream)
-    
 
+    const{data: members} = useGetMembers({stream_id: stream?.id?? 0});
 
+    console.log("Stream members::", members)
+
+    console.log("face change::", stream?.regions)
     return (
         <>
-            <MyNavBar prevPage="directory/churches" currentPage={stream?.name ?? "Unknown Stream"}/>
-            <HeaderPanel title={stream?.name ?? "Unknown Stream"} />
+            <MyNavBar prevPage="directory/churches" currentPage={`${stream?.name?? "Unknown Stream"} Stream `}/>
+            <HeaderPanel title={`${stream?.name ?? "Unknown Stream"} Stream`} />
             <Grid columns={2} gap={8} style={{marginTop: 20, marginLeft: 30, marginRight: 20}}>
                 <Grid.Item>
-                    <Card title={"Members"} style={{fontSize: 20}}> 0 </Card>
+                    <Card title={"Members"} style={{fontSize: 20}}> {members?.length} </Card>
                 </Grid.Item>
                 <Grid.Item>
-                    <Card title={"Councils"} style={{fontSize: 20}}
+                    <Card title={"Regions"} style={{fontSize: 20}}
                     onClick={handleCouncilsClick}
-                    > 3 </Card>
+                    > {stream?.regionalInfo?.length} </Card>
                 </Grid.Item>
 
                 <Grid.Item>
-                    <Card title={"Governors"} style={{fontSize: 20}}> 0 </Card>
+                    <Card title={"Zones"} style={{fontSize: 20}}> { stream?.regionalInfo.reduce((acc, curr) => acc + (curr?.zones?.length ?? 0), 0) } </Card>
                 </Grid.Item>
                 <Grid.Item>
-                    <Card title={"Pastors"} style={{fontSize: 20}}> 0 </Card>
+                    <Card title={"Bacentas"} style={{fontSize: 20}}>  { stream?.regionalInfo.reduce((acc, curr) => acc + (curr?.bacentas?.length ?? 0), 0) }  </Card>
                 </Grid.Item>
             </Grid>
             

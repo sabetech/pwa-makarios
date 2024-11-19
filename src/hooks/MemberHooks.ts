@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from 'react-query';
 import * as apiClient from '../services/Member';
 import * as queryKeys from '../constants/QueryKeys';
-import { TMember, TMemberRequest } from '../types/member';
+import { TMember, TMemberRequest, TFilterType } from '../types/member';
 
 const _addMember = async (member: TMemberRequest) => {
     
@@ -9,9 +9,10 @@ const _addMember = async (member: TMemberRequest) => {
     return data;
   };
 
-const _getMembers = async () => {
-
-    const { data } = await apiClient.getMembers()
+const _getMembers = async (filter? : TFilterType) => {
+    console.log("Are you called???")
+    console.log("ANY filter??", filter)
+    const { data } = await apiClient.getMembers(filter)
     return data.data
 }
 
@@ -31,12 +32,14 @@ export const useAddMember = () => {
     });
 }
 
-export const useGetMembers = () => {
+export const useGetMembers = (filter?: TFilterType) => {
+    console.log("json filter::", JSON.stringify(filter))
     return  useQuery<TMember[]>( 
         { 
-            queryKey: [queryKeys.MEMBER_LIST_KEY],
+            queryKey: [queryKeys.MEMBER_LIST_KEY, JSON.stringify(filter)],
             queryFn: async () => {
-                return await _getMembers()
+                console.log("are you heerrre")
+                return await _getMembers(filter)
             },
         })
 }
