@@ -1,4 +1,5 @@
 import { TChurchInfo } from "./church";
+import { TRegion } from "./Region";
 import { TUser } from "./user";
 
 export type TStream = {
@@ -10,4 +11,6 @@ export type TStream = {
     church: TChurchInfo,
     overseer: TUser,
     stream_admin_id?: TUser,
+    regions: TRegion[],
+    regionalInfo: TRegion[],
 }
