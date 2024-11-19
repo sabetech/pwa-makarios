@@ -11,13 +11,16 @@ const Index = () => {
         navigate('add');
     }
 
-    const {data: streams} = useGetStreams()
+    const {data: streams, isLoading} = useGetStreams()
 
     console.log("streams", streams)
 
     return (
         <>
             <MyNavBar prevPage="directory/churches" currentPage="Streams" />
+            {
+                isLoading && <div>Loading...</div>
+            }
             <List header="Streams" style={{'--header-font-size': '20px'}}>
             {
                 streams && streams.data.map((stream: TStream) => (
