@@ -42,14 +42,14 @@ const Stream = () => {
                 <Grid.Item>
                     <Card title={"Regions"} style={{fontSize: 20}}
                     onClick={handleCouncilsClick}
-                    > {stream?.regionalInfo?.length} </Card>
+                    > {stream?.regionalInfo?.length ?? 0} </Card>
                 </Grid.Item>
 
                 <Grid.Item>
-                    <Card title={"Zones"} style={{fontSize: 20}}> { stream?.regionalInfo.reduce((acc, curr) => acc + (curr?.zones?.length ?? 0), 0) } </Card>
+                    <Card title={"Zones"} style={{fontSize: 20}}> { stream?.regionalInfo?.reduce((acc, curr) => acc + (curr?.zones?.length ?? 0), 0) ?? 0 } </Card>
                 </Grid.Item>
                 <Grid.Item>
-                    <Card title={"Bacentas"} style={{fontSize: 20}}>  { stream?.regionalInfo.reduce((acc, curr) => acc + (curr?.bacentas?.length ?? 0), 0) }  </Card>
+                    <Card title={"Bacentas"} style={{fontSize: 20}}>  { stream?.regionalInfo?.reduce((acc, curr) => acc + (curr?.bacentas?.length ?? 0), 0) ?? 0 }  </Card>
                 </Grid.Item>
             </Grid>
             
