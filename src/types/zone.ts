@@ -1,4 +1,5 @@
 import { TRegion } from "./Region";
+import { TStream } from "./stream";
 import { TUser } from "./user";
 
 export type TZone = {
@@ -6,4 +7,6 @@ export type TZone = {
     name: string;
     region: TRegion;
     zone: TUser;
+    leader: TUser;
+    stream: TStream;
 }

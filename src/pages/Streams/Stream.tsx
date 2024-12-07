@@ -13,7 +13,15 @@ const Stream = () => {
     const {stream_id} = useParams();
 
     const handleRegionsClick = () => {
-        navigate('/regions');
+        navigate('regions');
+    }
+
+    const handleZonesClick = () => {
+        navigate('zones', {
+            state: {
+                stream_id: stream_id
+            }
+        });
     }
     
     if (!stream_id) {
@@ -46,7 +54,9 @@ const Stream = () => {
                 </Grid.Item>
 
                 <Grid.Item>
-                    <Card title={"Zones"} style={{fontSize: 20}}> { stream?.regionalInfo?.reduce((acc, curr) => acc + (curr?.zones?.length ?? 0), 0) ?? 0 } </Card>
+                    <Card title={"Zones"} style={{fontSize: 20}}
+                    onClick={handleZonesClick}
+                    > { stream?.regionalInfo?.reduce((acc, curr) => acc + (curr?.zones?.length ?? 0), 0) ?? 0 } </Card>
                 </Grid.Item>
                 <Grid.Item>
                     <Card title={"Bacentas"} style={{fontSize: 20}}>  { stream?.regionalInfo?.reduce((acc, curr) => acc + (curr?.bacentas?.length ?? 0), 0) ?? 0 }  </Card>
