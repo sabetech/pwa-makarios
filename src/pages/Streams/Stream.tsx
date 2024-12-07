@@ -12,8 +12,8 @@ const Stream = () => {
     const navigate = useNavigate();
     const {stream_id} = useParams();
 
-    const handleCouncilsClick = () => {
-        navigate('/streams')
+    const handleRegionsClick = () => {
+        navigate('/regions');
     }
     
     if (!stream_id) {
@@ -41,7 +41,7 @@ const Stream = () => {
                 </Grid.Item>
                 <Grid.Item>
                     <Card title={"Regions"} style={{fontSize: 20}}
-                    onClick={handleCouncilsClick}
+                    onClick={handleRegionsClick}
                     > {stream?.regionalInfo?.length ?? 0} </Card>
                 </Grid.Item>
 

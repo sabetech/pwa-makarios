@@ -7,4 +7,6 @@ export const BASONTA_LIST_KEY = 'basontas';
 export const MEMBER_LIST_KEY = 'members';
 export const REGION_LIST_KEY = 'regions'
 export const REGION_ITEM_KEY = 'region'
+export const ZONE_LIST_KEY = 'zones'
+export const ZONE_ITEM_KEY = 'zone'
 export const DASHBOARD_SUMMARY_KEY = 'dashboardSummary';

@@ -107,6 +107,9 @@ const Dashboard = () => {
             case App.REGIONS:
                 navigate("/dashboard/regions");
             break;
+            case App.ZONES:
+                navigate("/dashboard/zones");
+            break;
         }
         
     }
