@@ -68,6 +68,7 @@ function App() {
                     <Route path='/dashboard/regions/:id' element={<Region />}/>
 
                     <Route path='/dashboard/zones' element={<ZoneIndex />}/>
+                    <Route path='/dashboard/streams/:id/zones' element={<ZoneIndex />}/>
 
                     <Route path='/fellowship' element={<FellowshipServiceDetails />} />
                     <Route path='/fellowship/fill-form' element={<FellowshipServiceForm />} />
