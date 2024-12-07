@@ -20,7 +20,8 @@ import AddChurchform from './pages/Churches/AddChurchForm'
 import Streams from './pages/Streams/Index'
 import AddStream from './pages/Streams/AddStream'
 
-import Index from './pages/Regions/Index'
+import RegionIndex from './pages/Regions/Index';
+import ZoneIndex from './pages/Zones/Index';
 
 import SetPicture from './pages/Auth/SetPicture'
 import ProtectedRoute from './pages/Auth/ProtectedRoute'
@@ -63,8 +64,10 @@ function App() {
                     <Route path='/dashboard/streams' element={<Streams />} />
                     <Route path='/dashboard/streams/:stream_id' element={<Stream />} />
                     
-                    <Route path='/dashboard/regions' element={<Index />}/>
+                    <Route path='/dashboard/regions' element={<RegionIndex />}/>
                     <Route path='/dashboard/regions/:id' element={<Region />}/>
+
+                    <Route path='/dashboard/zones' element={<ZoneIndex />}/>
 
                     <Route path='/fellowship' element={<FellowshipServiceDetails />} />
                     <Route path='/fellowship/fill-form' element={<FellowshipServiceForm />} />
