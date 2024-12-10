@@ -13,14 +13,17 @@ const HeaderPanel:React.FC<HeaderProps> = ({title}) => {
         <>
         <div style={{
             width: '100%',
-            height: '14vh',                
+            height: '15vh',                
             background: "#570A22",
             backgroundImage: `url('https://yt3.googleusercontent.com/fkFesM3bJAfBWqtWc4tLsdrrJtHaJfbXUrUR22hQs4FBJTSNUSc3owKxqn0ImgCkZVpbUSrbKw=s900-c-k-c0x00ffffff-no-rj')`,
             boxShadow: '1px 1px 40px 1px rgba(0,0,0,0.25)',
             filter: 'brightness(0.5)',
-            backgroundSize: 'contain no-repeat',
+            backgroundSize: 'cover',
             resize: 'both',
-        }}></div>
+            backgroundPosition: 'center bottom 250px'
+        }}>
+            
+        </div>
             <Space style={{ '--gap': '10px' }}>                
                 <Space direction='vertical'>
                     

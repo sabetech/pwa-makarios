@@ -5,17 +5,21 @@ import { BarChart, Bar, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 
 import { useNavigate } from 'react-router-dom';
 import HeaderPanel from '../../components/HeaderPanel';
 import { useGetMembers } from '../../hooks/MemberHooks';
+import { useGetStreams } from '../../hooks/StreamHooks';
+import { useGetRegions } from '../../hooks/RegionHooks';
+import { useGetZones } from '../../hooks/Zones';
 
 const Church = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { id } = useParams();
-    const handleStreamClick = () => {
-        navigate('streams')
-    }
+    // const { id } = useParams();
 
     const {data: members} = useGetMembers()
+    const {data: streams} = useGetStreams()
+    const {data: regions} = useGetRegions()
+    const {data: zones} = useGetZones()
 
+    console.log("REgion ::", regions)
 
     return (
         <>
@@ -23,19 +27,20 @@ const Church = () => {
             <HeaderPanel title={location.state.church.name} />
             <Grid columns={2} gap={8} style={{marginTop: 20, marginLeft: 30, marginRight: 20}}>
                 <Grid.Item>
-                    <Card title={"Members"} style={{fontSize: 20}}> { typeof members !== 'undefined' ? members.length : 0 } </Card>
+                    <Card title={"Members"} style={{fontSize: 20}} onClick={() => navigate('members')}> { typeof members !== 'undefined' ? members.length : 0 } </Card>
                 </Grid.Item>
                 <Grid.Item>
                     <Card title={"Streams"} style={{fontSize: 20}}
-                    onClick={handleStreamClick}
-                    > 3 </Card>
+                    onClick={() => navigate('streams')}
+                    > { typeof streams !== 'undefined' ? streams.data.length : 0 } </Card>
                 </Grid.Item>
 
                 <Grid.Item>
-                    <Card title={"Regions"} style={{fontSize: 20}}> 0 </Card>
+                    <Card title={"Regions"} style={{fontSize: 20}} onClick={() => navigate('regions')}> {  typeof regions !== 'undefined' ? regions.length : 0 } </Card>
                 </Grid.Item>
+
                 <Grid.Item>
-                    <Card title={"Zones"} style={{fontSize: 20}}> 0 </Card>
+                    <Card title={"Zones"} style={{fontSize: 20}}  onClick={() => navigate('zones')}> {  typeof zones !== 'undefined' ? zones.length : 0 } </Card>
                 </Grid.Item>
             </Grid>
             

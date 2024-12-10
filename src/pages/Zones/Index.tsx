@@ -16,7 +16,7 @@ const Index = () => {
 
     const zones = useGetZones({stream_id: stream_id ?? null});
     const handleZoneClick = (id: number) => {
-        navigate(`/dashboard/zones/${id}`);
+        navigate(`${id}`);
     }
     return (
         <>
