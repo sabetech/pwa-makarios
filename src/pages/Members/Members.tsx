@@ -25,7 +25,6 @@ const Members = () => {
         key = 'stream_id';
     }
 
-    console.log("KEy VAL::", key, val)
     const { data:members, isLoading } = useGetMembers(val ? { [key]: val } : undefined)
 
     return (
