@@ -28,6 +28,7 @@ import ProtectedRoute from './pages/Auth/ProtectedRoute'
 import Stream from './pages/Streams/Stream'
 import AddMember from './pages/Members/AddMember'
 import Region from './pages/Regions/Region'
+import Zone from './pages/Zones/Zone'
 
 function App() {
   const queryClient = new QueryClient({
@@ -65,15 +66,28 @@ function App() {
                     <Route path='/dashboard/streams/:stream_id' element={<Stream />} />
                     
                     <Route path='/dashboard/regions' element={<RegionIndex />}/>
+                    <Route path='/dashboard/churches/:id/regions' element={<RegionIndex />} />
+                    <Route path='/dashboard/churches/:id/streams/:stream_id/regions' element={<RegionIndex />} />
+                    
+                    <Route path='/dashboard/streams/:stream_id/regions' element={<RegionIndex />} />
                     <Route path='/dashboard/regions/:id' element={<Region />}/>
+
 
                     <Route path='/dashboard/zones' element={<ZoneIndex />}/>
                     <Route path='/dashboard/streams/:id/zones' element={<ZoneIndex />}/>
+                    <Route path='/dashboard/churches/:id/zones' element={<ZoneIndex />}/>
+                    <Route path='/dashboard/churches/:id/streams/:stream_id/zones' element={<ZoneIndex />}/>
+
+                    <Route path='/dashboard/zones/:zone_id' element={<Zone />}/>
+                    <Route path='/dashboard/streams/:id/zones/:zone_id' element={<Zone />}/>
 
                     <Route path='/fellowship' element={<FellowshipServiceDetails />} />
                     <Route path='/fellowship/fill-form' element={<FellowshipServiceForm />} />
                     <Route path='/directory' element={<Directory />} />
                     <Route path='/directory/members' element={<Members />} />
+                    
+                    <Route path='/dashboard/churches/:id/members' element={<Members />} />
+                    <Route path='dashboard/streams/:stream_id/members' element={<Members />} />
                     <Route path='/directory/members/add' element={<AddMember />} />
                     <Route path='/directory/members/:id' element={<Members />} />
 

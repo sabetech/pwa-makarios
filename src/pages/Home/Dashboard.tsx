@@ -21,6 +21,7 @@ import type {
 
 import HeaderPanel from '../../components/dashboard/HeaderPanel';
 import { getActions, ADMIN, SERVICES, DIRECTORY, ARRIVAL } from '../../constants/SidebarActions';
+import DataBar from '../../components/dashboard/charts/DataBar';
 
 const Dashboard = () => {
     const authToken = useAuthToken();
@@ -151,6 +152,7 @@ const Dashboard = () => {
                 </Grid>
             </Space>
             <Divider />
+            <DataBar />
             
         <FloatingBubble
             style={{

@@ -10,6 +10,11 @@ const _getZones = async (filter? : TFilterType) => {
     return data.data
 }
 
+const _getZone = async (id: number): Promise<TZone> => {
+    const { data } = await apiClient.getZone(id)
+    return data.data
+}
+
 export const useGetZones = (filter?: TFilterType) => {
     return  useQuery<TZone[]>(
         { 
@@ -19,4 +24,13 @@ export const useGetZones = (filter?: TFilterType) => {
             },
         }
     )
+}
+
+export const useGetZone = (id: number) => {
+    return useQuery<TZone>({
+        queryKey: [queryKeys.ZONE_ITEM_KEY],
+        queryFn: async () => {
+            return await _getZone(id);
+        }
+    })
 }

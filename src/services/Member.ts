@@ -7,12 +7,11 @@ export const addMember = async (member: TMemberRequest): Promise<AxiosResponse> 
 }
 
 export const getMembers = async (filter?: TFilterType): Promise<AxiosResponse> => {
-    console.log("Do you get here??>>", filter)
-    if (!filter) {
+    console.log("filter>>>", filter)
+    if (!filter || filter == null || filter == undefined) {
         return (await api.get('/members', {}));
     }
     const filterParams = Object.entries(filter).map(([key, value]) => `${key}=${value}`).join('&');
-    console.log("Filter params::", filterParams)
     
     return (await api.get(`/members?${filterParams}`, {}));
 }

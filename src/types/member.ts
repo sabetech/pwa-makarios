@@ -28,5 +28,5 @@ export type TMemberRequest = {
 }
 
 export type TFilterType = {
-    [key: string]: string | number
+    [key: string]: string | number | undefined | null
 }

@@ -10,8 +10,7 @@ const _addMember = async (member: TMemberRequest) => {
   };
 
 const _getMembers = async (filter? : TFilterType) => {
-    console.log("Are you called???")
-    console.log("ANY filter??", filter)
+    
     const { data } = await apiClient.getMembers(filter)
     return data.data
 }
@@ -38,7 +37,6 @@ export const useGetMembers = (filter?: TFilterType) => {
         { 
             queryKey: [queryKeys.MEMBER_LIST_KEY, JSON.stringify(filter)],
             queryFn: async () => {
-                console.log("are you heerrre")
                 return await _getMembers(filter)
             },
         })

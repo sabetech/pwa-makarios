@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import HeaderPanel from '../../components/HeaderPanel';
 import { useGetStream } from '../../hooks/StreamHooks';
 import { useGetMembers } from '../../hooks/MemberHooks';
+import DataBar from '../../components/dashboard/charts/DataBar';
 
 const Stream = () => {
     
@@ -18,6 +19,14 @@ const Stream = () => {
 
     const handleZonesClick = () => {
         navigate('zones', {
+            state: {
+                stream_id: stream_id
+            }
+        });
+    }
+
+    const handleMembersClick = () => {
+        navigate('members', {
             state: {
                 stream_id: stream_id
             }
@@ -45,7 +54,7 @@ const Stream = () => {
             }
             <Grid columns={2} gap={8} style={{marginTop: 20, marginLeft: 30, marginRight: 20}}>
                 <Grid.Item>
-                    <Card title={"Members"} style={{fontSize: 20}}> {members?.length} </Card>
+                    <Card title={"Members"} style={{fontSize: 20}} onClick={handleMembersClick} > {members?.length} </Card>
                 </Grid.Item>
                 <Grid.Item>
                     <Card title={"Regions"} style={{fontSize: 20}}
@@ -71,21 +80,7 @@ const Stream = () => {
             </Space>
             
             <Divider />
-            <ResponsiveContainer width="100%" height="40%">
-                <BarChart data={[
-                    {name: 'Week 1', income: 1800, attn: 200},
-                    {name: 'Week 2', income: 2400, attn: 300},
-                    {name: 'Week 3', income: 1800, attn: 200},
-                    {name: 'Week 4', income: 2400, attn: 300},
-                ]}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    
-                    <Bar dataKey="income" fill="#F7A840" label={{ position: 'top' }}/>
-                    <Bar dataKey="attn" fill="#250009" label={{ position: 'top' }}/>
-                </BarChart>
-            </ResponsiveContainer>
+            <DataBar />
         </>
     )
 }
