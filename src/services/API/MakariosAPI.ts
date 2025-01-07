@@ -16,7 +16,6 @@ const postWithFile = (url: string, data: any, headers: object) => {
          headers: {
             'Content-Type': '"multipart/form-data"',
             'Authorization': `Bearer ${authToken}`,
-            'Content-Length': 'data.length',
            ...headers,
          },
          data: formData
