@@ -29,6 +29,7 @@ import Stream from './pages/Streams/Stream'
 import AddMember from './pages/Members/AddMember'
 import Region from './pages/Regions/Region'
 import Zone from './pages/Zones/Zone'
+import ParentForm from './pages/Services/Forms/ParentForm'
 
 function App() {
   const queryClient = new QueryClient({
@@ -102,6 +103,9 @@ function App() {
                     
                     
                     <Route path='/services' element={<Services />} />
+                    <Route path='/services/:stream_id/form' element={<ParentForm />} />
+
+                    
                     <Route path='/arrivals' element={<Arrivals />} />                    
                     <Route path='/admin/portal' element={<AdminPortal />} />
                   </Route>

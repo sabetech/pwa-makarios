@@ -23,7 +23,7 @@ const Index = () => {
             }
             <List header="Streams" style={{'--header-font-size': '20px'}}>
             {
-                streams && streams.data.map((stream: TStream) => (
+                streams && streams.map((stream: TStream) => (
                     <List.Item key={stream.name} 
                         onClick={() => {
                             navigate(`${stream.id}`)

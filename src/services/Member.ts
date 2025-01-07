@@ -7,7 +7,7 @@ export const addMember = async (member: TMemberRequest): Promise<AxiosResponse> 
 }
 
 export const getMembers = async (filter?: TFilterType): Promise<AxiosResponse> => {
-    console.log("filter>>>", filter)
+    
     if (!filter || filter == null || filter == undefined) {
         return (await api.get('/members', {}));
     }

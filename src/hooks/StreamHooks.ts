@@ -14,7 +14,7 @@ const _addStream = async (stream: TStream) => {
 const _getStreams = async () => {
 
     const { data } = await apiClient.getStreams()
-    return data
+    return data.data
 }
 
 const _getStream = async (stream_id: number): Promise<TStream> => {
@@ -40,7 +40,7 @@ export const useAddStream = () => {
 }
 
 export const useGetStreams = () => {
-    return  useQuery( 
+    return  useQuery<TStream[]>( 
         { 
             queryKey: [queryKeys.STREAM_LIST_KEY],
             queryFn: async () => {
