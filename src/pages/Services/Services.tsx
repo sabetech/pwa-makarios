@@ -1,23 +1,19 @@
-import { Button, List, Tabs } from 'antd-mobile';
+import { useState } from 'react';
+import { Button, Tabs, List,Image } from 'antd-mobile';
 import MyNavBar from "../../components/NavBar"
-import { FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useGetStreams } from '../../hooks/StreamHooks';
 import { TStream } from '../../types/stream';
+import { useGetServices } from '../../hooks/ServiceHooks';
+import { getUserFriendlyDateFormat } from '../../utils/helper';
 
 const Services = () => {
-    //Make the services configurable in the future
-    //In the database,
 
-    //based on who is logged in
-    /*
-    super admin sees all 
-
-    */
+    const [selectedStream, setSelectedStream] = useState<number>();
    
     const { data: streams } = useGetStreams();
-    console.log("streams::", streams)
-
+    const { data: services } = useGetServices({stream_id: selectedStream});
+    console.log("services::", services)
     const navigate = useNavigate();
 
     return (<>
@@ -26,6 +22,7 @@ const Services = () => {
         <Tabs
             defaultActiveKey="1"
             style={{ height: '100%', background: 'transparent'}}
+            onChange={(key) => setSelectedStream(parseInt(key))}
         >
              {
                 //generate tabs using the list of streams
@@ -34,38 +31,41 @@ const Services = () => {
                         <Button block color='primary' fill='solid' size='large' onClick={() => navigate(`/services/${stream.id}/form`)  }>
                             Fill {stream.name} Form
                         </Button>
-                        <List style={{paddingLeft: 0, marginTop: 20}}>
-                            <List.Item prefix={<FaEdit />} description={stream.church.name} style={listStyle}>{stream.name}</List.Item>
-                        </List>
                     </Tabs.Tab>
                 ))
              }
-             <Tabs.Tab title="Weekday Services" key="10">
+             <Tabs.Tab title="Weekday Services" key="0">
                 <Button block color='primary' fill='solid' size='large' onClick={() => navigate('/services/weekday/form')  }>
                     Fill Weekday Service Form
                 </Button>
                 <List style={{paddingLeft: 0, marginTop: 20}}>
-                    <List.Item prefix={<FaEdit />} description="Weekday Services" style={listStyle}>Weekday Services</List.Item>
-                </List>
-             </Tabs.Tab>
-           
-            {/* <Tabs.Tab title="Sunday Services" key="1">
-                <Button block color='primary' fill='solid' size='large' onClick={() => navigate('/services/sunday/form')  }>
-                    Fill Sunday Service Form
-                </Button>
-                <List style={{paddingLeft: 0, marginTop: 20}}>
-                    <List.Item prefix={<FaEdit />} description="Sunday Services" style={listStyle}>Sunday Services</List.Item>
+                {
+                    services?.filter((service) => service.service_type_id !== 7).map((service) => (
+                        <List.Item
+                        key={service.id}
+                        prefix={
+                          <Image
+                            src={service.service_photo}
+                            style={{ borderRadius: 20 }}
+                            fit='cover'
+                            width={40}
+                            height={40}
+                          />
+                        }
+                        description={`Attendance: ${service.attendance} | Offering: ${service.offering}`}
+                      >
+                        {`${getUserFriendlyDateFormat(service.date)} - WIP  `}
+                      </List.Item>
+                    ))
+                }
                 </List>
 
-            </Tabs.Tab>
-            <Tabs.Tab title="Friday Services" key="2">
-                <Button block color='primary' fill='solid' size='large'>
-                    Fill Friday Service Form
-                </Button>
-            </Tabs.Tab>
-            <Tabs.Tab title="Weekday Services" key="3">
-                <h1>Weekday Services</h1>
-            </Tabs.Tab> */}
+                {/* <List style={{paddingLeft: 0, marginTop: 20}}>
+                    <List.Item prefix={<FaEdit />} description="Weekday Services" style={listStyle}>Weekday Services</List.Item>
+                </List> */}
+
+             </Tabs.Tab>
+           
         </Tabs>
 
 

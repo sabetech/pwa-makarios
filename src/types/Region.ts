@@ -12,5 +12,6 @@ export type TRegion = {
     stream: TStream,
     members?: TMember[],
     zones?: TZone[],
-    bacentas?: TBacenta[],
+    bacentas?: TBacenta[]
 }
+
