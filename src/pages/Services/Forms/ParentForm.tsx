@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Form, Button, DatePicker, Stepper, Input, Picker, Toast } from 'antd-mobile'
+import { Form, Button, DatePicker, Stepper, Input, Picker, Toast, Tag } from 'antd-mobile'
 import { AddCircleOutline, MinusCircleOutline } from 'antd-mobile-icons'
 import MyNavBar from '../../../components/NavBar'
 import dayjs from "dayjs";
@@ -9,6 +9,9 @@ import { useAddService, useGetServiceTypes } from '../../../hooks/ServiceHooks';
 import { PickerColumnItem, PickerValue } from 'antd-mobile/es/components/picker-view';
 import { TServiceType } from '../../../types/service';
 import { useNavigate } from 'react-router-dom';
+import { useAuthUser } from '../../../hooks/AuthHooks';
+import { useGetBacentas } from '../../../hooks/BacentaHooks';
+import { TBacenta } from '../../../types/bacenta';
 
 
 const startDate = dayjs('01-01-2000', 'DD-MM-YYYY'); // Using a custom date format
@@ -17,13 +20,16 @@ const ParentForm: React.FC = () => {
     const [showDateSelector, setShowDateSelector] = useState(false)
     const [date, setDate] = useState<Date>(calendarDefault);
     const [selectedServiceType , setSelectedServiceType] = useState<PickerValue[]>([]);
+    const [selectedBacentaId, setSelectedBacentaId] = useState<PickerValue[]>([])
     const [form] = Form.useForm()
     const navigate = useNavigate();
 
     const { stream_id } = useParams();
     const { data:serviceTypes } = useGetServiceTypes();
+    const {data: bacentas} = useGetBacentas();
     
     const {mutate: addService, isLoading: isAdding, isSuccess } = useAddService();
+    const user = useAuthUser()();
 
     const onFinish = (values: any) => {
         console.log('values', values)
@@ -71,6 +77,8 @@ const ParentForm: React.FC = () => {
 
         return true
     }
+
+    console.log("selected suomt::", selectedServiceType[0])
     
     return (
         <>
@@ -84,7 +92,10 @@ const ParentForm: React.FC = () => {
                   }
                 onFinish={onFinish}
             >
-            <Form.Item
+                {
+                    <Tag color='warning'>You are filling as a { user.roles[0].name }</Tag>
+                }
+                <Form.Item
                     label='Service Date'
                     rules={[{ required: true, message: 'Please select Service date' }]}
                 >
@@ -138,7 +149,38 @@ const ParentForm: React.FC = () => {
                         </Button>
                     </Form.Item>
                 }
-                {/*  */}
+                { /*Find a better solution to this */
+                    selectedServiceType[0] === 3 && 
+                    <Form.Item
+                        name='bacenta_id'
+                        label='Select Bacenta'
+                        rules={[{ required: true, message: 'Please select Bacenta' }]}
+                    >
+                        <Button
+                            onClick={async () => {
+                                const value = await Picker.prompt({
+                                confirmText: 'OK',
+                                cancelText: 'Cancel',
+                                columns: [ (bacentas && bacentas?.map((bacenta: TBacenta) => (
+                                        {
+                                            label: `${bacenta.name} (${bacenta.region.region})`,
+                                            value: bacenta.id
+                                        } as PickerColumnItem
+                                    )
+                                )) ?? []
+                                ] });
+                                
+                                setSelectedBacentaId(value ?? [])
+                                form.setFieldValue('bacenta_id', value)
+
+                            }}
+                            fill='outline'
+                            color='primary'
+                            >
+                            {selectedBacentaId.length > 0 ? bacentas?.find((bc) => bc.id === selectedBacentaId[0])?.name : 'Select Your Bacenta'}
+                        </Button>
+                    </Form.Item>
+                }
                 <Form.Item
                     name='attendance'
                     label='Attendance'

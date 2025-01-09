@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from "react-query";
 import { TFilterType } from "../types/member";
-import { TServiceInfo, TServiceType } from "../types/service";
+import { TServiceInfo, TServiceResponse, TServiceType } from "../types/service";
 import * as apiClient from '../services/Service';
 import * as queryKeys from '../constants/QueryKeys';
 
@@ -11,6 +11,11 @@ const _addServiceRequest = async (service: any) => {
 
 const _getServiceTypes = async () => {
     const { data } = await apiClient.getServiceTypes()
+    return data.data
+}
+
+const _getServices = async (filter? : TFilterType) => {
+    const { data } = await apiClient.getServices(filter)
     return data.data
 }
 
@@ -38,3 +43,11 @@ export const useAddService = () => {
         });
     };
 
+export const useGetServices = (filter?: TFilterType) => {
+    return useQuery<TServiceResponse[]>({
+            queryKey: [queryKeys.SERVICE_LIST_KEY, filter],
+            queryFn: async () => {
+                return await _getServices(filter);
+            }
+        })
+}

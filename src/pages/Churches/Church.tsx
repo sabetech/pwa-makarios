@@ -32,7 +32,7 @@ const Church = () => {
                 <Grid.Item>
                     <Card title={"Streams"} style={{fontSize: 20}}
                     onClick={() => navigate('streams')}
-                    > { typeof streams !== 'undefined' ? streams.data.length : 0 } </Card>
+                    > { typeof streams !== 'undefined' ? streams.length : 0 } </Card>
                 </Grid.Item>
 
                 <Grid.Item>

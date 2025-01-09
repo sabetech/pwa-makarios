@@ -19,6 +19,19 @@ export type TServiceInfo = {
     foreign_currency?: string;
     service_image: File;
     treasurers_picture: File;
-    treasurers: number[];
-    
+    treasurers: string;
+}
+
+export type TServiceResponse = {
+    id?: number;
+    date: string;
+    service_type_id: number;
+    service_photo: string;
+    attendance: number;
+    offering: number;
+    foreign_currency?: string;
+    treasurer_photo: string;
+    service_type: TServiceType;
+    treasurers: string;
+
 }
