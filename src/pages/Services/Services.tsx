@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Tabs, List,Image } from 'antd-mobile';
+import { Button, Tabs, List,Image, Tag } from 'antd-mobile';
 import MyNavBar from "../../components/NavBar"
 import { useNavigate } from "react-router-dom";
 import { useGetStreams } from '../../hooks/StreamHooks';
@@ -52,9 +52,10 @@ const Services = () => {
                             height={40}
                           />
                         }
+                        extra={<Tag color='warning'>{service.service_type.service_type}</Tag>}
                         description={`Attendance: ${service.attendance} | Offering: ${service.offering}`}
                       >
-                        {`${getUserFriendlyDateFormat(service.date)} - WIP  `}
+                        {`${getUserFriendlyDateFormat(service.date)} - ${service?.bacenta?.name ?? 'No Bacenta'}`}
                       </List.Item>
                     ))
                 }
