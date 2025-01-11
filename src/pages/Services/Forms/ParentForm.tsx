@@ -45,6 +45,9 @@ const ParentForm: React.FC = () => {
 
         values.date = dayjs(date).format('YYYY-MM-DD')
         values.treasurers = treasures;
+        if (values.service_type == undefined) {
+            values.service_type = stream_id;
+        }
         addService(values)
 
     }
@@ -86,7 +89,7 @@ const ParentForm: React.FC = () => {
             <Form
                 form={form}
                 footer={
-                    <Button block type='submit' color='primary' size='large'>
+                    <Button block type='submit' color='primary' size='large' loading={isAdding}>
                       Submit
                     </Button>
                   }
@@ -95,6 +98,7 @@ const ParentForm: React.FC = () => {
                 {
                     <Tag color='warning'>You are filling as a { user.roles[0].name }</Tag>
                 }
+
                 <Form.Item
                     label='Service Date'
                     rules={[{ required: true, message: 'Please select Service date' }]}
