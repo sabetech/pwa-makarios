@@ -31,6 +31,28 @@ const Services = () => {
                         <Button block color='primary' fill='solid' size='large' onClick={() => navigate(`/services/${stream.id}/form`)  }>
                             Fill {stream.name} Form
                         </Button>
+                        <List style={{paddingLeft: 0, marginTop: 20}}>
+                {
+                    services?.filter((service) => service.service_type_id !== 7).map((service) => (
+                        <List.Item
+                        key={service.id}
+                        prefix={
+                          <Image
+                            src={service.service_photo}
+                            style={{ borderRadius: 20 }}
+                            fit='cover'
+                            width={40}
+                            height={40}
+                          />
+                        }
+                        extra={<Tag color='warning'>{service.service_type.service_type}</Tag>}
+                        description={`Attendance: ${service.attendance} | Offering: ${service.offering}`}
+                      >
+                        {`${getUserFriendlyDateFormat(service.date)} - ${service?.bacenta?.name ?? 'No Bacenta'}`}
+                      </List.Item>
+                    ))
+                }
+                </List>
                     </Tabs.Tab>
                 ))
              }
