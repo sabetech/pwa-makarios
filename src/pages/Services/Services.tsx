@@ -33,7 +33,7 @@ const Services = () => {
                         </Button>
                         <List style={{paddingLeft: 0, marginTop: 20}}>
                 {
-                    services?.filter((service) => service.service_type_id !== 7).map((service) => (
+                    services?.filter((service) => service.service_type_id == 7).map((service) => (
                         <List.Item
                         key={service.id}
                         prefix={
@@ -48,7 +48,7 @@ const Services = () => {
                         extra={<Tag color='warning'>{service.service_type.service_type}</Tag>}
                         description={`Attendance: ${service.attendance} | Offering: ${service.offering}`}
                       >
-                        {`${getUserFriendlyDateFormat(service.date)} - ${service?.bacenta?.name ?? 'No Bacenta'}`}
+                        {`${getUserFriendlyDateFormat(service.date)} - ${service?.bacenta?.name ?? ''}`}
                       </List.Item>
                     ))
                 }
@@ -77,7 +77,7 @@ const Services = () => {
                         extra={<Tag color='warning'>{service.service_type.service_type}</Tag>}
                         description={`Attendance: ${service.attendance} | Offering: ${service.offering}`}
                       >
-                        {`${getUserFriendlyDateFormat(service.date)} - ${service?.bacenta?.name ?? 'No Bacenta'}`}
+                        {`${getUserFriendlyDateFormat(service.date)} - ${service?.bacenta?.name ?? ''}`}
                       </List.Item>
                     ))
                 }
