@@ -46,7 +46,7 @@ const ParentForm: React.FC = () => {
         values.date = dayjs(date).format('YYYY-MM-DD')
         values.treasurers = treasures;
         if (values.service_type == undefined) {
-            values.service_type = stream_id;
+            values.service_type = serviceTypes?.find((sv: TServiceType) => sv.service_type === "Stream Service")?.id;
         }
         addService(values)
 
