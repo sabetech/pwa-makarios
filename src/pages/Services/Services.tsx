@@ -9,7 +9,7 @@ import { getUserFriendlyDateFormat } from '../../utils/helper';
 
 const Services = () => {
 
-    const [selectedStream, setSelectedStream] = useState<number>();
+    const [selectedStream, setSelectedStream] = useState<number>(1);
    
     const { data: streams } = useGetStreams();
     const { data: services } = useGetServices({stream_id: selectedStream});

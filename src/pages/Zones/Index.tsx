@@ -27,7 +27,7 @@ const Index = () => {
                     <List.Item 
                         key={zone.id}
                         prefix={<Avatar src={zone.leader?.img_url ?? '/404'} />}
-                        description={`${zone?.region?.region ?? "Unknown Region"} - ${zone?.stream?.name ?? "Unknown Stream"} - ${zone?.leader?.name ?? "Unknown Person"}` }
+                        description={`${zone?.region?.name ?? "Unknown Region"} - ${zone?.stream?.name ?? "Unknown Stream"} - ${zone?.leader?.name ?? "Unknown Person"}` }
                         onClick={() => handleZoneClick(zone.id)}
                         >
                         {zone.name}
