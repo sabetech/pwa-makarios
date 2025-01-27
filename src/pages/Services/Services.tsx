@@ -6,6 +6,7 @@ import { useGetStreams } from '../../hooks/StreamHooks';
 import { TStream } from '../../types/stream';
 import { useGetServices } from '../../hooks/ServiceHooks';
 import { getUserFriendlyDateFormat } from '../../utils/helper';
+import { AiFillHome } from "react-icons/ai";
 
 const Services = () => {
 
@@ -17,10 +18,10 @@ const Services = () => {
     const navigate = useNavigate();
 
     return (<>
-        <MyNavBar prevPage="dashboard" currentPage="Services" />
+        <MyNavBar prevPage="dashboard" currentPage="Services" rightNode={<Button fill='none' onClick={() => navigate("/dashboard")}><AiFillHome color='white' size={20} /></Button>} />
         
         <Tabs
-            defaultActiveKey="1"
+            defaultActiveKey={streams && streams?.length > 0 ? "1" : "0"}
             style={{ height: '100%', background: 'transparent'}}
             onChange={(key) => setSelectedStream(parseInt(key))}
         >
