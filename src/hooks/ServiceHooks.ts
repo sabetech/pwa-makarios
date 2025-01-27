@@ -44,8 +44,15 @@ export const useAddService = () => {
     };
 
 export const useGetServices = (filter?: TFilterType) => {
+
+
+    let serviceFilter = filter ? (('stream_id' in filter) ? filter['stream_id'] : filter) : {};
+
+    console.log("Service Filter::", serviceFilter)
+
     return useQuery<TServiceResponse[]>({
-            queryKey: [queryKeys.SERVICE_LIST_KEY, filter],
+            
+            queryKey: [queryKeys.SERVICE_LIST_KEY, JSON.stringify(serviceFilter)],
             queryFn: async () => {
                 return await _getServices(filter);
             }

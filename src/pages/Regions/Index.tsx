@@ -23,7 +23,7 @@ const Index = () => {
                         description={`${region.leader?.name} - ${region?.stream?.name}` }
                         onClick={() => handleRegionClick(region.id)}
                         >
-                        {region.region}
+                        {region.name}
                     </List.Item>
                 ))
             }

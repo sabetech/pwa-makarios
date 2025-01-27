@@ -12,6 +12,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthUser } from '../../../hooks/AuthHooks';
 import { useGetBacentas } from '../../../hooks/BacentaHooks';
 import { TBacenta } from '../../../types/bacenta';
+import { useGetZones } from '../../../hooks/Zones';
+import { useGetRegions } from '../../../hooks/RegionHooks';
+import { TZone } from '../../../types/zone';
+import { TRegion } from '../../../types/Region';
 
 
 const startDate = dayjs('01-01-2000', 'DD-MM-YYYY'); // Using a custom date format
@@ -20,13 +24,48 @@ const ParentForm: React.FC = () => {
     const [showDateSelector, setShowDateSelector] = useState(false)
     const [date, setDate] = useState<Date>(calendarDefault);
     const [selectedServiceType , setSelectedServiceType] = useState<PickerValue[]>([]);
-    const [selectedBacentaId, setSelectedBacentaId] = useState<PickerValue[]>([])
+    const [selectedSubjectaId, setSelectedSubjectId] = useState<PickerValue[]>([])
+
     const [form] = Form.useForm()
     const navigate = useNavigate();
 
     const { stream_id } = useParams();
     const { data:serviceTypes } = useGetServiceTypes();
     const {data: bacentas} = useGetBacentas();
+    const {data: zones} = useGetZones();
+    const {data: regions} = useGetRegions();
+    let serviceTypeData = new Map()
+    serviceTypes?.forEach((serviceType) => {
+        switch (serviceType.service_type) {
+ 
+            case 'Bacenta Service':
+                serviceTypeData.set(serviceType.id, {
+                    data: bacentas,
+                    label: 'Select Bacenta',
+                    field: 'bacenta_id',
+                    subject: 'Bacenta'
+                });
+                break;
+            case 'Joint Bacenta Service (Zonal Service)':
+                serviceTypeData.set(serviceType.id, {
+                    data: zones,
+                    label: 'Select Zone',
+                    field: 'zone_id',
+                    subject: 'Zone'
+                });
+                break;
+            case 'Joint Zonal Service (Regional Service)':
+                serviceTypeData.set(serviceType.id,{
+                    data: regions,
+                    label: 'Select Region',
+                    field: 'region_id',
+                    subject: 'Region'
+                });
+                break;
+        }
+       
+    })
+
     
     const {mutate: addService, isLoading: isAdding, isSuccess } = useAddService();
     const user = useAuthUser()();
@@ -48,6 +87,11 @@ const ParentForm: React.FC = () => {
         if (values.service_type == undefined) {
             values.service_type = serviceTypes?.find((sv: TServiceType) => sv.service_type === "Stream Service")?.id;
         }
+
+        if (values.service_type == 7) {
+            values.stream_id = stream_id;
+        }
+
         addService(values)
 
     }
@@ -81,7 +125,11 @@ const ParentForm: React.FC = () => {
         return true
     }
 
-    console.log("selected suomt::", selectedServiceType[0])
+    console.log("selected Subject ID::", selectedServiceType[0])
+
+    console.log("List values for ",serviceTypeData.get(selectedServiceType[0])?.subject, "::", serviceTypeData.get(selectedServiceType[0])?.data)
+
+    console.log("What valu eis this::", selectedSubjectaId[0], "::", serviceTypeData.get(selectedServiceType[0])?.data?.find((item: any) => item.id === selectedSubjectaId[0])?.name)
     
     return (
         <>
@@ -122,8 +170,8 @@ const ParentForm: React.FC = () => {
                 </Form.Item>
                 
                 {
-                    stream_id === 'weekday' && 
-                    <Form.Item
+                    stream_id === 'weekday' &&
+                    (<Form.Item
                         name='service_type'
                         label='Service Type'
                         rules={[{ required: true, message: 'Please select Service Type' }]}
@@ -151,37 +199,38 @@ const ParentForm: React.FC = () => {
                             >
                             {selectedServiceType.length > 0 ? serviceTypes?.find((sv) => sv.id === selectedServiceType[0])?.service_type : 'Choose Service Type'}
                         </Button>
-                    </Form.Item>
-                }
+                    </Form.Item>) 
+                    
+                } 
                 { /*Find a better solution to this */
-                    selectedServiceType[0] === 3 && 
+                    (selectedServiceType[0] === 3 || selectedServiceType[0] === 4 || selectedServiceType[0] === 5) && 
                     <Form.Item
-                        name='bacenta_id'
-                        label='Select Bacenta'
-                        rules={[{ required: true, message: 'Please select Bacenta' }]}
+                        name={serviceTypeData.get(selectedServiceType[0])?.field}
+                        label={serviceTypeData.get(selectedServiceType[0])?.label}
+                        rules={[{ required: true, message: `Please ${serviceTypeData.get(selectedServiceType[0])?.label}` }]}
                     >
                         <Button
                             onClick={async () => {
                                 const value = await Picker.prompt({
                                 confirmText: 'OK',
                                 cancelText: 'Cancel',
-                                columns: [ (bacentas && bacentas?.map((bacenta: TBacenta) => (
-                                        {
-                                            label: `${bacenta.name} (${bacenta.region.region})`,
-                                            value: bacenta.id
-                                        } as PickerColumnItem
-                                    )
-                                )) ?? []
-                                ] });
+                                columns: [ (serviceTypeData.get(selectedServiceType[0])?.data && serviceTypeData.get(selectedServiceType[0])?.data?.map((serviceEntity: TBacenta | TRegion | TZone) => (
+                                    {
+                                        label: serviceEntity.name,
+                                        value: serviceEntity.id
+                                    } 
+                                ))) ?? []
+                                ]});
                                 
-                                setSelectedBacentaId(value ?? [])
-                                form.setFieldValue('bacenta_id', value)
+                                setSelectedSubjectId(value ?? [])
+                                form.setFieldValue(serviceTypeData.get(selectedServiceType[0])?.field, value)
+                                console.log("Field: ", serviceTypeData.get(selectedServiceType[0])?.field, "Value: ", value)
 
                             }}
                             fill='outline'
                             color='primary'
                             >
-                            {selectedBacentaId.length > 0 ? bacentas?.find((bc) => bc.id === selectedBacentaId[0])?.name : 'Select Your Bacenta'}
+                            {selectedSubjectaId.length > 0 ? serviceTypeData.get(selectedServiceType[0])?.data?.find((item: any) => item.id === selectedSubjectaId[0])?.name : `Select Your ${serviceTypeData.get(selectedServiceType[0])?.subject}`}
                         </Button>
                     </Form.Item>
                 }
