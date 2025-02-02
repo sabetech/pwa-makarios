@@ -25,18 +25,18 @@ const Arrivals = () => {
         icon={<InformationCircleOutline />}
       />
 
-      <List header={`${user.name}'s Arrival Updates`} style={{ '--header-font-size': '20px' }}>
-        {isLoading ? <List.Item>Loading...</List.Item> :
+      <List header={`${user.name}'s Arrival data for ${bacentas?.length} Bacentas`} style={{ '--header-font-size': '20px' }}>
+        {/* {isLoading ? <List.Item>Loading...</List.Item> :
           bacentas && bacentas.length > 0 && bacentas.map((bacenta) => (
             <List.Item
               key={bacenta.id}
-              prefix={bacenta.id}
-              description={bacenta.name}
+              prefix={bacenta.region.name}
+              description={bacenta?.leader?.name}
             >
               {bacenta.name}
             </List.Item>
           ))
-        }
+        } */}
       </List>
     </>
   );
