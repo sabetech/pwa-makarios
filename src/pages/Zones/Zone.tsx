@@ -14,7 +14,7 @@ const Zone = () => {
     return (<>
                 <ProfileCard 
                     name={zone?.leader?.name ?? "Unknown Person"}
-                    area={`${zone?.region?.name ?? "Unknown Region"} - ${zone?.name ?? "Unknown Zone"}`} 
+                    area={`${zone?.region?.name ?? "Unknown Region"} - ${zone?.name ?? "Unknown Zone"} Zone`} 
                     role={zone?.leader?.roles[0].name ?? "Unknown Role"}
                     avg_attendance={0} 
                     avg_bussing={0} 
