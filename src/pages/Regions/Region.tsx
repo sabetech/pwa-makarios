@@ -18,7 +18,11 @@ const Region = () => {
     console.log(region)
 
     const onMembersClick = () => {
-        navigate(`/dashboard/regions/${id}/members`);
+        navigate(`/dashboard/regions/${id}/members`, {
+            state: {
+                cachedRegionMembers: region?.members
+            }
+        });
     }
     
     return (<>

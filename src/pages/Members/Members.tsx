@@ -1,17 +1,21 @@
+import { useEffect, useState } from 'react';
 import { List, Image, SearchBar, Button } from 'antd-mobile';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthUser } from '../../hooks/AuthHooks';
 import { useGetMembers } from '../../hooks/MemberHooks';
 import { useParams } from "react-router-dom";
 import MyNavBar from '../../components/NavBar';
+import { TMember } from '../../types/member';
 const Members = () => {
     const loggedInUser = useAuthUser()
     const navigate = useNavigate();
     const user = loggedInUser()
+    const [members, setMembers] = useState<TMember[]>([]);
 
     const { stream_id: stream_id } = useParams();
     const { region_id: region_id } = useParams();
     const { zone_id: zone_id } = useParams();
+    const location = useLocation();
 
     let val = stream_id ?? region_id ?? zone_id ?? null
     let key = null;
@@ -24,8 +28,21 @@ const Members = () => {
     } else {
         key = 'stream_id';
     }
+    
+    console.log("Members Cached::", location.state.cachedRegionMembers)
 
-    const { data:members, isLoading } = useGetMembers(val ? { [key]: val } : undefined)
+
+    const { data:fetchedMembers, isLoading, isFetched } = (location.state.cachedRegionMembers && location.state.cachedRegionMembers.length > 0) ? function() {
+        return {
+        data: location.state.cachedRegionMembers,
+        isLoading: false,
+        isFetched: true,
+    }}() 
+    : useGetMembers(val ? { [key]: val } : undefined)
+    
+    useEffect(() => {
+        setMembers(fetchedMembers ?? [])
+    },[fetchedMembers])
 
     return (
     <>
