@@ -19,7 +19,7 @@ const Members = () => {
 
     let val = stream_id ?? region_id ?? zone_id ?? null
     let key = null;
-    
+
     if (stream_id) {
         key = 'stream_id';
     } else if (region_id) {
@@ -30,7 +30,7 @@ const Members = () => {
         key = 'stream_id';
     }
 
-    const { data:fetchedMembers, isLoading, isFetched } = (location.state.cachedRegionMembers && location.state.cachedRegionMembers.length > 0) ? function() {
+    const { data:fetchedMembers, isLoading, isFetched } = (location.state?.cachedRegionMembers && location.state.cachedRegionMembers?.length > 0) ? function() {
         return {
         data: location.state.cachedRegionMembers,
         isLoading: false,
