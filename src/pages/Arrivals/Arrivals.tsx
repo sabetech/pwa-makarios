@@ -20,7 +20,7 @@ const Arrivals = () => {
     <>
       <MyNavBar prevPage="dashboard" currentPage="Arrivals" rightNode={<Button color={"default"} onClick={() => navigate("/arrivals/new")}>Add New</Button>} />
       <NoticeBar
-        content="You bus on Fridays and Sundays."
+        content="Feature in development (Testing)"
         color="alert"
         icon={<InformationCircleOutline />}
       />
