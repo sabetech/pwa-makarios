@@ -4,15 +4,22 @@ import { useParams } from "react-router-dom";
 import { Card, Space } from "antd-mobile";
 import ProfileCard from "../../components/Profile/ProfileCard";
 import DataBar from '../../components/dashboard/charts/DataBar';
+import { useNavigate } from 'react-router-dom';
 
 const Region = () => {
     //get region id from url param
     const { id } = useParams();
     
+    const navigate = useNavigate();
+    
     if (!id) return null;
 
     const {data: region} = useGetRegion( parseInt(id) )
     console.log(region)
+
+    const onMembersClick = () => {
+        navigate(`/dashboard/regions/${id}/members`);
+    }
     
     return (<>
                 <ProfileCard 
@@ -25,13 +32,13 @@ const Region = () => {
                     avatar={region?.leader?.img_url ?? "/404"} />
 
                 <Space direction="vertical" style={{width: "100%"}}>
-                    <Card title='Members' >
+                    <Card title='Members' onClick={() => onMembersClick() }>
                         { typeof region?.members !== 'undefined' ? region?.members.length : 0 }
                     </Card>
                     <Card title='Zones - Target: 10' >
                         {  typeof region?.zones !== 'undefined' ? region?.zones.length : 0 }
                     </Card>
-                    <Card title='Bacentas - Target: 100' >
+                    <Card title='Bacentas' >
                         {  typeof region?.bacentas !== 'undefined' ? region?.bacentas.length : 0 }
                     </Card>
                     

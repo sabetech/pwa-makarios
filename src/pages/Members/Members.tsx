@@ -33,7 +33,7 @@ const Members = () => {
         <SearchBar placeholder='Search for member by name' showCancelButton 
             style={{'--height': '60px', backgroundColor: '#570A22', color:'white', '--border-radius': '0px'}}
         />
-        <List header={`${user.name}'s Members`} style={{'--header-font-size': '20px'}}>
+        <List header={`${user.name}'s Members - ${members?.length}`} style={{'--header-font-size': '20px'}}>
         {isLoading ? <List.Item>Loading...</List.Item> :
         members && members.length > 0 && members.map((member) => (
             <List.Item
