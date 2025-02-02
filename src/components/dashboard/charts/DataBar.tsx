@@ -3,10 +3,10 @@ const DataBar = () => {
     return (
         <ResponsiveContainer width="100%" height="30%">
             <BarChart data={[
-                {name: 'Week 1', income: 400, attn: 200, bussing: 100},
-                {name: 'Week 2', income: 400, attn: 300, bussing: 100},
-                {name: 'Week 3', income: 400, attn: 200, bussing: 100},
-                {name: 'Week 4', income: 400, attn: 300, bussing: 100},
+                {name: 'Week 1', income: 0, attn: 0, bussing: 0},
+                {name: 'Week 2', income: 0, attn: 0, bussing: 0},
+                {name: 'Week 3', income: 0, attn: 0, bussing: 0},
+                {name: 'Week 4', income: 0, attn: 0, bussing: 0},
             ]}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />

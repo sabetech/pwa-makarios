@@ -1,3 +1,4 @@
+import { TBacenta } from "./bacenta";
 import { TChurchInfo } from "./church";
 import { TRole } from "./user";
 
@@ -26,6 +27,7 @@ export type TServiceResponse = {
     id?: number;
     date: string;
     service_type_id: number;
+    bacenta: TBacenta;
     service_photo: string;
     attendance: number;
     offering: number;

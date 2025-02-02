@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { Button, Tabs, List,Image } from 'antd-mobile';
+import { Button, Tabs, List,Image, Tag } from 'antd-mobile';
 import MyNavBar from "../../components/NavBar"
 import { useNavigate } from "react-router-dom";
 import { useGetStreams } from '../../hooks/StreamHooks';
 import { TStream } from '../../types/stream';
 import { useGetServices } from '../../hooks/ServiceHooks';
 import { getUserFriendlyDateFormat } from '../../utils/helper';
+import { AiFillHome } from "react-icons/ai";
 
 const Services = () => {
 
-    const [selectedStream, setSelectedStream] = useState<number>();
+    const [selectedStream, setSelectedStream] = useState<number>(1);
    
     const { data: streams } = useGetStreams();
     const { data: services } = useGetServices({stream_id: selectedStream});
@@ -17,10 +18,10 @@ const Services = () => {
     const navigate = useNavigate();
 
     return (<>
-        <MyNavBar prevPage="dashboard" currentPage="Services" />
+        <MyNavBar prevPage="dashboard" currentPage="Services" rightNode={<Button fill='none' onClick={() => navigate("/dashboard")}><AiFillHome color='white' size={20} /></Button>} />
         
         <Tabs
-            defaultActiveKey="1"
+            defaultActiveKey={streams && streams?.length > 0 ? "1" : "0"}
             style={{ height: '100%', background: 'transparent'}}
             onChange={(key) => setSelectedStream(parseInt(key))}
         >
@@ -31,6 +32,28 @@ const Services = () => {
                         <Button block color='primary' fill='solid' size='large' onClick={() => navigate(`/services/${stream.id}/form`)  }>
                             Fill {stream.name} Form
                         </Button>
+                        <List style={{paddingLeft: 0, marginTop: 20}}>
+                {
+                    services?.filter((service) => service.service_type_id == 7).map((service) => (
+                        <List.Item
+                        key={service.id}
+                        prefix={
+                          <Image
+                            src={service.service_photo}
+                            style={{ borderRadius: 20 }}
+                            fit='cover'
+                            width={40}
+                            height={40}
+                          />
+                        }
+                        extra={<Tag color='warning'>{service.service_type.service_type}</Tag>}
+                        description={`Attendance: ${service.attendance} | Offering: ${service.offering}`}
+                      >
+                        {`${getUserFriendlyDateFormat(service.date)} - ${service?.bacenta?.name ?? ''}`}
+                      </List.Item>
+                    ))
+                }
+                </List>
                     </Tabs.Tab>
                 ))
              }
@@ -52,9 +75,10 @@ const Services = () => {
                             height={40}
                           />
                         }
+                        extra={<Tag color='warning'>{service.service_type.service_type}</Tag>}
                         description={`Attendance: ${service.attendance} | Offering: ${service.offering}`}
                       >
-                        {`${getUserFriendlyDateFormat(service.date)} - WIP  `}
+                        {`${getUserFriendlyDateFormat(service.date)} - ${service?.bacenta?.name ?? ''}`}
                       </List.Item>
                     ))
                 }

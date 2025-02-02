@@ -56,20 +56,20 @@ const AddMember = () => {
             }
         }
 
-        if (bacenta === undefined) {
-            return Toast.show({
-                content: 'Please select a Bacenta',
-                duration: 4000,
-                icon: 'fail',
-                position: 'top'
-            })
-        }
+        // if (bacenta === undefined) {
+        //     return Toast.show({
+        //         content: 'Please select a Bacenta',
+        //         duration: 4000,
+        //         icon: 'fail',
+        //         position: 'top'
+        //     })
+        // }
 
         const request = {
             ..._values,
             date_of_birth: dayjs(date).format("YYYY-MM-DD"),
-            bacenta_id: bacenta.id,
-            basonta_id: basonta?.id ?? 0,
+            bacenta_id: bacenta?.id ?? undefined,
+            basonta_id: basonta?.id ?? undefined,
             location: location.lat ? `${location.lat}, ${location.lng}` : "",
             picture: picture
         }
@@ -140,6 +140,7 @@ const AddMember = () => {
                 <Form.Item
                     name='whatsapp'
                     label='Member Whatsapp Number'
+                    
                 >
                     <Input placeholder="+233541231123" />
                 </Form.Item>

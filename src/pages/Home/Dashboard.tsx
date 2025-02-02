@@ -2,7 +2,7 @@ import { useState } from 'react';
 // import { UserContext } from '../../contexts/UserContext';
 import { logoutUser } from '../../services/UserManagement';
 // import { IPastoralPoint, IUserManager } from '../../interfaces/ServerResponse';
-import { Grid, Space, FloatingBubble, Modal, ActionSheet, Divider } from 'antd-mobile'
+import { Grid, Space, FloatingBubble, Modal, ActionSheet, Divider, Card } from 'antd-mobile'
 import { useSignOut, useAuthUser, useAuthToken } from '../../hooks/AuthHooks';
 import { MoreOutline } from 'antd-mobile-icons'
 import { useLocation } from 'react-router-dom';
@@ -22,6 +22,7 @@ import type {
 import HeaderPanel from '../../components/dashboard/HeaderPanel';
 import { getActions, ADMIN, SERVICES, DIRECTORY, ARRIVAL } from '../../constants/SidebarActions';
 import DataBar from '../../components/dashboard/charts/DataBar';
+import { auto } from '@cloudinary/url-gen/actions/resize';
 
 const Dashboard = () => {
     const authToken = useAuthToken();
@@ -123,20 +124,25 @@ const Dashboard = () => {
                 isLoading && <div>Loading...</div>
             }
 
-            <Grid columns={3} gap={2} style={{marginTop: '5vh'}}>
+            <Grid columns={3} gap={1} style={{marginTop: '10vh'}}>
                 {
                     dashboardSummary && dashboardSummary?.length > 0 &&
                     dashboardSummary.map((summary: any, index: number) => 
                      (
                         <Grid.Item key={index}>
-                            <ValueCard key={index} title={summary.name} value={summary.count} handleClick={() => {handleClick(summary.name)}} />
+                  
+                            <Card title={summary.name} onClick={() => {handleClick(summary.name)}} >
+                                {summary.count}
+                            </Card>
+      
+                            {/* <ValueCard key={index} title={summary.name} value={summary.count} handleClick={() => {handleClick(summary.name)}} /> */}
                         </Grid.Item>
                     ))
                 }
             </Grid>
             <Divider />
-            <Space direction='horizontal' style={{marginTop: 30, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                <Grid columns={2} gap={2} style={{fontFamily: 'Verdana, sans-serif', fontSize: 14}}>
+            <Space direction='vertical' style={{marginLeft: 15, width: '100%'}}>
+                <Grid columns={3} gap={8} style={{fontFamily: 'Verdana, sans-serif', fontSize: 13, display: 'flex', justifyContent: 'center'}}>
                     <Grid.Item>
                         <Space direction='vertical'>
                             <div>Avg Attendance</div>
@@ -146,6 +152,12 @@ const Dashboard = () => {
                     <Grid.Item>
                         <Space direction='vertical'>
                             <div>Avg Weekly Income (Ghc)</div>
+                            <div>0</div>
+                        </Space>
+                    </Grid.Item>
+                    <Grid.Item>
+                        <Space direction='vertical'>
+                            <div>Avg Weekly Bussing </div>
                             <div>0</div>
                         </Space>
                     </Grid.Item>

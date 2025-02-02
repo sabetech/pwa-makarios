@@ -6,7 +6,7 @@ import { TZone } from "./zone";
 
 export type TRegion = {
     id: number,
-    region: string,
+    name: string,
     description: string,
     leader?: TUser,
     stream: TStream,
