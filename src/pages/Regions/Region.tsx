@@ -17,7 +17,7 @@ const Region = () => {
     return (<>
                 <ProfileCard 
                     name={region?.leader?.name ?? "Unknown Person"}
-                    area={`${region?.region ?? "Unknown Stream"} - ${region?.stream.name ?? "Unknown Stream"}`} 
+                    area={`${region?.name ?? "Unknown Stream"} - ${region?.stream.name ?? "Unknown Stream"}`} 
                     role={region?.leader?.roles[0].name ?? "Unknown Role"}
                     avg_attendance={0} 
                     avg_bussing={0} 
