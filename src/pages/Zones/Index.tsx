@@ -1,20 +1,29 @@
 // This is list zones page
+import { useEffect, useState } from 'react';
 import { List } from 'antd-mobile';
 import MyNavBar from "../../components/NavBar";
 import { useGetZones } from '../../hooks/Zones';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { Avatar } from 'antd-mobile';
+import { TZone } from '../../types/zone';
 
 const Index = () => {
+    const [zones, setZones] = useState<TZone[]>([]);
     const navigate = useNavigate();
 
-    //get stream_id from navigate function
     const location = useLocation();
-    const { stream_id } = location.state || {};
+    
+    const { cachedRegionZones } = location.state || {};
 
-    console.log("stream_id:: ", stream_id)
+    const { data:fetchedZones } = (cachedRegionZones && cachedRegionZones.length > 0) ? function() {
+        return {
+        data: cachedRegionZones,
+    }}() : useGetZones();
 
-    const zones = useGetZones({stream_id: stream_id ?? null});
+    useEffect(() => {
+        setZones(fetchedZones || [])
+    },[fetchedZones])
+
     const handleZoneClick = (id: number) => {
         navigate(`${id}`);
     }
@@ -23,7 +32,7 @@ const Index = () => {
         <MyNavBar prevPage="directory/churches" currentPage="Zones" />
         <List header="Zones" style={{'--header-font-size': '20px'}} mode={'card'}>
             {
-                zones && zones.data?.map(zone => (
+                zones && zones?.map(zone => (
                     <List.Item 
                         key={zone.id}
                         prefix={<Avatar src={zone.leader?.img_url ?? '/404'} />}

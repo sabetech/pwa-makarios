@@ -74,7 +74,8 @@ function App() {
                     <Route path='/dashboard/streams/:stream_id/regions' element={<RegionIndex />} />
                     <Route path='/dashboard/regions/:id' element={<Region />}/>
                     <Route path='/dashboard/regions/:id/members' element={<Members />} />
-
+                    <Route path='dashboard/regions/:id/zones' element={<ZoneIndex />} />
+                    <Route path='dashboard/regions/:id/zones/:zone_id' element={<Zone />} />
 
                     <Route path='/dashboard/zones' element={<ZoneIndex />}/>
                     <Route path='/dashboard/streams/:id/zones' element={<ZoneIndex />}/>
