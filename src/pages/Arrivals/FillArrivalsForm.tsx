@@ -8,6 +8,7 @@ import {
   Button,
   Picker,
   Stepper,
+  Toast,
 } from "antd-mobile";
 import { InformationCircleOutline } from "antd-mobile-icons";
 import dayjs from "dayjs";
@@ -15,6 +16,7 @@ import { useGetBacentas } from "../../hooks/BacentaHooks";
 import { PickerColumnItem, PickerValue } from "antd-mobile/es/components/picker-view";
 import { TBacenta } from "../../types/bacenta";
 import UploadComponent from "../../components/UploadImage";
+import { useAddArrivalReport } from "../../hooks/ArrivalHooks";
 
 
 
@@ -24,18 +26,25 @@ const FillArrivalsForm = () => {
   const todaysDate = dayjs().toDate();
   const { data: bacentas } = useGetBacentas();
   const [selectedBacentaId, setSelectedBacentaId] = useState<PickerValue[]>([])
+  const {mutate: addArrivalReport, isLoading: isSubmitting, isSuccess} = useAddArrivalReport();
 
-  const onSubmit = () => {
-    const values = form.getFieldsValue();
-    console.log(values);
-    // form.submit();
+  const onSubmit = (_values: any) => {
+   
+    addArrivalReport(_values)
+
   };
+
+  if (isSuccess) {
+    Toast.show({
+      content: 'Arrival added successfully',
+  });
+  }
 
   return (
     <>
       <MyNavBar prevPage="Arrivals" currentPage="New Arrivals Form" />
       <NoticeBar
-        content="You bus on Fridays and Sundays."
+        content="Feature in Development (Testing)"
         color="alert"
         icon={<InformationCircleOutline />}
       />
@@ -43,8 +52,9 @@ const FillArrivalsForm = () => {
       <Space block direction="vertical" style={{ width: "100%" }}>
         <Form
           form={form}
+          onFinish={onSubmit}
           footer={
-            <Button block color="primary" onClick={onSubmit} size="large">
+            <Button block color="primary" type='submit' size="large" loading={isSubmitting}>
               Submit
             </Button>
           }
@@ -84,7 +94,7 @@ const FillArrivalsForm = () => {
                     cancelText: 'Cancel',
                     columns: [(bacentas && bacentas?.map((bacenta: TBacenta) => (
                       {
-                        label: `${bacenta.name} (${bacenta.region.region})`,
+                        label: `${bacenta.name} (${bacenta.region.name})`,
                         value: bacenta.id
                       } as PickerColumnItem
                     )

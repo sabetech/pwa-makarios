@@ -11,7 +11,16 @@ const getActions = (role: string) => {
             break
         case "Bacenta Leader":
             actions = [...actionsByRole['General'], ...actionsByRole['Bacenta Leader']]
-            break
+            break;
+        case "Zone Lead":
+            actions = [...actionsByRole['General'], ...actionsByRole['Zone Lead']] 
+            break;
+        case "Region Lead":
+            actions = [...actionsByRole['General'], ...actionsByRole['Region Lead']] 
+            break;
+        case "Stream Lead":
+            actions = [...actionsByRole['General'], ...actionsByRole['Stream Lead']] 
+            break;
         default:
             actions = [...actionsByRole['General']]
     }       
@@ -35,6 +44,21 @@ const actionsByRole = {
             text: 'Services', key: 'services', 
         }
     ] as Action[],
+    'Zone Lead': [
+        {
+            text: 'Arrivals', key: 'arrival',
+        }   
+    ],
+    'Region Lead': [
+        {
+            text: 'Arrivals', key: 'arrival',
+        }   
+    ],
+    'Stream Lead': [
+        {
+            text: 'Arrivals', key: 'arrival',
+        }   
+    ],
     'Bacenta Leader': [
         {
             text: 'Arrivals', key: 'arrival',
