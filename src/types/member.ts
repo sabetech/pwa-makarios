@@ -1,3 +1,8 @@
+import { TBacenta } from "./bacenta"
+import { TRegion } from "./Region"
+import { TStream } from "./stream"
+import { TZone } from "./zone"
+
 export type TMember = {
     id: number
     name: string
@@ -10,6 +15,10 @@ export type TMember = {
     occupation: string
     marital_status: string
     img_url: string
+    bacenta?: TBacenta
+    zone?: TZone
+    region?: TRegion
+    stream?: TStream
 }
 
 export type TMemberRequest = {

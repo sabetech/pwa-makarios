@@ -131,7 +131,7 @@ const Dashboard = () => {
                      (
                         <Grid.Item key={index}>
                   
-                            <Card title={summary.name} onClick={() => {handleClick(summary.name)}} >
+                            <Card title={summary.name} onClick={() => {handleClick(summary.name)}} style={{boxShadow: '1px 1px 8px 0px rgba(0,0,0,0.25)'}}>
                                 {summary.count}
                             </Card>
       
