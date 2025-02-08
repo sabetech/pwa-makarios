@@ -61,6 +61,14 @@ const Members = () => {
                     height={40}
                   />} 
                 description={member.phone}
+                onClick={() => {
+                    navigate(`${member.id}`, {
+                        state: {
+                            member
+                        }
+                    });
+                }}
+                clickable={true}
             >
                 {member.name}
             </List.Item>

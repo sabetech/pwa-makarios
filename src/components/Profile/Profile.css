@@ -10,11 +10,11 @@
 header {
 	background-image: url("../../assets/region_background_2.avif");
 	background-position: 0px 0px;
-	background-repeat: repeat;
-	background-size: contain;
+	background-repeat: no-repeat;
+	background-size: cover;
 	text-align: center;
-	border-top-left-radius: 14px;
-	border-top-right-radius: 14px;
+	border-top-left-radius: 7px;
+	border-top-right-radius: 7px;
 }
 
 .profile-img {

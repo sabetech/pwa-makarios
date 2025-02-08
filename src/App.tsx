@@ -31,6 +31,7 @@ import Region from './pages/Regions/Region'
 import Zone from './pages/Zones/Zone'
 import ParentForm from './pages/Services/Forms/ParentForm'
 import FillArrivalsForm from './pages/Arrivals/FillArrivalsForm'
+import Member from './pages/Members/Member'
 
 function App() {
   const queryClient = new QueryClient({
@@ -74,6 +75,9 @@ function App() {
                     <Route path='/dashboard/streams/:stream_id/regions' element={<RegionIndex />} />
                     <Route path='/dashboard/regions/:id' element={<Region />}/>
                     <Route path='/dashboard/regions/:id/members' element={<Members />} />
+                    
+                    <Route path='/dashboard/regions/:id/members/:member_id' element={<Member />} />
+
                     <Route path='dashboard/regions/:id/zones' element={<ZoneIndex />} />
                     <Route path='dashboard/regions/:id/zones/:zone_id' element={<Zone />} />
 
@@ -89,11 +93,12 @@ function App() {
                     <Route path='/fellowship/fill-form' element={<FellowshipServiceForm />} />
                     <Route path='/directory' element={<Directory />} />
                     <Route path='/directory/members' element={<Members />} />
+                    <Route path='/directory/members/:id' element={<Member />} />
                     
                     <Route path='/dashboard/churches/:id/members' element={<Members />} />
                     <Route path='dashboard/streams/:stream_id/members' element={<Members />} />
                     <Route path='/directory/members/add' element={<AddMember />} />
-                    <Route path='/directory/members/:id' element={<Members />} />
+                    
 
                     <Route path='/directory/churches' element={<Churches />} />
                     
