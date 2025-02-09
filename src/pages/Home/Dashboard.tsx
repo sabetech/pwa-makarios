@@ -2,7 +2,7 @@ import { useState } from 'react';
 // import { UserContext } from '../../contexts/UserContext';
 import { logoutUser } from '../../services/UserManagement';
 // import { IPastoralPoint, IUserManager } from '../../interfaces/ServerResponse';
-import { Grid, Space, FloatingBubble, Modal, ActionSheet, Divider, Card } from 'antd-mobile'
+import { Grid, Space, FloatingBubble, Modal, ActionSheet, Divider, Card, SpinLoading } from 'antd-mobile'
 import { useSignOut, useAuthUser, useAuthToken } from '../../hooks/AuthHooks';
 import { MoreOutline } from 'antd-mobile-icons'
 import { useLocation } from 'react-router-dom';
@@ -119,12 +119,13 @@ const Dashboard = () => {
     return (
         <>
             <HeaderPanel setVisible={setVisible} loggedInUser={ user } />
-
+            <div style={{display: 'flex', justifyContent: 'center'}}>
             {
-                isLoading && <div>Loading...</div>
+                isLoading && <SpinLoading style={{'--size': '48px', marginTop: 50}}/>
             }
+            </div>
 
-            <Grid columns={3} gap={1} style={{marginTop: '10vh'}}>
+            <Grid columns={3} gap={1} style={{marginTop: '7vh'}}>
                 {
                     dashboardSummary && dashboardSummary?.length > 0 &&
                     dashboardSummary.map((summary: any, index: number) => 
@@ -141,7 +142,7 @@ const Dashboard = () => {
                 }
             </Grid>
             <Divider />
-            <Space direction='vertical' style={{marginLeft: 15, width: '100%'}}>
+            <Space direction='vertical' style={{marginLeft: 15}}>
                 <Grid columns={3} gap={8} style={{fontFamily: 'Verdana, sans-serif', fontSize: 13, display: 'flex', justifyContent: 'center'}}>
                     <Grid.Item>
                         <Space direction='vertical'>
