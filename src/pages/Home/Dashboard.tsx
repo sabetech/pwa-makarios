@@ -112,6 +112,9 @@ const Dashboard = () => {
             case App.ZONES:
                 navigate("/dashboard/zones");
             break;
+            case App.BACENTAS:
+                navigate("/dashboard/bacentas");
+            break;
         }
         
     }

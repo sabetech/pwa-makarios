@@ -17,7 +17,7 @@ const Index = () => {
 
     return (
         <>
-            <MyNavBar prevPage="directory/churches" currentPage="Streams" />
+            <MyNavBar currentPage="Streams" />
             {
                 isLoading && <div>Loading...</div>
             }

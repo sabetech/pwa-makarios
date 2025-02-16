@@ -31,6 +31,14 @@ const Region = () => {
             }
         })
     }
+
+    const onBacentasClick =() => {
+        navigate(`/dashboard/regions/${id}/bacentas`, {
+            state: {
+                cachedRegion: region
+            }
+        });
+    }
     
     return (<>
                 <ProfileCard 
@@ -49,7 +57,7 @@ const Region = () => {
                     <Card title='Zones - Target: 10' onClick={() => onZoneClick()}>
                         {  typeof region?.zones !== 'undefined' ? region?.zones.length : 0 }
                     </Card>
-                    <Card title='Bacentas' >
+                    <Card title='Bacentas' onClick={() => onBacentasClick()}>
                         {  typeof region?.bacentas !== 'undefined' ? region?.bacentas.length : 0 }
                     </Card>
                 </Space>

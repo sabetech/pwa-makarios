@@ -6,6 +6,7 @@ import { useGetMembers } from '../../hooks/MemberHooks';
 import { useParams } from "react-router-dom";
 import MyNavBar from '../../components/NavBar';
 import { TMember } from '../../types/member';
+import { IoPersonAdd } from "react-icons/io5";
 const Members = () => {
     const loggedInUser = useAuthUser()
     const navigate = useNavigate();
@@ -30,11 +31,10 @@ const Members = () => {
         key = 'stream_id';
     }
 
-    const { data:fetchedMembers, isLoading, isFetched } = (location.state?.cachedRegionMembers && location.state.cachedRegionMembers?.length > 0) ? function() {
+    const { data:fetchedMembers, isLoading } = (location.state?.cachedRegionMembers && location.state.cachedRegionMembers?.length > 0) ? function() {
         return {
         data: location.state.cachedRegionMembers,
         isLoading: false,
-        isFetched: true,
     }}() 
     : useGetMembers(val ? { [key]: val } : undefined)
     
@@ -44,9 +44,22 @@ const Members = () => {
 
     return (
     <>
-        <MyNavBar prevPage="/directory" currentPage="Members" rightNode={<Button color={"default"} onClick={() => navigate("/directory/members/add")}>Add New</Button>}/>
+        <MyNavBar currentPage="Members" rightNode={<Button color={"default"} onClick={() => navigate("/directory/members/add")}><IoPersonAdd /> Add New</Button>}/>
         <SearchBar placeholder='Search for member by name' showCancelButton 
             style={{'--height': '60px', backgroundColor: '#570A22', color:'white', '--border-radius': '0px'}}
+            onChange={(value) => {
+                if (value.length === 0) {
+                    setMembers(fetchedMembers ?? [])
+                }
+                console.log("valeue::", value)
+                //match value with member name
+                const filteredMembers = fetchedMembers.filter((member: TMember) => member.name.toLowerCase().includes(value.toLowerCase()));
+                console.log("filteredMembers::", filteredMembers)
+                setMembers(filteredMembers);
+            }}
+            onClear={() => {
+                setMembers(fetchedMembers ?? [])
+            }}
         />
         <List header={`${user.name}'s Members - ${members?.length}`} style={{'--header-font-size': '20px'}}>
         {isLoading ? <List.Item>Loading...</List.Item> :
