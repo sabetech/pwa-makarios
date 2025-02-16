@@ -22,6 +22,7 @@ import AddStream from './pages/Streams/AddStream'
 
 import RegionIndex from './pages/Regions/Index';
 import ZoneIndex from './pages/Zones/Index';
+import BacentaIndex from './pages/Bacentas/Index';
 
 import SetPicture from './pages/Auth/SetPicture'
 import ProtectedRoute from './pages/Auth/ProtectedRoute'
@@ -32,6 +33,7 @@ import Zone from './pages/Zones/Zone'
 import ParentForm from './pages/Services/Forms/ParentForm'
 import FillArrivalsForm from './pages/Arrivals/FillArrivalsForm'
 import Member from './pages/Members/Member'
+import Bacenta from './pages/Bacentas/Bacenta'
 
 function App() {
   const queryClient = new QueryClient({
@@ -81,13 +83,19 @@ function App() {
                     <Route path='dashboard/regions/:id/zones' element={<ZoneIndex />} />
                     <Route path='dashboard/regions/:id/zones/:zone_id' element={<Zone />} />
 
+                    <Route path='/dashboard/regions/:id/bacentas' element={<BacentaIndex />} />
+                    <Route path='/dashboard/regions/:id/bacentas/:bacenta_id' element={<Bacenta />} />
+
                     <Route path='/dashboard/zones' element={<ZoneIndex />}/>
                     <Route path='/dashboard/streams/:id/zones' element={<ZoneIndex />}/>
                     <Route path='/dashboard/churches/:id/zones' element={<ZoneIndex />}/>
                     <Route path='/dashboard/churches/:id/streams/:stream_id/zones' element={<ZoneIndex />}/>
-
+                    
                     <Route path='/dashboard/zones/:zone_id' element={<Zone />}/>
                     <Route path='/dashboard/streams/:id/zones/:zone_id' element={<Zone />}/>
+
+                    <Route path='/dashboard/bacentas' element={<BacentaIndex />} />
+                    <Route path='/dashboard/bacentas/:bacenta_id' element={<Bacenta />} />
 
                     <Route path='/fellowship' element={<FellowshipServiceDetails />} />
                     <Route path='/fellowship/fill-form' element={<FellowshipServiceForm />} />

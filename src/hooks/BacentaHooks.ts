@@ -1,8 +1,7 @@
 import { useMutation, useQuery } from 'react-query';
 import * as apiClient from '../services/Bacenta';
 import * as queryKeys from '../constants/QueryKeys';
-import { TStream } from '../types/stream';
-import { TCouncil } from '../types/council';
+import { TFilterType } from '../types/member';
 import { TBacenta } from '../types/bacenta';
 
 
@@ -34,7 +33,7 @@ const _getBacentas = async () => {
 //     });
 // }
 
-export const useGetBacentas = () => {
+export const useGetBacentas = (filter?: TFilterType) => {
     return  useQuery<TBacenta[]>( 
         { 
             queryKey: [queryKeys.BACENTA_LIST_KEY],

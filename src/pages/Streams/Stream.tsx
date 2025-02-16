@@ -45,30 +45,32 @@ const Stream = () => {
     console.log("Stream members::", members)
 
     console.log("face change::", stream?.regions)
+
+    
     return (
         <>
-            <MyNavBar prevPage="directory/churches" currentPage={`${stream?.name?? "Unknown Stream"} Stream `}/>
+            <MyNavBar currentPage={`${stream?.name?? "Unknown Stream"} Stream `}/>
             <HeaderPanel title={`${stream?.name ?? "Unknown Stream"} Stream`} />
             {
                 isLoading && <div>Loading...</div>
             }
             <Grid columns={2} gap={8} style={{marginTop: 20, marginLeft: 30, marginRight: 20}}>
                 <Grid.Item>
-                    <Card title={"Members"} style={{fontSize: 20}} onClick={handleMembersClick} > {members?.length} </Card>
+                    <Card title={"Members"} style={cardStyle} onClick={handleMembersClick}> {members?.length} </Card>
                 </Grid.Item>
                 <Grid.Item>
-                    <Card title={"Regions"} style={{fontSize: 20}}
+                    <Card title={"Regions"} style={cardStyle}
                     onClick={handleRegionsClick}
                     > {stream?.regionalInfo?.length ?? 0} </Card>
                 </Grid.Item>
 
                 <Grid.Item>
-                    <Card title={"Zones"} style={{fontSize: 20}}
+                    <Card title={"Zones"} style={cardStyle}
                     onClick={handleZonesClick}
                     > { stream?.regionalInfo?.reduce((acc, curr) => acc + (curr?.zones?.length ?? 0), 0) ?? 0 } </Card>
                 </Grid.Item>
                 <Grid.Item>
-                    <Card title={"Bacentas"} style={{fontSize: 20}}>  { stream?.regionalInfo?.reduce((acc, curr) => acc + (curr?.bacentas?.length ?? 0), 0) ?? 0 }  </Card>
+                    <Card title={"Bacentas"} style={cardStyle}>  { stream?.regionalInfo?.reduce((acc, curr) => acc + (curr?.bacentas?.length ?? 0), 0) ?? 0 }  </Card>
                 </Grid.Item>
             </Grid>
             
@@ -84,5 +86,10 @@ const Stream = () => {
         </>
     )
 }
+const cardStyle = {
+    fontSize: 20,
+    boxShadow: '1px 1px 8px 0px rgba(0,0,0,0.25)'
+}
+
 
 export default Stream;

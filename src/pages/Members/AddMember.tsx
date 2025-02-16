@@ -112,7 +112,7 @@ const AddMember = () => {
     return (
         <>
             {/* Handle back navigation properly */}
-            <MyNavBar prevPage="members" currentPage="Add Member" />
+            <MyNavBar currentPage="Add Member" />
             <Form
                  form={form}
                  onFinish={onFinish}

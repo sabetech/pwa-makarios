@@ -6,7 +6,6 @@ const Member= () => {
     const location = useLocation();
 
     const memberDetail = location.state?.member || {}
-    //get member from navigater
 
     console.log(memberDetail)
 
