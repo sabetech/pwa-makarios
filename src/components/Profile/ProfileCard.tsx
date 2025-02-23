@@ -1,6 +1,7 @@
 import "./Profile.css";
 import { LeftOutline } from 'antd-mobile-icons'
 import { useNavigate } from "react-router-dom";
+import { FaHome } from "react-icons/fa";
 
 type ProfileCardProps = {
     avatar: string,
@@ -20,7 +21,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({avatar, name, avg_attendance, 
         <div className="card-container">
 			<header>
 				<img className="profile-img" src={avatar} alt={name} />
-                
+                <FaHome onClick={() => navigate('/dashboard')} style={{ position: "absolute", top: 10, right: '20', color: "white", fontSize: 25 }}/>
 			</header>
             <LeftOutline onClick={() => navigate(-1)} style={{ position: "absolute", top: 10, left: 10, color: "white", fontSize: 25 }}/>
 			<h1 className="bold-text">

@@ -42,7 +42,7 @@ const FillArrivalsForm = () => {
 
   return (
     <>
-      <MyNavBar prevPage="Arrivals" currentPage="New Arrivals Form" />
+      <MyNavBar prevPage="/dashboard" currentPage="New Arrivals Form" />
       <NoticeBar
         content="Feature in Development (Testing)"
         color="alert"
