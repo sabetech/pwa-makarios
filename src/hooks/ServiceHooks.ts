@@ -19,6 +19,11 @@ const _getServices = async (filter? : TFilterType) => {
     return data.data
 }
 
+const _getServiceAverageAttnAndOffering = async (filter? : TFilterType) => {
+    const { data } = await apiClient.getServiceAverageAttnAndOffering(filter)
+    return data.data
+}
+
 export const useGetServiceTypes = (filter?: TFilterType) => {
     return useQuery<TServiceType[]>({
             queryKey: [queryKeys.SERVICE_TYPE_LIST_KEY, filter],
@@ -57,4 +62,15 @@ export const useGetServices = (filter?: TFilterType) => {
                 return await _getServices(filter);
             }
         })
+}
+
+export const useGetServiceAverageAttnAndOffering = (filter?: TFilterType) => {
+
+    return useQuery<{avgAttn: number, avgOffering: number}>({
+            
+            queryKey: [queryKeys.SERVICE_LIST_KEY, JSON.stringify(filter)],
+            queryFn: async () => {
+                return await _getServiceAverageAttnAndOffering(filter);
+            }
+        });
 }

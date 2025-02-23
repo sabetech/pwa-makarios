@@ -1,6 +1,11 @@
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+
 const DataBar = () => {
+
+        
+
     return (
+
         <ResponsiveContainer width="100%" height="30%">
             <BarChart data={[
                 {name: 'Week 1', income: 0, attn: 0, bussing: 0},

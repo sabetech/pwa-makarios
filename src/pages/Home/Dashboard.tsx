@@ -2,11 +2,10 @@ import { useState } from 'react';
 // import { UserContext } from '../../contexts/UserContext';
 import { logoutUser } from '../../services/UserManagement';
 // import { IPastoralPoint, IUserManager } from '../../interfaces/ServerResponse';
-import { Grid, Space, FloatingBubble, Modal, ActionSheet, Divider, Card, SpinLoading } from 'antd-mobile'
+import { Grid, Space, FloatingBubble, Modal, ActionSheet, Divider, Card, SpinLoading, Tag } from 'antd-mobile'
 import { useSignOut, useAuthUser, useAuthToken } from '../../hooks/AuthHooks';
 import { MoreOutline } from 'antd-mobile-icons'
 import { useLocation } from 'react-router-dom';
-import { ValueCard } from '../../components/dashboard/ValueCard';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import * as StorageKeys from '../../constants/StorageKeys';
@@ -17,12 +16,10 @@ import type {
     Action
 } from 'antd-mobile/es/components/action-sheet';
 
-// import { IAttendanceRequestInfo } from '../../interfaces/Attendance';
-
 import HeaderPanel from '../../components/dashboard/HeaderPanel';
 import { getActions, ADMIN, SERVICES, DIRECTORY, ARRIVAL } from '../../constants/SidebarActions';
 import DataBar from '../../components/dashboard/charts/DataBar';
-import { auto } from '@cloudinary/url-gen/actions/resize';
+import { useGetServiceAverageAttnAndOffering } from '../../hooks/ServiceHooks';
 
 const Dashboard = () => {
     const authToken = useAuthToken();
@@ -40,8 +37,10 @@ const Dashboard = () => {
 
     // const dashboardCards
     const {data: dashboardSummary, isLoading} = useGetDashboardSummaries()
+    const {data: dashboardAverage} = useGetServiceAverageAttnAndOffering()
 
     console.log("Dashboard summary::", dashboardSummary)
+    console.log("Service Average::", dashboardAverage)
 
     const { mutate: logout } = useMutation({
         mutationFn: async () => {
@@ -148,21 +147,21 @@ const Dashboard = () => {
             <Space direction='vertical' style={{marginLeft: 15}}>
                 <Grid columns={3} gap={8} style={{fontFamily: 'Verdana, sans-serif', fontSize: 13, display: 'flex', justifyContent: 'center'}}>
                     <Grid.Item>
-                        <Space direction='vertical'>
+                        <Space direction='vertical' style={{alignItems: 'center'}}>
                             <div>Avg Attendance</div>
-                            <div>0</div>
+                            <div><Tag round={true} style={{fontSize: '0.8rem'}}>{ Math.round(dashboardAverage?.avgAttn ?? 0) }</Tag></div>
                         </Space>
                     </Grid.Item>
                     <Grid.Item>
-                        <Space direction='vertical'>
+                        <Space direction='vertical' style={{alignItems: 'center'}}>
                             <div>Avg Weekly Income (Ghc)</div>
-                            <div>0</div>
+                            <div><Tag round={true} style={{fontSize: '0.8rem'}}>{ Math.round(dashboardAverage?.avgOffering ?? 0) }</Tag> </div>
                         </Space>
                     </Grid.Item>
                     <Grid.Item>
-                        <Space direction='vertical'>
+                        <Space direction='vertical' style={{alignItems: 'center'}}>
                             <div>Avg Weekly Bussing </div>
-                            <div>0</div>
+                            <div><Tag round={true} style={{fontSize: '0.8rem'}}>0</Tag></div>
                         </Space>
                     </Grid.Item>
                 </Grid>

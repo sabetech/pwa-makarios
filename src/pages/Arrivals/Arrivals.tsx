@@ -18,7 +18,7 @@ const Arrivals = () => {
 
   return (
     <>
-      <MyNavBar prevPage="dashboard" currentPage="Arrivals" rightNode={<Button color={"default"} onClick={() => navigate("/arrivals/new")}>Add New</Button>} />
+      <MyNavBar prevPage="/dashboard" currentPage="Arrivals" rightNode={<Button color={"default"} onClick={() => navigate("/arrivals/new")}>Add New</Button>} />
       <NoticeBar
         content="Feature in development (Testing)"
         color="alert"

@@ -18,3 +18,12 @@ export const getServices = async (filter?: any): Promise<AxiosResponse> => {
     return (await api.get(`/services?${filterParams}`, {}));
 }
 
+export const getServiceAverageAttnAndOffering = async (filter?: any): Promise<AxiosResponse> => {
+    if (!filter || filter == null || filter == undefined) {
+        return (await api.get('/service/averages', {}));
+    }
+    const filterParams = Object.entries(filter).map(([key, value]) => `${key}=${value}`).join('&');
+    
+    return (await api.get(`service/averages?${filterParams}`, {}));
+}
+
