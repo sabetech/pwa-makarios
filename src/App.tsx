@@ -97,6 +97,9 @@ function App() {
                     <Route path='/dashboard/bacentas' element={<BacentaIndex />} />
                     <Route path='/dashboard/bacentas/:bacenta_id' element={<Bacenta />} />
 
+                    <Route path='/dashboard/members' element={<Members />} />
+                    <Route path='/dashboard/members/:id' element={<Member />} />
+
                     <Route path='/fellowship' element={<FellowshipServiceDetails />} />
                     <Route path='/fellowship/fill-form' element={<FellowshipServiceForm />} />
                     <Route path='/directory' element={<Directory />} />

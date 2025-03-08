@@ -46,7 +46,7 @@ const Members = () => {
     <>
         <MyNavBar currentPage="Members" rightNode={<Button color={"default"} onClick={() => navigate("/directory/members/add")}><IoPersonAdd /> Add New</Button>}/>
         <SearchBar placeholder='Search for member by name' showCancelButton 
-            style={{'--height': '60px', backgroundColor: '#570A22', color:'white', '--border-radius': '0px'}}
+            style={{'--height': '60px', backgroundColor: '#570A22', color:'white', position: 'fixed', top: '60px', zIndex: 1000, width: '100%','--border-radius': '0px'}}
             onChange={(value) => {
                 if (value.length === 0) {
                     setMembers(fetchedMembers ?? [])

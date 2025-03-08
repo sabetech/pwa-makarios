@@ -29,7 +29,7 @@ const Index = () => {
     }
     return (
         <>
-        <MyNavBar prevPage="directory/churches" currentPage="Zones" />
+        <MyNavBar currentPage="Zones" />
         <List header="Zones" style={{'--header-font-size': '20px'}} mode={'card'}>
             {
                 zones && zones?.map(zone => (

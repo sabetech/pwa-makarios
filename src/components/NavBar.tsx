@@ -17,7 +17,7 @@ const MyNavBar:React.FC<Navprops> = ({prevPage, currentPage, rightNode}) => {
                 if (prevPage) navigate(prevPage)
                 else navigate(-1)}   
             } 
-            style={{'--height': '60px', backgroundColor: '#570A22', color:'white'}}
+            style={{'--height': '60px', backgroundColor: '#570A22', color:'white', position: 'fixed', top: 0, zIndex: 1000, width: '95%'}}
             right={rightNode}
             > {currentPage} </NavBar>
     )
