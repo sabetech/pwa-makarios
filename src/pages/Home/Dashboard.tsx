@@ -114,6 +114,9 @@ const Dashboard = () => {
             case App.BACENTAS:
                 navigate("/dashboard/bacentas");
             break;
+            case App.MEMBERS:
+                navigate("/dashboard/members");
+            break;
         }
         
     }
@@ -135,10 +138,9 @@ const Dashboard = () => {
                         <Grid.Item key={index}>
                   
                             <Card title={summary.name} onClick={() => {handleClick(summary.name)}} style={{boxShadow: '1px 1px 8px 0px rgba(0,0,0,0.25)'}}>
-                                {summary.count}
+                                { summary.count }
                             </Card>
-      
-                            {/* <ValueCard key={index} title={summary.name} value={summary.count} handleClick={() => {handleClick(summary.name)}} /> */}
+    
                         </Grid.Item>
                     ))
                 }
