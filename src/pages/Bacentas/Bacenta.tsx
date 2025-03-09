@@ -32,7 +32,7 @@ const Bacenta = () => {
     return (<>
             <ProfileCard 
                 name={cachedBacenta?.leader?.name ?? "Unknown Person"}
-                area={`${cachedBacenta?.name ?? "Unknown Bacenta"} - ${cachedBacenta?.region?.name ?? "Unknown Region"} - ${cachedBacenta?.region.stream?.name ?? "Unknown Stream"}`} 
+                area={`${cachedBacenta?.name ?? "Unknown Bacenta"} - ${cachedBacenta?.region?.name ?? "Unknown Region"} - ${cachedBacenta?.region?.stream?.name ?? "Unknown Stream"}`} 
                 role={"Unknown Role"}
                 avg_attendance={0}
                 avg_bussing={0}

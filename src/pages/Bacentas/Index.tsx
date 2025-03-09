@@ -21,8 +21,6 @@ const Index = () => {
         setBacentas(fetchedBacentas || [])
     },[fetchedBacentas])
 
-    console.log("Cached Infomration::", location.state.cachedRegion)
-
     return (<>
         <MyNavBar prevPage="/dashboard" currentPage="Bacentas" />
         <List header={`Bacentas: ${bacentas?.length}`} style={{'--header-font-size': '20px'}} mode={'card'}>
