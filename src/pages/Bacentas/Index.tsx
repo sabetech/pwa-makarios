@@ -23,7 +23,7 @@ const Index = () => {
 
     return (<>
         <MyNavBar prevPage="/dashboard" currentPage="Bacentas" />
-        <List header={`Bacentas: ${bacentas?.length}`} style={{'--header-font-size': '20px'}} mode={'card'}>
+        <List header={`Bacentas: ${bacentas?.length}`} style={{'--header-font-size': '20px', marginTop: '7vh'}} mode={'card'}>
             {
                 bacentas && bacentas?.map((bacenta: TBacenta) => (
                     <List.Item 

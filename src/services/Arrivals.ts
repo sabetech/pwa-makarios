@@ -5,3 +5,7 @@ import { TArrivalForm } from '../types/arrivals';
 export const addArrivalReport = async (arrivalForm: TArrivalForm):Promise<AxiosResponse> => {
     return (await api.post('/arrivals/', arrivalForm, {}));
 }
+
+export const getArrivalReport = async ():Promise<AxiosResponse> => {
+    return (await api.get('/arrivals', {}));
+}
