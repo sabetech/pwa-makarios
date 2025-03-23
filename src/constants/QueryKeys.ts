@@ -12,3 +12,4 @@ export const ZONE_ITEM_KEY = 'zone'
 export const DASHBOARD_SUMMARY_KEY = 'dashboardSummary';
 export const SERVICE_TYPE_LIST_KEY = 'serviceTypes';
 export const SERVICE_LIST_KEY = 'services';
+export const ARRIVAL_LIST_KEY = 'arrivals';

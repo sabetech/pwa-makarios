@@ -1,14 +1,31 @@
+import { useState, useRef } from "react";
 import MemberProfileCard from "../../components/Profile/MemberProfileCard";
 import { useLocation } from "react-router-dom";
-import { List } from "antd-mobile";
+import { List, DatePicker, Input, InputRef } from "antd-mobile";
+import dayjs from "dayjs";
+
 
 const Member= () => {
     const location = useLocation();
-
     const memberDetail = location.state?.member || {}
+    const [showEmailTextInput, setShowEmailTextInput] = useState(false);
+    const emailInput = useRef<InputRef>(null);
+    
+    const existingDate: Date = new Date( memberDetail.date_of_birth ?? "1995-01-01" );
 
-    console.log(memberDetail)
+    const [showDateSelector, setShowDateSelector] = useState(false);
+    const [date, setDate] = useState<Date>(existingDate);
 
+    const highlightText = () => {
+        const nativeInput = emailInput.current?.nativeElement as HTMLInputElement; 
+        console.log("emailInput::", emailInput?.current)
+        console.log("native imput::", nativeInput)
+
+        if (nativeInput) {
+            nativeInput.focus(); 
+            nativeInput.setSelectionRange(0, nativeInput.value.length); // Highlight the entire text
+          }
+    };
 
     return (
         <>
@@ -18,6 +35,10 @@ const Member= () => {
             <List header={'Personal Information'}>
                 <List.Item
                     description={"Date of Birth"}
+                    clickable={false}
+                    onClick={() => {
+                        setShowDateSelector(true)
+                    }}
                 >
                     {memberDetail.date_of_birth}
                     
@@ -25,8 +46,26 @@ const Member= () => {
 
                 <List.Item
                     description={"Email"}
+                    onClick={() => {
+                        setShowEmailTextInput((prev) => {
+                            if (!prev) {
+                                console.log("focus and highlight!!!")
+                                highlightText();
+                            }
+                            return !prev
+                        })
+                    }}
+                    clickable={false}
+                    style={{backgroundColor: showEmailTextInput ? "rgba(0,0,0,0.1)" : "transparent"}}
                 >
-                    {memberDetail.email ?? "N/A"}
+                    {
+                        
+                        !showEmailTextInput ?
+                        memberDetail.email ?? "N/A"
+                        :
+                        <Input ref={emailInput} placeholder="Email" value={memberDetail.email ?? "N/A"} style={{display: showEmailTextInput ? "block" : "none"}} />
+                        
+                    }
                 </List.Item>
 
                 <List.Item
@@ -79,6 +118,21 @@ const Member= () => {
                     
                 </List.Item>
             </List>
+            <DatePicker
+                title='Choose Date (Year-Month-Day)'
+                style={{zIndex: 20}}
+                visible={showDateSelector}
+                onClose={() => {
+                    setShowDateSelector(false)
+                }}
+                precision='day'
+                onConfirm={val => {
+                    setDate(val as Date)
+                }}
+                defaultValue={date}
+                max={(dayjs().subtract(5, 'year')).toDate()}
+                min={(dayjs().subtract(80, 'year')).toDate()}
+            />
         </>
     )
 }

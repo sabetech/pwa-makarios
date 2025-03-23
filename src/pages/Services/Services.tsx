@@ -34,7 +34,7 @@ const Services = () => {
         
         <Tabs
             defaultActiveKey={streams && streams?.length > 0 ? "1" : "0"}
-            style={{ height: '100%', background: 'transparent'}}
+            style={{ height: '100%', background: 'transparent', top: '8vh'}}
             onChange={(key) => setSelectedStream(parseInt(key))}
         >
              {

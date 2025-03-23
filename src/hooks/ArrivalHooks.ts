@@ -1,6 +1,7 @@
-import { useMutation } from "react-query"
-import { TArrivalForm } from "../types/arrivals"
+import { useMutation, useQuery } from "react-query"
+import { TArrivalForm, TArrivalData } from "../types/arrivals"
 import * as apiClient from '../services/Arrivals';
+import * as queryKeys from '../constants/QueryKeys';
 
 const _addArrivalReport = async (arrivalForm: TArrivalForm) => {
     
@@ -21,4 +22,20 @@ export const useAddArrivalReport = () => {
             // handle error
         },
     })
+}
+
+export const _getArrivalReport = async () => {
+    const { data } = await apiClient.getArrivalReport()
+    return data.data
+}
+
+export const useGetArrivalReport = () => {
+    return useQuery<TArrivalData>(
+        {
+            queryKey: [queryKeys.ARRIVAL_LIST_KEY],
+            queryFn: async () => {
+                return await _getArrivalReport()
+            }
+        }
+    )
 }

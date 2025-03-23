@@ -42,14 +42,14 @@ const FillArrivalsForm = () => {
 
   return (
     <>
-      <MyNavBar prevPage="/dashboard" currentPage="New Arrivals Form" />
+      <MyNavBar currentPage="New Arrivals Form" />
       <NoticeBar
         content="Feature in Development (Testing)"
         color="alert"
         icon={<InformationCircleOutline />}
       />
 
-      <Space block direction="vertical" style={{ width: "100%" }}>
+      <Space block direction="vertical" style={{ marginTop: 20, width: "100%" }}>
         <Form
           form={form}
           onFinish={onSubmit}
@@ -63,7 +63,7 @@ const FillArrivalsForm = () => {
             style={{
               display: "flex",
               alignContent: "center",
-              justifyContent: "left",
+              justifyContent: "left"
             }}
           >
             <Form.Item initialValue={todaysDate} label={todaysDate.toDateString()} name="date">
