@@ -1,3 +1,7 @@
-export type TArrivalForm = {
+// export type TArrivalForm = {
     
-}
+// }
+
+// export type TArrivalData = {
+//     // 
+// }
