@@ -1,21 +1,18 @@
 import { useState } from 'react';
 import MyNavBar from "../../components/NavBar";
-import { Form, Button, Input, ImageUploader } from 'antd-mobile';
-import { ImageUploadItem } from 'antd-mobile/es/components/image-uploader';
+import { Form, Button, Input, Picker } from 'antd-mobile';
+import { useGetUsers } from '../../hooks/UserHooks';
 import { useAddChurch } from '../../hooks/ChurchHooks';
 import { TChurchInfo } from '../../types/church';
 
 
 const AddChurchform = () => {
 
-    const [fileList, setFileList] = useState<ImageUploadItem[]>([])
     const {mutate:addChurch, isLoading: isAdding, error } = useAddChurch()
+    const {isLoading: isLoadingPastors, data: pastors} = useGetUsers({role: 'branch pastor'})
+    
+    const [pickerVisible, setPickerVisible] = useState(false)
 
-    const imgUpload = async (file: File) => {
-        return {
-            url: URL.createObjectURL(file),
-          }
-    }
 
     const onFinish = (values: TChurchInfo) => {
         
@@ -33,31 +30,35 @@ const AddChurchform = () => {
                 Add Church
             </Button>
             }
+            style={{marginTop: 60}}
         >
             <Form.Item name='name' label='Church Name'>
                 <Input placeholder="Church Name" />
             </Form.Item>
 
-            {/* <Form.Item name='location' label='Location'>
-                <Input placeholder="Location" />
-            </Form.Item> */}
-
             <Form.Item name='description' label='Description'>
                 <Input placeholder="Description" />
             </Form.Item>
-
-            {/* <Form.Item name='head_pastor' label='Head Pastor'>
-                <Input placeholder="Bishop/Rev/Ps ..." />
-            </Form.Item> */}
-
-            {/* <Form.Item name='church_img' label='Church Image'>
-            <ImageUploader
-                value={fileList}
-                onChange={setFileList}
-                upload={imgUpload}
-    />
-            </Form.Item> */}
-
+            <Form.Item name="head_pastor" label="Head Pastor">
+                <Button block color='primary' fill='outline' size='large' onClick={() => {
+                        setPickerVisible(true)
+                    }}
+                    style={{marginRight: 20, marginLeft: 10, width: '50%'}}
+                    >
+                        Select Head Pastor
+                    </Button>
+            </Form.Item>
+            <Picker 
+                columns={[
+                    ['Pastor 1', 'Pastor 2', 'Pastor 3']
+                ]}
+                onConfirm={v => {
+                    console.log(v)
+                    setPickerVisible(false)
+                }}
+                onCancel={() => setPickerVisible(false)}
+                visible={pickerVisible}
+            />
         </Form>
 
         </>

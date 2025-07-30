@@ -30,3 +30,19 @@ export const uploadMemberPhoto = async(formData: any): Promise<AxiosResponse> =>
 export const getUser = async(email: string): Promise<AxiosResponse> => {
     return (await api.get(`/user?email=${email}`, {}));
 }
+
+export const getUsers = async(filter?: { [key: string]: string | number | undefined | null }): Promise<AxiosResponse> => {
+    const query = new URLSearchParams(filter as Record<string, string>).toString();
+
+    console.log('Filter Query:', query);
+
+    return (await api.get(`/users?${query}`, {}));
+}
+
+export const addUser = async(user: any): Promise<AxiosResponse> => {
+    return (await api.post('/users', user, {}));
+}
+
+export const getRoles = async(): Promise<AxiosResponse> => {
+    return (await api.get('/roles', {}));
+}

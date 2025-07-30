@@ -21,7 +21,7 @@ const Index = () => {
             {
                 isLoading && <div>Loading...</div>
             }
-            <List header="Streams" style={{'--header-font-size': '20px'}}>
+            <List header="Streams" style={{'--header-font-size': '20px', marginTop: 20}}>
             {
                 streams && streams.map((stream: TStream) => (
                     <List.Item key={stream.name} 

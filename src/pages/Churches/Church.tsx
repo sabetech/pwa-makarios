@@ -23,7 +23,7 @@ const Church = () => {
 
     return (
         <>
-            <MyNavBar prevPage="directory/churches" currentPage={location.state.church.name}/>
+            <MyNavBar currentPage={location.state.church.name}/>
             <HeaderPanel title={location.state.church.name} />
             <Grid columns={2} gap={8} style={{marginTop: 20, marginLeft: 30, marginRight: 20}}>
                 <Grid.Item>

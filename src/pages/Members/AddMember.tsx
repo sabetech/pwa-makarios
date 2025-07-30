@@ -35,7 +35,7 @@ const AddMember = () => {
     const { data:bacentas } = useGetBacentas();
     const { data: basontas } = useGetBasontas();
 
-    const {mutate: addMember, isLoading: isAdding, isSuccess } = useAddMember()
+    const {mutate: addMember, isLoading: isAdding, isSuccess, isError } = useAddMember()
     const { data: user, refetch, isLoading: isFetchingUser, isSuccess: isUserLoaded } = useGetUser(email)
 
     const onFinish = (_values: any) => {
@@ -56,15 +56,6 @@ const AddMember = () => {
             }
         }
 
-        // if (bacenta === undefined) {
-        //     return Toast.show({
-        //         content: 'Please select a Bacenta',
-        //         duration: 4000,
-        //         icon: 'fail',
-        //         position: 'top'
-        //     })
-        // }
-
         const request = {
             ..._values,
             date_of_birth: dayjs(date).format("YYYY-MM-DD"),
@@ -84,6 +75,18 @@ const AddMember = () => {
             content: 'Member Added Successfully',
         });
         navigate("/directory/members");
+    }
+
+    if (isError) {
+        
+        console.error("Error adding member", isError);
+        
+        Toast.show({
+            content: 'Error adding member',
+            duration: 4000,
+            icon: 'fail',
+            position: 'top'
+        });
     }
 
     const lookupEmail = (email: string) => {
@@ -121,6 +124,7 @@ const AddMember = () => {
                       Save
                     </Button>
                   }
+                style={{ marginTop: '70px' }}
             >
                 <Form.Header>Register A New Member</Form.Header>
                 <Form.Item
