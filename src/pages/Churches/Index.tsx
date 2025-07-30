@@ -24,8 +24,8 @@ const Index = () => {
 
     return (
         <>
-            <MyNavBar prevPage="admin/portal" currentPage="Churches" />
-            <List header="Churches" style={{'--header-font-size': '20px'}}>
+            <MyNavBar currentPage="Churches" />
+            <List header="Churches" style={{'--header-font-size': '20px', marginTop: '15px'}}>
             {
                 churches && churches.data.map((church: TChurchInfo) => (
                     <List.Item key={church.name} onClick={() => {

@@ -14,6 +14,7 @@ export type TUser = {
 }
 
 export type TRole = {
+    id?: number
     name: string
 }
 

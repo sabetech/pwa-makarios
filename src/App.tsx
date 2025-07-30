@@ -12,7 +12,7 @@ import FellowshipServiceDetails from './pages/Detail/FellowshipServiceDetail'
 import FellowshipServiceForm from './pages/Forms/FellowshipService'
 import ForgotPassword from './pages/Auth/ForgotPassword'
 import Register from './pages/Auth/Register'
-import AdminPortal from './pages/AdminPortal/Index'
+import AdminRoutes from './routes/AdminRoutes'
 import Churches from './pages/Churches/Index'
 import Church from './pages/Churches/Church'
 import AddChurchform from './pages/Churches/AddChurchForm'
@@ -57,10 +57,7 @@ function App() {
                 <Route path='/register' element={ <Register /> } />
                 <Route path='/set-photo' element={ <SetPicture /> } />
                 <Route path='/forgot-password' element={ <ForgotPassword /> } />
-
                 {
-                  // TODO: Add protected routes
-                 
                   <Route element={<ProtectedRoute />}>
                     <Route path='/dashboard' element={<Dashboard />} />
                     <Route path='/dashboard/churches' element={<Churches />} />
@@ -127,7 +124,8 @@ function App() {
                     
                     <Route path='/arrivals' element={<Arrivals />} />
                     <Route path='/arrivals/new' element={<FillArrivalsForm />} />
-                    <Route path='/admin/portal' element={<AdminPortal />} />
+
+                    <Route path='/admin/*' element={<AdminRoutes />} />
                   </Route>
                 }
                                 
