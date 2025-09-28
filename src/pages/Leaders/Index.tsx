@@ -1,23 +1,37 @@
 //page src/pages/Leaders/Index.tsx
-import { Avatar, List, Button, SwipeAction, Dialog } from "antd-mobile";
-import MyNavBar from "../../components/NavBar";
+import { useState } from "react";
+import { Avatar, List, Button, SwipeAction, Dialog, SpinLoading, ActionSheet } from "antd-mobile";
+import MyNavBar from "../../components/Nav/NavBar";
 import { useGetUsers } from "../../hooks/UserHooks";
 import { TRole } from "../../types/user";
 import { IoPersonAdd } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 const Index = () => {
-    const {data:leaders} = useGetUsers();
+    const [pickerVisible, setPickerVisible] = useState(false);
+    const {data:leaders, isLoading} = useGetUsers();
     const navigate = useNavigate();
     
     const handleLeaderClick = (id: number) => {
         // navigate(`/dashboard/regions/${id}`);
     }
 
+    const options = [
+                        {
+                            text: 'Add Leader',
+                            key: 'add_leader',
+                        },
+                        {
+                            text: 'Add Role',
+                            key: 'add_role',
+                        }
+                    ];
+
     return (
         <>
-            <MyNavBar currentPage="Leaders" rightNode={<Button color={"default"} onClick={() => navigate("add")}><IoPersonAdd />Add New</Button>} />
-            <List header="Leaders" style={{ '--header-font-size': '20px' }} mode={'card'}>
+            <MyNavBar currentPage="Leaders" rightNode={<Button color={"default"} onClick={() => setPickerVisible(true)}><IoPersonAdd />Add New</Button>} />
+            {isLoading ? <SpinLoading style={{'--size': '48px', marginTop: 50}}/> :
+                <List header="Leaders" style={{ '--header-font-size': '20px' }} mode={'card'}>
                 {
                     leaders && leaders.map(leader => (
                         <SwipeAction
@@ -71,6 +85,22 @@ const Index = () => {
                     ))
                 }
             </List>
+            }
+            <ActionSheet 
+                visible={pickerVisible} actions={options} onClose={() => setPickerVisible(false)}
+                onAction={
+                    (action) => {
+                        switch(action.key) {
+                            case 'add_leader':
+                                navigate('add');
+                                break;
+                            case 'add_role':
+                                navigate('roles/add');
+                                break;
+                        }
+                    }
+                }
+            />
         </>
     );
 }

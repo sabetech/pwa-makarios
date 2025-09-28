@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from "react-query";
 import { TFilterType } from "../types/member";
-import { TServiceInfo, TServiceResponse, TServiceType } from "../types/service";
+import { TRegionServiceData, TServiceInfo, TServiceResponse, TServiceType } from "../types/service";
 import * as apiClient from '../services/Service';
 import * as queryKeys from '../constants/QueryKeys';
 
@@ -21,6 +21,11 @@ const _getServices = async (filter? : TFilterType) => {
 
 const _getServiceAverageAttnAndOffering = async (filter? : TFilterType) => {
     const { data } = await apiClient.getServiceAverageAttnAndOffering(filter)
+    return data.data
+}
+
+const _getRegionServices = async () => {
+    const { data } = await apiClient.getRegionServices()
     return data.data
 }
 
@@ -50,7 +55,6 @@ export const useAddService = () => {
 
 export const useGetServices = (filter?: TFilterType) => {
 
-
     let serviceFilter = filter ? (('stream_id' in filter) ? filter['stream_id'] : filter) : {};
 
     console.log("Service Filter::", serviceFilter)
@@ -73,4 +77,15 @@ export const useGetServiceAverageAttnAndOffering = (filter?: TFilterType) => {
                 return await _getServiceAverageAttnAndOffering(filter);
             }
         });
+}
+
+export const useGetRegionServices = () => {
+
+    return useQuery<TRegionServiceData[]>({
+            
+            queryKey: [queryKeys.SERVICE_LIST_KEY],
+            queryFn: async () => {
+                return await _getRegionServices();
+            }
+        })
 }

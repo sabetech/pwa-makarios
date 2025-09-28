@@ -1,5 +1,5 @@
 import { Avatar, List } from "antd-mobile";
-import MyNavBar from "../../components/NavBar";
+import MyNavBar from "../../components/Nav/NavBar";
 import { useGetRegions } from "../../hooks/RegionHooks";
 import { useNavigate, useParams } from "react-router-dom";
 const Index = () => {

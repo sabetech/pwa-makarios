@@ -13,3 +13,6 @@ export const DASHBOARD_SUMMARY_KEY = 'dashboardSummary';
 export const SERVICE_TYPE_LIST_KEY = 'serviceTypes';
 export const SERVICE_LIST_KEY = 'services';
 export const ARRIVAL_LIST_KEY = 'arrivals';
+export const MICROCHURCH_LIST_KEY = 'microchurches';
+export const STREAM_REGION_LIST_KEY = 'streamRegions';
+export const MICROCHURCH_DETAIL_KEY = 'microchurchDetail';

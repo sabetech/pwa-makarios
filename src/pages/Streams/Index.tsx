@@ -1,4 +1,4 @@
-import MyNavBar from "../../components/NavBar"
+import MyNavBar from "../../components/Nav/NavBar"
 import { List, FloatingBubble, Avatar } from 'antd-mobile';
 import { AddOutline } from 'antd-mobile-icons'
 import { useNavigate } from "react-router-dom";
@@ -30,7 +30,7 @@ const Index = () => {
                         }}
                         prefix={<Avatar src={stream.overseer?.img_url ?? '/404'} style={{'--border-radius': '50%'}}/>}
                         style={listStyle}
-                        description={`${stream.church.name}: ${stream.meeting_day} by ${stream.overseer?.name}`}
+                        description={`${stream.church?.name ?? 'Unknown Church'}: ${stream.meeting_day} by ${stream.overseer?.name}`}
                     >
                         {stream.name}
                     </List.Item>

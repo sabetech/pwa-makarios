@@ -53,3 +53,9 @@ export function convertBase64ToFile(base64String: string, fileName: string): Fil
   const blob = new Blob([byteArray], { type: mime });
   return convertBlobToFile(blob, fileName);
 }
+
+export function convertObjectToQueryString(obj: Record<string, any>): string {
+    return Object.entries(obj)
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .join('&');
+}

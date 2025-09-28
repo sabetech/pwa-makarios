@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Form, Button, DatePicker, Stepper, Input, Picker, Toast, Tag } from 'antd-mobile'
 import { AddCircleOutline, MinusCircleOutline } from 'antd-mobile-icons'
-import MyNavBar from '../../../components/NavBar'
+import MyNavBar from '../../../components/Nav/NavBar'
 import dayjs from "dayjs";
 import UploadComponent from '../../../components/UploadImage';
 import { useParams } from 'react-router-dom';
@@ -16,6 +16,7 @@ import { useGetZones } from '../../../hooks/Zones';
 import { useGetRegions } from '../../../hooks/RegionHooks';
 import { TZone } from '../../../types/zone';
 import { TRegion } from '../../../types/Region';
+import { SERVICE_TYPES } from '../../../constants/App';
 
 
 const startDate = dayjs('01-01-2000', 'DD-MM-YYYY'); // Using a custom date format
@@ -25,6 +26,7 @@ const ParentForm: React.FC = () => {
     const [date, setDate] = useState<Date>(calendarDefault);
     const [selectedServiceType , setSelectedServiceType] = useState<PickerValue[]>([]);
     const [selectedSubjectaId, setSelectedSubjectId] = useState<PickerValue[]>([])
+    const [formTitle, setFormTitle] = useState("Form");
 
     const [form] = Form.useForm()
     const navigate = useNavigate();
@@ -34,6 +36,7 @@ const ParentForm: React.FC = () => {
     const {data: bacentas} = useGetBacentas();
     const {data: zones} = useGetZones();
     const {data: regions} = useGetRegions();
+    
     let serviceTypeData = new Map()
     serviceTypes?.forEach((serviceType) => {
         switch (serviceType.service_type) {
@@ -66,6 +69,25 @@ const ParentForm: React.FC = () => {
        
     })
 
+    useEffect(() => {
+       switch(stream_id) {
+        case "1":
+            setFormTitle("Jesus Experience Service");
+            break;
+        case "2":
+            setFormTitle("Fresh Oil Service");
+            break;
+        case "3":
+            setFormTitle("Wisdom Encounter Service");
+            break;
+        case "weekday":
+            setFormTitle("Weekday");
+            break;
+        case "microchurch":
+            setFormTitle("Microchurch Service");
+            break;
+       } 
+    },[]);
     
     const {mutate: addService, isLoading: isAdding, isSuccess } = useAddService();
     const user = useAuthUser()();
@@ -90,6 +112,10 @@ const ParentForm: React.FC = () => {
 
         if (values.service_type == 7) {
             values.stream_id = stream_id;
+        }
+
+        if (stream_id == "microchurch") {
+            values.service_type = SERVICE_TYPES.MICRO_CHURCH
         }
 
         addService(values)
@@ -125,15 +151,9 @@ const ParentForm: React.FC = () => {
         return true
     }
 
-    console.log("selected Subject ID::", selectedServiceType[0])
-
-    console.log("List values for ",serviceTypeData.get(selectedServiceType[0])?.subject, "::", serviceTypeData.get(selectedServiceType[0])?.data)
-
-    console.log("What valu eis this::", selectedSubjectaId[0], "::", serviceTypeData.get(selectedServiceType[0])?.data?.find((item: any) => item.id === selectedSubjectaId[0])?.name)
-    
     return (
         <>
-        <MyNavBar prevPage='' currentPage='Form' />
+        <MyNavBar prevPage='' currentPage={formTitle}/>
             <Form
                 form={form}
                 footer={
@@ -142,6 +162,7 @@ const ParentForm: React.FC = () => {
                     </Button>
                   }
                 onFinish={onFinish}
+                style={{ marginTop: 60 }}
             >
                 {
                     <Tag color='warning'>You are filling as a { user.roles[0].name }</Tag>
@@ -170,7 +191,7 @@ const ParentForm: React.FC = () => {
                 </Form.Item>
                 
                 {
-                    stream_id === 'weekday' &&
+                    (stream_id === 'weekday') &&
                     (<Form.Item
                         name='service_type'
                         label='Service Type'

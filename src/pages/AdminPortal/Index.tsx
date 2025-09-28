@@ -1,4 +1,4 @@
-import MyNavBar from "../../components/NavBar"
+import MyNavBar from "../../components/Nav/NavBar"
 import { Space, List } from 'antd-mobile'
 import { MdOutlineChurch } from "react-icons/md";
 import { FaWater } from "react-icons/fa6";
@@ -76,6 +76,9 @@ const Index = () => {
                         prefix={<TbUsersGroup />}
                         style={listStyle}
                         description={"0 Microchurches"}
+                        onClick={() => {
+                            navigate("/admin/microchurches")
+                        }}
                     >
                         Microchurches
                     </List.Item>

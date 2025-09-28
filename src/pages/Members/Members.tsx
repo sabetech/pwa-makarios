@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthUser } from '../../hooks/AuthHooks';
 import { useGetMembers } from '../../hooks/MemberHooks';
 import { useParams } from "react-router-dom";
-import MyNavBar from '../../components/NavBar';
+import MyNavBar from '../../components/Nav/NavBar';
 import { TMember } from '../../types/member';
 import { IoPersonAdd } from "react-icons/io5";
 const Members = () => {

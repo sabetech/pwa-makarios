@@ -1,6 +1,6 @@
 import { Grid, Card, Divider, Space, Button } from 'antd-mobile'
 import { useLocation, useParams } from "react-router-dom";
-import MyNavBar from "../../components/NavBar";
+import MyNavBar from "../../components/Nav/NavBar";
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import HeaderPanel from '../../components/HeaderPanel';

@@ -2,7 +2,7 @@ import { useMutation, useQuery } from 'react-query';
 import * as apiClient from '../services/Stream';
 import * as queryKeys from '../constants/QueryKeys';
 import { TChurchInfo } from '../types/church';
-import { TStream } from '../types/stream';
+import { TStream, TStreamRegion } from '../types/stream';
 
 
 const _addStream = async (stream: TStream) => {
@@ -58,4 +58,15 @@ export const useGetStream = (stream_id: number) => {
             },
         }
     )
+}
+
+export const useGetStreamsAndRegions = () => {
+    return useQuery<TStreamRegion[]>({
+        queryKey: [queryKeys.STREAM_REGION_LIST_KEY],
+        queryFn: async () => {
+            const { data } = await apiClient.getStreamsAndRegions();
+            return data.data;
+        },
+        refetchOnWindowFocus: false,
+    });
 }

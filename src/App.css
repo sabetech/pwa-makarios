@@ -1,6 +1,7 @@
 :root:root {
   --adm-color-primary: #570A22;
   --adm-button-border-radius: 10px;
+  --adm-picker-header-button: #570A22;
 }
 
 .anagkazo-theme {

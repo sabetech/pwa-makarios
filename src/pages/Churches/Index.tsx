@@ -1,4 +1,4 @@
-import MyNavBar from "../../components/NavBar";
+import MyNavBar from "../../components/Nav/NavBar";
 import { List, FloatingBubble } from 'antd-mobile';
 import { AddOutline } from 'antd-mobile-icons'
 import { useNavigate } from "react-router-dom";

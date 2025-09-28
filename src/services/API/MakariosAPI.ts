@@ -44,9 +44,14 @@ const post = (url: string, data: any, headers: object) => {
     const formData = new FormData();
 
     Object.keys(data).forEach(key => {
+
+        if (typeof data[key] === 'object' ) {
+            data[key] = JSON.stringify(data[key]);
+        }
+
         formData.append(key, data[key]);
     });
-    
+
     return axios(API_BASE_URL+url, {
          method: 'POST',
          headers: {
