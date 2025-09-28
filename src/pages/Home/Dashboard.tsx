@@ -117,6 +117,9 @@ const Dashboard = () => {
             case App.MEMBERS:
                 navigate("/dashboard/members");
             break;
+            case App.MICROCHURCHES:
+                navigate("/dashboard/microchurches");
+            break;
         }
         
     }

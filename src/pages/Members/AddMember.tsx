@@ -3,7 +3,7 @@ import { Form, Button, Input, Radio, Space, Divider, TextArea, DatePicker, Toast
 import CurrentLocation from "../../components/CurrentLocation"
 import { Coordinates } from "../../types/location";
 
-import MyNavBar from "../../components/NavBar";
+import MyNavBar from "../../components/Nav/NavBar";
 import Autocomplete from "../../components/Autocomplete";
 import dayjs from "dayjs";
 import { useGetBacentas } from "../../hooks/BacentaHooks";

@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import * as api from './API/MakariosAPI';
+import { TUser } from '../types/user';
 
 export const authenticateStudent = async(indexnumber: number, passcode: string): Promise<AxiosResponse> => {
     return (await api.post('/authenticate', {index_number: indexnumber, passcode: passcode}, {}));
@@ -39,10 +40,14 @@ export const getUsers = async(filter?: { [key: string]: string | number | undefi
     return (await api.get(`/users?${query}`, {}));
 }
 
-export const addUser = async(user: any): Promise<AxiosResponse> => {
+export const addUser = async(user: TUser): Promise<AxiosResponse> => {
     return (await api.post('/users', user, {}));
 }
 
 export const getRoles = async(): Promise<AxiosResponse> => {
     return (await api.get('/roles', {}));
+}
+
+export const addRole = async(role: { name: string, description?: string }): Promise<AxiosResponse> => {
+    return (await api.post('/roles', role, {}));
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import MyNavBar from "../../components/NavBar";
+import MyNavBar from "../../components/Nav/NavBar";
 import { Form, Button, Input, Picker } from 'antd-mobile';
 import { useGetUsers } from '../../hooks/UserHooks';
 import { useAddChurch } from '../../hooks/ChurchHooks';

@@ -1,6 +1,8 @@
 import { TBacenta } from "./bacenta";
 import { TChurchInfo } from "./church";
-import { TRole } from "./user";
+import { TStream } from "./stream";
+import { TRole, TUser } from "./user";
+import { TBacentaServicesData } from "./bacenta";
 
 export type TServiceType = {
     id: number;
@@ -26,7 +28,7 @@ export type TServiceInfo = {
 export type TServiceResponse = {
     id?: number;
     date: string;
-    service_type_id: number;
+    service_type_id?: number;
     bacenta: TBacenta;
     service_photo: string;
     attendance: number;
@@ -35,5 +37,17 @@ export type TServiceResponse = {
     treasurer_photo: string;
     service_type: TServiceType;
     treasurers: string;
+}
 
+export type TRegionServiceData = {
+    id: number;
+    name: string;
+    bacentas: TBacentaServicesData[];
+    leader: TUser;
+    stream: TStream;
+    attendance_weekly_summary: {
+        week_start: string;
+        week_end: string;
+        total_attendance: number;
+    }[];
 }

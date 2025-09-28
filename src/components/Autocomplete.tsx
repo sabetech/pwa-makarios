@@ -42,18 +42,20 @@ const Autocomplete:React.FC<AutocompleteProps> = ({items, onItemSelected, placeh
             onChange={handleInputChange}
             clearable
         />
-        {/* Display Suggestions */}
-      {filteredSuggestions.length > 0 && (
-        <List mode='card' style={{'--font-size': '14px'}}>
-          {filteredSuggestions.map((item, index) => (
-            <List.Item 
-                arrow={false}
-                key={index} onClick={() => handleSelect(item)}>
-              {item.name}
-            </List.Item>
-          ))}
-        </List>
-      )}
+        <div style={{position: 'fixed', width: '100%', zIndex: 1000, overflowY: 'auto', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)', backgroundColor: '#fff'}}>
+            {/* Display Suggestions */}
+          {filteredSuggestions.length > 0 && (
+            <List mode='card' style={{'--font-size': '14px'}}>
+              {filteredSuggestions.map((item, index) => (
+                <List.Item 
+                    arrowIcon={false}
+                    key={index} onClick={() => handleSelect(item)}>
+                  {item.name}
+                </List.Item>
+              ))}
+            </List>
+          )}
+      </div>
     </>
     )
 }

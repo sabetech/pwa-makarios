@@ -1,6 +1,6 @@
 import { useState, RefObject, useContext } from 'react';
 import { Form, Button, DatePicker, Stepper, ImageUploader, Input, Dialog, Toast } from 'antd-mobile'
-import MyNavBar from '../../components/NavBar';
+import MyNavBar from '../../components/Nav/NavBar';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import type { DatePickerRef } from 'antd-mobile/es/components/date-picker'

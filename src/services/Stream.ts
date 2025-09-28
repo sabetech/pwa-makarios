@@ -13,3 +13,7 @@ export const getStreams = async (): Promise<AxiosResponse> => {
 export const getStream = async (id: number): Promise<AxiosResponse> => {
     return (await api.get(`/stream/${id}`, {}));
 }
+
+export const getStreamsAndRegions = async (): Promise<AxiosResponse> => {
+    return (await api.get('/streams/regions', {}));
+}

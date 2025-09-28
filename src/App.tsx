@@ -24,6 +24,8 @@ import RegionIndex from './pages/Regions/Index';
 import ZoneIndex from './pages/Zones/Index';
 import BacentaIndex from './pages/Bacentas/Index';
 
+import MicrochurchesIndex from './pages/Microchurches/Index';
+
 import SetPicture from './pages/Auth/SetPicture'
 import ProtectedRoute from './pages/Auth/ProtectedRoute'
 import Stream from './pages/Streams/Stream'
@@ -34,6 +36,7 @@ import ParentForm from './pages/Services/Forms/ParentForm'
 import FillArrivalsForm from './pages/Arrivals/FillArrivalsForm'
 import Member from './pages/Members/Member'
 import Bacenta from './pages/Bacentas/Bacenta'
+import MicroChurch from './pages/Microchurches/MicroChurch'
 
 function App() {
   const queryClient = new QueryClient({
@@ -97,6 +100,8 @@ function App() {
                     <Route path='/dashboard/members' element={<Members />} />
                     <Route path='/dashboard/members/:id' element={<Member />} />
 
+                    <Route path='/dashboard/microchurches' element={<MicrochurchesIndex />} />
+                    <Route path='/dashboard/microchurches/:id' element={<MicroChurch />} />
                     <Route path='/fellowship' element={<FellowshipServiceDetails />} />
                     <Route path='/fellowship/fill-form' element={<FellowshipServiceForm />} />
                     <Route path='/directory' element={<Directory />} />
@@ -116,7 +121,6 @@ function App() {
                     <Route path='/directory/churches/:church_id/streams' element={<Streams />} />
                     
                     <Route path='/directory/churches/:church_id/streams/:stream_id' element={<Stream />} />
-                    
                     
                     <Route path='/services' element={<Services />} />
                     <Route path='/services/:stream_id/form' element={<ParentForm />} />

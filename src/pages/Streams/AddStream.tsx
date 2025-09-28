@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Form, Input, Picker, Button } from "antd-mobile"
-import MyNavBar from "../../components/NavBar"
+import MyNavBar from "../../components/Nav/NavBar"
 import { PickerColumn } from "antd-mobile/es/components/picker-view"
 
 

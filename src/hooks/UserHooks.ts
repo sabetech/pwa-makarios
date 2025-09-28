@@ -14,14 +14,16 @@ export const useGetUsers = (filter?: TFilterType) => {
 
 }
 
-
 export const useAddUser = () => {
     return useMutation(async (user: TUser) => {
+        
+        console.log("User::", user);
+
         const { data } = await apiClient.addUser(user)
         return data;
     }, {
         onSuccess: (userResponse) => {
-            // Invalidate the query cache for 'users'
+            
             console.log("response from adding user", userResponse)
             // queryClient.invalidateQueries('users');
         },
@@ -40,4 +42,24 @@ export const useGetRoles = () => {
             return data.data
         }
     })
+}
+
+export const useAddRole = () => {
+    return useMutation(async (role: TRole) => {
+        
+        console.log("Role::", role);
+
+        const { data } = await apiClient.addRole(role)
+        return data;
+    }, {
+        onSuccess: (roleResponse) => {
+            
+            console.log("response from adding role", roleResponse)
+            // queryClient.invalidateQueries('roles');
+        },
+        onError: (error) => {
+            // handle error
+            console.error("Error adding role:", error);
+        },
+    });
 }

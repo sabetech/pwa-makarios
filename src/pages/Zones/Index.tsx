@@ -1,7 +1,7 @@
 // This is list zones page
 import { useEffect, useState } from 'react';
 import { List } from 'antd-mobile';
-import MyNavBar from "../../components/NavBar";
+import MyNavBar from "../../components/Nav/NavBar";
 import { useGetZones } from '../../hooks/Zones';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { Avatar } from 'antd-mobile';

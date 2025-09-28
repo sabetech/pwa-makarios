@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import MyNavBar from "../../components/NavBar";
+import MyNavBar from "../../components/Nav/NavBar";
 import { List, Avatar } from "antd-mobile";
 import { useGetBacentas } from "../../hooks/BacentaHooks";
 import { useLocation, useNavigate } from "react-router-dom";

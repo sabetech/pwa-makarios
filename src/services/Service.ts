@@ -27,3 +27,6 @@ export const getServiceAverageAttnAndOffering = async (filter?: any): Promise<Ax
     return (await api.get(`service/averages?${filterParams}`, {}));
 }
 
+export const getRegionServices = async (): Promise<AxiosResponse> => {
+    return (await api.get('/service/newIndex', {}));
+}

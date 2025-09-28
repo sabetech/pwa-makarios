@@ -1,5 +1,5 @@
 import { useState } from "react";
-import MyNavBar from "../../components/NavBar";
+import MyNavBar from "../../components/Nav/NavBar";
 import {
   Selector,
   Button,

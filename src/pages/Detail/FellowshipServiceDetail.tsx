@@ -9,7 +9,7 @@ import { TFellowshipService, TCancelFellowshipService } from '../../types/fellow
 import { getFellowshipServices, cancelFellowshipService } from '../../services/FellowshipService';
 import { getUserFriendlyDateFormat } from '../../utils/helper'
 import dayjs from 'dayjs';
-import MyNavBar from '../../components/NavBar';
+import MyNavBar from '../../components/Nav/NavBar';
 
 
 
