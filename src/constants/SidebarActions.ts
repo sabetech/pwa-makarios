@@ -42,6 +42,9 @@ const actionsByRole = {
         },
         {
             text: 'Services', key: 'services', 
+        },
+        {
+            text: 'Campaigns', key: 'campaigns',
         }
     ] as Action[],
     'Zone Lead': [
@@ -70,7 +73,8 @@ const ADMIN = 'admin'
 const DIRECTORY = 'directory'
 const SERVICES = 'services'
 const ARRIVAL = 'arrival'
+const CAMPAIGNS = 'campaigns'
 
 
 
-export { ADMIN, DIRECTORY, SERVICES, ARRIVAL, getActions }
+export { ADMIN, DIRECTORY, SERVICES, ARRIVAL,CAMPAIGNS, getActions }

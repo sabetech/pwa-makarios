@@ -3,6 +3,7 @@ export const STREAMS = 'streams';
 export const REGIONS = 'regions';
 export const ZONES = 'zones';
 export const MEMBERS = 'members';
+export const LEADERS = 'leaders';
 export const BACENTAS = 'bacentas';
 export const BASONTAS = 'basontas';
 export const MICROCHURCHES = 'microchurches';

@@ -8,12 +8,15 @@ import { TStream } from '../../types/stream';
 import { useGetRegionServices } from "../../hooks/ServiceHooks";
 import { TRegionServiceData } from "../../types/service";
 import { List } from "antd-mobile";
+import { useAuthUser } from "../../hooks/AuthHooks";
 //this only gets weekday services
 const WeekdayServices = () => {
 
     const {data: regionServices, isLoading} = useGetRegionServices();
     const [filterOption, setFilterOption] = useState<{label: string, value: number}>({label: "All", value: 0});
     const { data: streams } = useGetStreams();
+
+    const user = useAuthUser()();
 
     const navigate = useNavigate();
     const [calenderVisible, setCalenderVisible] = useState(false);
@@ -77,6 +80,8 @@ const WeekdayServices = () => {
             </Collapse.Panel>
         </Collapse>
         {
+            //If user has permission to view regions
+            
             regionServices && regionServices?.length > 0 && !isLoading &&
             regionServices.map((regionService: TRegionServiceData) => (
                 <>
@@ -86,6 +91,8 @@ const WeekdayServices = () => {
                         streamName={regionService.stream.name}
                         leaderName={regionService.leader.name}
                         leaderPicture={regionService.leader.img_url ?? '/404'}
+                        latestAttn={0} //have a sum of attendance for all the regions
+                        latestOffering={0} //have a sum of offerings for all the regions
                         averageAttendance={0}
                         averageOffering={0}
                         previewChartData={regionService.attendance_weekly_summary.map(item => item.total_attendance)}
@@ -106,6 +113,11 @@ const WeekdayServices = () => {
                                             height={40}
                                         />
                                     }
+                                    onClick={() => navigate(`/services/bacentas/${bacenta.id}`, {
+                                        state: {
+                                            cachedBacenta: bacenta
+                                        }
+                                    })}
                                     extra={<Tag color='warning'>{`${bacenta.services.length} Services`}</Tag>}
                                     description={`Latest Attendance: ${bacenta.services.length > 0 ? bacenta.services[0].attendance : 0} | Latest Offering: ${bacenta.services.length > 0 ? bacenta.services[0].offering : 0}`}
                                     >

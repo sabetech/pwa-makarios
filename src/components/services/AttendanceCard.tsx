@@ -6,6 +6,8 @@ type AttendanceCardProps = {
   streamName: string;
   leaderName: string;
   leaderPicture: string;
+  latestAttn: number;
+  latestOffering: number;
   averageAttendance: number;
   averageOffering: number;
   images?: string[];
@@ -17,6 +19,8 @@ const AttendanceCard = ({
   streamName,
   leaderName,
   leaderPicture,
+  latestAttn,
+  latestOffering,
   averageAttendance,
   averageOffering,
   previewChartData,

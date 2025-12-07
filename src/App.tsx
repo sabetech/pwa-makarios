@@ -48,7 +48,6 @@ function App() {
     },
   });
 
-
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
@@ -96,6 +95,7 @@ function App() {
 
                     <Route path='/dashboard/bacentas' element={<BacentaIndex />} />
                     <Route path='/dashboard/bacentas/:bacenta_id' element={<Bacenta />} />
+                    <Route path='/services/bacentas/:bacenta_id' element={<Bacenta />} />
 
                     <Route path='/dashboard/members' element={<Members />} />
                     <Route path='/dashboard/members/:id' element={<Member />} />
@@ -124,6 +124,7 @@ function App() {
                     
                     <Route path='/services' element={<Services />} />
                     <Route path='/services/:stream_id/form' element={<ParentForm />} />
+                    <Route path='/campaigns' element={<Services />} />
 
                     
                     <Route path='/arrivals' element={<Arrivals />} />

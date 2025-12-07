@@ -17,7 +17,7 @@ import type {
 } from 'antd-mobile/es/components/action-sheet';
 
 import HeaderPanel from '../../components/dashboard/HeaderPanel';
-import { getActions, ADMIN, SERVICES, DIRECTORY, ARRIVAL } from '../../constants/SidebarActions';
+import { getActions, ADMIN, SERVICES, DIRECTORY, ARRIVAL, CAMPAIGNS } from '../../constants/SidebarActions';
 import DataBar from '../../components/dashboard/charts/DataBar';
 import { useGetServiceAverageAttnAndOffering } from '../../hooks/ServiceHooks';
 
@@ -94,6 +94,11 @@ const Dashboard = () => {
             case ARRIVAL:
                 navigate('/arrivals');
                 break;
+            case CAMPAIGNS:
+                navigate('/campaigns');
+                break;
+            default:
+                break;
         }
     }
 
@@ -117,6 +122,8 @@ const Dashboard = () => {
             case App.MEMBERS:
                 navigate("/dashboard/members");
             break;
+            case App.LEADERS:
+                navigate("/dashboard/leaders");
             case App.MICROCHURCHES:
                 navigate("/dashboard/microchurches");
             break;
