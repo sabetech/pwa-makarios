@@ -1,146 +1,34 @@
-import { QueryClient, QueryClientProvider } from 'react-query'
-import './App.css'
-import UserProvider from './contexts/UserContext'
-import Welcome from './pages/Auth/Welcome'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Dashboard from './pages/Home/Dashboard'
-import Members from './pages/Members/Members'
-import Services from './pages/Services/Services'
-import Arrivals from './pages/Arrivals/Arrivals'
-import Directory from './pages/Directory/Directory'
-import FellowshipServiceDetails from './pages/Detail/FellowshipServiceDetail'
-import FellowshipServiceForm from './pages/Forms/FellowshipService'
-import ForgotPassword from './pages/Auth/ForgotPassword'
-import Register from './pages/Auth/Register'
-import AdminRoutes from './routes/AdminRoutes'
-import Churches from './pages/Churches/Index'
-import Church from './pages/Churches/Church'
-import AddChurchform from './pages/Churches/AddChurchForm'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ThemeProvider } from './contexts/ThemeContext';
+import Login from './pages/Auth/Login';
+import MainLayout from './components/Layout/MainLayout';
+import Dashboard from './pages/Home/Dashboard';
+import './App.css';
 
-import Streams from './pages/Streams/Index'
-import AddStream from './pages/Streams/AddStream'
-
-import RegionIndex from './pages/Regions/Index';
-import ZoneIndex from './pages/Zones/Index';
-import BacentaIndex from './pages/Bacentas/Index';
-
-import MicrochurchesIndex from './pages/Microchurches/Index';
-
-import SetPicture from './pages/Auth/SetPicture'
-import ProtectedRoute from './pages/Auth/ProtectedRoute'
-import Stream from './pages/Streams/Stream'
-import AddMember from './pages/Members/AddMember'
-import Region from './pages/Regions/Region'
-import Zone from './pages/Zones/Zone'
-import ParentForm from './pages/Services/Forms/ParentForm'
-import FillArrivalsForm from './pages/Arrivals/FillArrivalsForm'
-import Member from './pages/Members/Member'
-import Bacenta from './pages/Bacentas/Bacenta'
-import MicroChurch from './pages/Microchurches/MicroChurch'
+const queryClient = new QueryClient();
 
 function App() {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        //other query settings
-        refetchOnWindowFocus: false,
-      },
-    },
-  });
-
   return (
     <QueryClientProvider client={queryClient}>
-      <UserProvider>
-        <div className="App">
-          <Router>
-            <Routes>
-                <Route path='/' element={<Welcome />} />
-                <Route path='/login' element={<Welcome />} />
-                <Route path='/register' element={ <Register /> } />
-                <Route path='/set-photo' element={ <SetPicture /> } />
-                <Route path='/forgot-password' element={ <ForgotPassword /> } />
-                {
-                  <Route element={<ProtectedRoute />}>
-                    <Route path='/dashboard' element={<Dashboard />} />
-                    <Route path='/dashboard/churches' element={<Churches />} />
-                    <Route path='/dashboard/churches/:id' element={<Church />} />
-                    <Route path='/dashboard/churches/:id/streams' element={<Streams />} />
-                    <Route path='/dashboard/churches/:id/streams/:stream_id' element={<Stream />} />
-                    <Route path='/dashboard/streams' element={<Streams />} />
-                    <Route path='/dashboard/streams/:stream_id' element={<Stream />} />
-                    
-                    <Route path='/dashboard/regions' element={<RegionIndex />}/>
-                    <Route path='/dashboard/churches/:id/regions' element={<RegionIndex />} />
-                    <Route path='/dashboard/churches/:id/streams/:stream_id/regions' element={<RegionIndex />} />
-                    
-                    <Route path='/dashboard/streams/:stream_id/regions' element={<RegionIndex />} />
-                    <Route path='/dashboard/regions/:id' element={<Region />}/>
-                    <Route path='/dashboard/regions/:id/members' element={<Members />} />
-                    
-                    <Route path='/dashboard/regions/:id/members/:member_id' element={<Member />} />
+      <ThemeProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
 
-                    <Route path='dashboard/regions/:id/zones' element={<ZoneIndex />} />
-                    <Route path='dashboard/regions/:id/zones/:zone_id' element={<Zone />} />
-
-                    <Route path='/dashboard/regions/:id/bacentas' element={<BacentaIndex />} />
-                    <Route path='/dashboard/regions/:id/bacentas/:bacenta_id' element={<Bacenta />} />
-
-                    <Route path='/dashboard/zones' element={<ZoneIndex />}/>
-                    <Route path='/dashboard/streams/:id/zones' element={<ZoneIndex />}/>
-                    <Route path='/dashboard/churches/:id/zones' element={<ZoneIndex />}/>
-                    <Route path='/dashboard/churches/:id/streams/:stream_id/zones' element={<ZoneIndex />}/>
-                    
-                    <Route path='/dashboard/zones/:zone_id' element={<Zone />}/>
-                    <Route path='/dashboard/streams/:id/zones/:zone_id' element={<Zone />}/>
-
-                    <Route path='/dashboard/bacentas' element={<BacentaIndex />} />
-                    <Route path='/dashboard/bacentas/:bacenta_id' element={<Bacenta />} />
-                    <Route path='/services/bacentas/:bacenta_id' element={<Bacenta />} />
-
-                    <Route path='/dashboard/members' element={<Members />} />
-                    <Route path='/dashboard/members/:id' element={<Member />} />
-
-                    <Route path='/dashboard/microchurches' element={<MicrochurchesIndex />} />
-                    <Route path='/dashboard/microchurches/:id' element={<MicroChurch />} />
-                    <Route path='/fellowship' element={<FellowshipServiceDetails />} />
-                    <Route path='/fellowship/fill-form' element={<FellowshipServiceForm />} />
-                    <Route path='/directory' element={<Directory />} />
-                    <Route path='/directory/members' element={<Members />} />
-                    <Route path='/directory/members/:id' element={<Member />} />
-                    
-                    <Route path='/dashboard/churches/:id/members' element={<Members />} />
-                    <Route path='dashboard/streams/:stream_id/members' element={<Members />} />
-                    <Route path='/directory/members/add' element={<AddMember />} />
-                    
-
-                    <Route path='/directory/churches' element={<Churches />} />
-                    
-                    <Route path='/directory/churches/add' element={<AddChurchform />} />
-                    <Route path='/directory/churches/:id' element={<Church />} />
-                    <Route path='/directory/churches/:church_id/streams/add' element={<AddStream />} />
-                    <Route path='/directory/churches/:church_id/streams' element={<Streams />} />
-                    
-                    <Route path='/directory/churches/:church_id/streams/:stream_id' element={<Stream />} />
-                    
-                    <Route path='/services' element={<Services />} />
-                    <Route path='/services/:stream_id/form' element={<ParentForm />} />
-                    <Route path='/campaigns' element={<Services />} />
-
-                    
-                    <Route path='/arrivals' element={<Arrivals />} />
-                    <Route path='/arrivals/new' element={<FillArrivalsForm />} />
-
-                    <Route path='/admin/*' element={<AdminRoutes />} />
-                  </Route>
-                }
-                                
-            </Routes>
-          </Router>
-          {/* <Footer label='(c) Anagkazo Lite 2023' style={{position: 'fixed', bottom: 10}}></Footer> */}
-        </div>
-      </UserProvider>
+            <Route path="/dashboard" element={<MainLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="services" element={<div>Services Page</div>} />
+              <Route path="campaigns" element={<div>Campaigns Page</div>} />
+              <Route path="members" element={<div>Members Page</div>} />
+              <Route path="arrivals" element={<div>Arrivals Page</div>} />
+            </Route>
+          </Routes>
+        </Router>
+      </ThemeProvider>
     </QueryClientProvider>
-  )
+  );
 }
 
-export default App
+export default App;

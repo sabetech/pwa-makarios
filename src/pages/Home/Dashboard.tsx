@@ -1,207 +1,98 @@
-import { useState } from 'react';
-// import { UserContext } from '../../contexts/UserContext';
-import { logoutUser } from '../../services/UserManagement';
-// import { IPastoralPoint, IUserManager } from '../../interfaces/ServerResponse';
-import { Grid, Space, FloatingBubble, Modal, ActionSheet, Divider, Card, SpinLoading, Tag } from 'antd-mobile'
-import { useSignOut, useAuthUser, useAuthToken } from '../../hooks/AuthHooks';
-import { MoreOutline } from 'antd-mobile-icons'
-import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { useMutation } from 'react-query';
-import * as StorageKeys from '../../constants/StorageKeys';
-import * as App from '../../constants/App';
-import { useGetDashboardSummaries } from '../../hooks/DashboardSummaryHooks';
+import React from 'react';
+import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import './Dashboard.css';
 
-import type {
-    Action
-} from 'antd-mobile/es/components/action-sheet';
-
-import HeaderPanel from '../../components/dashboard/HeaderPanel';
-import { getActions, ADMIN, SERVICES, DIRECTORY, ARRIVAL, CAMPAIGNS } from '../../constants/SidebarActions';
-import DataBar from '../../components/dashboard/charts/DataBar';
-import { useGetServiceAverageAttnAndOffering } from '../../hooks/ServiceHooks';
-
-const Dashboard = () => {
-    const authToken = useAuthToken();
-    const location = useLocation();
-    const signOut = useSignOut();
-    const navigate = useNavigate();
-    const [visible, setVisible] = useState(false)
-    
-    if (location?.state?.user != null) {
-        localStorage.setItem(StorageKeys.USER, JSON.stringify(location.state.user));
-    }
-
-    const loggedInUser = useAuthUser()
-    const user = loggedInUser()
-
-    // const dashboardCards
-    const {data: dashboardSummary, isLoading} = useGetDashboardSummaries()
-    const {data: dashboardAverage} = useGetServiceAverageAttnAndOffering()
-
-    console.log("Dashboard summary::", dashboardSummary)
-    console.log("Service Average::", dashboardAverage)
-
-    const { mutate: logout } = useMutation({
-        mutationFn: async () => {
-            return await logoutUser(authToken as string);
-        },
-
-        onSuccess: () => {
-            signOut();
-            navigate('/');
-        },
-        onError: (error) => {
-            signOut();
-            navigate('/');
-            console.log(error)
-        }
-    })
-    
-    const actions: Action[] = [
-       ...getActions(user.roles.length > 0 ? user.roles[0].name : 'General'),
-        {
-            text: 'Logout', key: 'logout', danger: true,
-            onClick: () => {
-                Modal.confirm({
-                    title: 'Logout',
-                    content: 'Are you sure you want to logout?',
-                    confirmText: 'Yes',
-                    cancelText: 'No',
-                    showCloseButton: true,
-                    onConfirm: () => {
-                        logout();
-                    },
-                    onCancel: () => {
-                        setVisible(false)
-                    }
-                })
-            }
-        }
+const Dashboard: React.FC = () => {
+    // Data from HTML
+    const stats = [
+        { label: 'Churches', value: '1' },
+        { label: 'Streams', value: '3' },
+        { label: 'Regions', value: '13' },
+        { label: 'Zones', value: '55' },
+        { label: 'Bacentas', value: '82' },
+        { label: 'Members', value: '460' },
+        { label: 'Micro', value: '3' },
+        { label: 'Leaders', value: '84' },
+        { label: 'Guests', value: '22' },
     ];
 
-    const onAction = (action: Action) => {
-        switch(action.key) {
-            case ADMIN:
-                navigate("/admin/portal");
-                break;
-            case DIRECTORY:
-                navigate('/directory');
-                break;
-            case SERVICES:
-                navigate('/services');
-                break;
-            case ARRIVAL:
-                navigate('/arrivals');
-                break;
-            case CAMPAIGNS:
-                navigate('/campaigns');
-                break;
-            default:
-                break;
-        }
-    }
-
-    const handleClick = (label: string) => {
-        switch(label.toLowerCase()) {
-            case App.CHURCHES:
-                navigate("/dashboard/churches");
-            break;
-            case App.STREAMS:
-                navigate("/dashboard/streams");
-            break;
-            case App.REGIONS:
-                navigate("/dashboard/regions");
-            break;
-            case App.ZONES:
-                navigate("/dashboard/zones");
-            break;
-            case App.BACENTAS:
-                navigate("/dashboard/bacentas");
-            break;
-            case App.MEMBERS:
-                navigate("/dashboard/members");
-            break;
-            case App.LEADERS:
-                navigate("/dashboard/leaders");
-            case App.MICROCHURCHES:
-                navigate("/dashboard/microchurches");
-            break;
-        }
-        
-    }
+    // Chart Data
+    const data = [
+        { name: 'Week 1', attendance: 2000, income: 1500 },
+        { name: 'Week 2', attendance: 3000, income: 2800 },
+        { name: 'Week 3', attendance: 2780, income: 3908 },
+        { name: 'Week 4', attendance: 1890, income: 4800 },
+    ];
 
     return (
-        <>
-            <HeaderPanel setVisible={setVisible} loggedInUser={ user } />
-            <div style={{display: 'flex', justifyContent: 'center'}}>
-            {
-                isLoading && <SpinLoading style={{'--size': '48px', marginTop: 50}}/>
-            }
+        <div className="dashboard-container">
+            {/* Stats Grid */}
+            <div className="stats-grid">
+                {stats.map((stat, index) => (
+                    <div className="stat-card" key={index}>
+                        <div className="stat-label">{stat.label}</div>
+                        <div className="stat-value">{stat.value}</div>
+                    </div>
+                ))}
             </div>
 
-            <Grid columns={3} gap={1} style={{marginTop: '7vh'}}>
-                {
-                    dashboardSummary && dashboardSummary?.length > 0 &&
-                    dashboardSummary.map((summary: any, index: number) => 
-                     (
-                        <Grid.Item key={index}>
-                  
-                            <Card title={summary.name} onClick={() => {handleClick(summary.name)}} style={{boxShadow: '1px 1px 8px 0px rgba(0,0,0,0.25)'}}>
-                                { summary.count }
-                            </Card>
-    
-                        </Grid.Item>
-                    ))
-                }
-            </Grid>
-            <Divider />
-            <Space direction='vertical' style={{marginLeft: 15}}>
-                <Grid columns={3} gap={8} style={{fontFamily: 'Verdana, sans-serif', fontSize: 13, display: 'flex', justifyContent: 'center'}}>
-                    <Grid.Item>
-                        <Space direction='vertical' style={{alignItems: 'center'}}>
-                            <div>Avg Attendance</div>
-                            <div><Tag round={true} style={{fontSize: '0.8rem'}}>{ Math.round(dashboardAverage?.avgAttn ?? 0) }</Tag></div>
-                        </Space>
-                    </Grid.Item>
-                    <Grid.Item>
-                        <Space direction='vertical' style={{alignItems: 'center'}}>
-                            <div>Avg Weekly Income (Ghc)</div>
-                            <div><Tag round={true} style={{fontSize: '0.8rem'}}>{ Math.round(dashboardAverage?.avgOffering ?? 0) }</Tag> </div>
-                        </Space>
-                    </Grid.Item>
-                    <Grid.Item>
-                        <Space direction='vertical' style={{alignItems: 'center'}}>
-                            <div>Avg Weekly Bussing </div>
-                            <div><Tag round={true} style={{fontSize: '0.8rem'}}>0</Tag></div>
-                        </Space>
-                    </Grid.Item>
-                </Grid>
-            </Space>
-            <Divider />
-            <DataBar />
-            
-        <FloatingBubble
-            style={{
-                '--initial-position-bottom': '24px',
-                '--initial-position-right': '24px',
-                '--edge-distance': '24px',
-                '--z-index': '10px'
-            }}
-            onClick={() => {setVisible(true)}}
-        >
-            <MoreOutline fontSize={32} color={'white'} />
-        </FloatingBubble>
-        
-        <ActionSheet
-            visible={visible}
-            actions={actions}
-            onClose={() => setVisible(false)}
-            extra={`Logged in as: `}
-            onAction={onAction}
-        />
-        </>
-    )
-}
+            {/* Summary Row */}
+            <div className="summary-row">
+                <div className="summary-item">
+                    <p className="summary-label">Avg Attend</p>
+                    <span className="summary-value text-teal">238</span>
+                </div>
+                <div className="summary-divider"></div>
+                <div className="summary-item">
+                    <p className="summary-label">Weekly Inc</p>
+                    <span className="summary-value text-gold">₵1,142</span>
+                </div>
+                <div className="summary-divider"></div>
+                <div className="summary-item">
+                    <p className="summary-label">Bussing</p>
+                    <span className="summary-value text-white">0</span>
+                </div>
+            </div>
+
+            {/* Chart Section */}
+            <div className="chart-card">
+                <div className="chart-header">
+                    <h3 className="chart-title">Weekly Tracking</h3>
+                    <span className="badge">Growth View</span>
+                </div>
+                <div style={{ width: '100%', height: 200 }}>
+                    <ResponsiveContainer>
+                        <AreaChart data={data}>
+                            <defs>
+                                <linearGradient id="colorTeal" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#00F5FF" stopOpacity={0.3} />
+                                    <stop offset="95%" stopColor="#00F5FF" stopOpacity={0} />
+                                </linearGradient>
+                                <linearGradient id="colorGold" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.3} />
+                                    <stop offset="95%" stopColor="#D4AF37" stopOpacity={0} />
+                                </linearGradient>
+                            </defs>
+                            <XAxis dataKey="name" hide />
+                            <Tooltip />
+                            <Area type="monotone" dataKey="attendance" stroke="#00F5FF" fillOpacity={1} fill="url(#colorTeal)" strokeWidth={3} />
+                            <Area type="monotone" dataKey="income" stroke="#D4AF37" fillOpacity={1} fill="url(#colorGold)" strokeWidth={3} />
+                        </AreaChart>
+                    </ResponsiveContainer>
+                </div>
+                <div className="flex justify-center gap-4 mt-4" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#00F5FF' }}></div>
+                        <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 'bold', textTransform: 'uppercase' }}>Attendance</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#D4AF37' }}></div>
+                        <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 'bold', textTransform: 'uppercase' }}>Income</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export default Dashboard;
