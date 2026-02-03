@@ -1,0 +1,123 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Stats Grid - 3 Columns */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.stat-card {
+    background-color: var(--adm-color-slate);
+    padding: 1rem 0.5rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.25rem;
+}
+
+.stat-label {
+    font-size: 9px;
+    color: #94a3b8;
+    /* Slate 400 */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* Summary Row */
+.summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(30, 32, 35, 0.6);
+    /* SlateCard with opacity */
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-item {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-divider {
+    width: 1px;
+    height: 32px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.summary-label {
+    font-size: 10px;
+    color: #94a3b8;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.summary-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+.text-teal {
+    color: var(--adm-color-teal);
+}
+
+.text-gold {
+    color: var(--adm-color-secondary);
+}
+
+.text-white {
+    color: white;
+}
+
+/* Chart Card */
+.chart-card {
+    background-color: var(--adm-color-slate);
+    padding: 1.5rem;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.chart-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+}
+
+.badge {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 6px 12px;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}

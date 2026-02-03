@@ -1,11 +1,23 @@
-:root:root {
-  --adm-color-primary: #570A22;
-  --adm-button-border-radius: 10px;
-  --adm-picker-header-button: #570A22;
+:root {
+  /* Default/Light Mode */
+  --adm-color-primary: #580B1E;
+  --adm-color-secondary: #D4AF37;
+  --adm-color-teal: #00F5FF;
+  --adm-color-charcoal: #121212;
+  --adm-color-slate: #1E2023;
+  --adm-text-primary: #121212;
+  --adm-bg-main: #FFFFFF;
+  --adm-button-border-radius: 12px;
+}
+
+[data-theme='dark'] {
+  --adm-color-primary: #580B1E;
+  --adm-text-primary: #FFFFFF;
+  --adm-bg-main: #121212;
 }
 
 .anagkazo-theme {
-  --adm-color-primary: #570A22;
+  --adm-color-primary: #580B1E;
 }
 
 .App {
@@ -23,7 +35,7 @@ a:link,
 a:visited,
 a:hover,
 a:active {
-  text-decoration: none; 
+  text-decoration: none;
   color: #570A22;
 }
 
@@ -31,16 +43,33 @@ a:active {
   animation: skew-x-shakeng 1s ease-in-out;
 }
 
-@keyframes skew-x-shakeng{
-  0% { transform: skewX(-15deg); }
-  5% { transform: skewX(15deg); }
-  10% { transform: skewX(-15deg); }
-  15% { transform: skewX(15deg); }
-  20% { transform: skewX(0deg); }
-  100% { transform: skewX(0deg); }
- }
+@keyframes skew-x-shakeng {
+  0% {
+    transform: skewX(-15deg);
+  }
 
- @media screen and (max-width: 280px) {
+  5% {
+    transform: skewX(15deg);
+  }
+
+  10% {
+    transform: skewX(-15deg);
+  }
+
+  15% {
+    transform: skewX(15deg);
+  }
+
+  20% {
+    transform: skewX(0deg);
+  }
+
+  100% {
+    transform: skewX(0deg);
+  }
+}
+
+@media screen and (max-width: 280px) {
   .App {
     height: 96vh;
     /* width: 96vw; */
@@ -50,8 +79,8 @@ a:active {
     font-family: Verdana, sans-serif;
     font-size: 14px;
   }
- }
- 
+}
+
 /* #root {
   max-width: 1280px;
   margin: 0 auto;
