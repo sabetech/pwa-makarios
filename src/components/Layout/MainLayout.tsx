@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { useTheme } from '../../hooks/useTheme';
-import { FiSun, FiMoon, FiHome, FiUsers, FiMap, FiLogOut, FiMoreHorizontal } from 'react-icons/fi';
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { FiHome, FiUsers, FiMap, FiLogOut, FiMoreHorizontal } from 'react-icons/fi';
 import { ActionSheet } from 'antd-mobile';
 import type { Action } from 'antd-mobile/es/components/action-sheet';
 import BottomNav from './BottomNav';
 import './MainLayout.css';
 
 const MainLayout: React.FC = () => {
-    const { theme, toggleTheme } = useTheme();
     const navigate = useNavigate();
+    const location = useLocation();
     const [actionSheetVisible, setActionSheetVisible] = useState(false);
+
+    // Check if we're on a page that should hide the header
+    const isSettingsPage = location.pathname === '/dashboard/settings';
 
     const actions: Action[] = [
         { text: 'Admin Portal', key: 'admin' },
@@ -56,26 +58,25 @@ const MainLayout: React.FC = () => {
             </aside>
 
             <main className="main-area">
-                <header className="main-header">
-                    <div className="header-left">
-                        <div className="profile-img-container">
-                            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGbULG3nrHtJyy-h0O17JBNpxnUdZiOsUIsLHZdnBOmNuE8E5VDav27O5Zz2aOVIutvdTol7CbWUu3nJRKuBxwjVfAOsmVajT_FdQpFg9883ZeVdJ3uBqUUnLYYMa9sN7qXbvDvmb-FVMcnMq1i3ddTHrTIE_FULqUe32-aHWYFrwJqok1BmGr3TiYBiA4E4Qe4h7tB_YAO2kxrZF4-EToscePQz8juFJ44UCfkvKa_tBj7bV2ZBY6zBni2v5VWeKOz3bcEtDujTOf" alt="Profile" className="profile-img" />
+                {!isSettingsPage && (
+                    <header className="main-header">
+                        <div className="header-left">
+                            <div className="profile-img-container">
+                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGbULG3nrHtJyy-h0O17JBNpxnUdZiOsUIsLHZdnBOmNuE8E5VDav27O5Zz2aOVIutvdTol7CbWUu3nJRKuBxwjVfAOsmVajT_FdQpFg9883ZeVdJ3uBqUUnLYYMa9sN7qXbvDvmb-FVMcnMq1i3ddTHrTIE_FULqUe32-aHWYFrwJqok1BmGr3TiYBiA4E4Qe4h7tB_YAO2kxrZF4-EToscePQz8juFJ44UCfkvKa_tBj7bV2ZBY6zBni2v5VWeKOz3bcEtDujTOf" alt="Profile" className="profile-img" />
+                            </div>
+                            <div>
+                                <h1 className="header-greeting">Hi, Admin</h1>
+                                <p className="header-subtitle">SUPER ADMIN</p>
+                            </div>
                         </div>
-                        <div>
-                            <h1 className="header-greeting">Hi, Admin</h1>
-                            <p className="header-subtitle">SUPER ADMIN</p>
+                        <div className="header-actions">
+                            <button className="menu-button" onClick={() => setActionSheetVisible(true)} aria-label="Menu">
+                                <FiMoreHorizontal size={24} />
+                            </button>
                         </div>
-                    </div>
-                    <div className="header-actions">
-                        <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
-                            {theme === 'light' ? <FiMoon size={20} /> : <FiSun size={20} />}
-                        </button>
-                        <button className="menu-button" onClick={() => setActionSheetVisible(true)} aria-label="Menu">
-                            <FiMoreHorizontal size={24} />
-                        </button>
-                    </div>
-                </header>
-                <div className="main-content">
+                    </header>
+                )}
+                <div className={`main-content ${isSettingsPage ? 'no-header' : ''}`}>
                     <Outlet />
                 </div>
             </main>

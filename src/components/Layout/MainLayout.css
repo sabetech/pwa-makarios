@@ -227,6 +227,12 @@
     z-index: 20;
 }
 
+/* When header is hidden (e.g., Settings page) */
+.main-content.no-header {
+    margin-top: 0;
+    padding-top: 1rem;
+}
+
 /* Mobile Nav Visibility */
 .mobile-nav-container {
     display: block;
@@ -268,4 +274,36 @@
     .header-subtitle {
         color: rgba(255, 255, 255, 0.7);
     }
+}
+
+/* Force ActionSheet (Bottom Sheet) to Light Mode */
+.adm-action-sheet-popup {
+    --adm-color-background: #ffffff;
+    --adm-color-text: #121212;
+}
+
+.adm-action-sheet-button-item {
+    background-color: #ffffff !important;
+    color: #121212 !important;
+}
+
+.adm-action-sheet-button-item:active {
+    background-color: #f5f5f5 !important;
+}
+
+.adm-action-sheet-cancel-button-item {
+    background-color: #ffffff !important;
+    color: #121212 !important;
+}
+
+.adm-action-sheet-cancel-button-item-wrapper {
+    background-color: #f4f4f4 !important;
+    /* Separator color */
+}
+
+/* Ensure text is dark even if global theme is dark */
+[data-theme='dark'] .adm-action-sheet-button-item,
+[data-theme='dark'] .adm-action-sheet-cancel-button-item {
+    color: #121212 !important;
+    background-color: #ffffff !important;
 }

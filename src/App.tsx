@@ -4,6 +4,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import Login from './pages/Auth/Login';
 import MainLayout from './components/Layout/MainLayout';
 import Dashboard from './pages/Home/Dashboard';
+import Settings from './pages/Settings/Settings';
 import './App.css';
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ function App() {
               <Route path="campaigns" element={<div>Campaigns Page</div>} />
               <Route path="members" element={<div>Members Page</div>} />
               <Route path="arrivals" element={<div>Arrivals Page</div>} />
+              <Route path="settings" element={<Settings />} />
             </Route>
           </Routes>
         </Router>
