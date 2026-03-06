@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiSun, FiMoon, FiArrowLeft } from 'react-icons/fi';
+import { FiSun, FiMoon } from 'react-icons/fi';
 import { useTheme } from '../../hooks/useTheme';
+import PageHeader from '../../components/PageHeader/PageHeader';
 import './Settings.css';
 
 const Settings: React.FC = () => {
@@ -11,12 +12,7 @@ const Settings: React.FC = () => {
 
     return (
         <div className="settings-page">
-            <div className="settings-appbar">
-                <button className="back-button" onClick={() => navigate(-1)} aria-label="Go back">
-                    <FiArrowLeft size={24} />
-                </button>
-                <h1 className="settings-title">Settings</h1>
-            </div>
+            <PageHeader title="Settings" />
             <div className="settings-container">
                 <div className="settings-section">
                     <div className="settings-section-title">Appearance</div>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Services Overview - Makarios Admin</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .ios-tab-shadow {
+            box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-[#111318]">
+    <!-- Main Container -->
+    <div
+        class="relative flex min-h-screen w-full flex-col max-w-[430px] mx-auto bg-background-light dark:bg-background-dark pb-24">
+        <!-- Top App Bar -->
+        <header
+            class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-4 pt-6 pb-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="size-10 rounded-full bg-primary flex items-center justify-center text-white">
+                    <span class="material-symbols-outlined text-[24px]">church</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold leading-tight tracking-tight dark:text-white">Services</h1>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button
+                    class="size-10 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
+                    <span class="material-symbols-outlined text-[#111318] dark:text-white">notifications</span>
+                </button>
+            </div>
+        </header>
+        <!-- Section: Service Categories -->
+        <section class="px-4 mt-2">
+            <div class="flex items-center justify-between pb-4">
+                <h2 class="text-lg font-bold tracking-tight dark:text-white">Service Categories</h2>
+                <button class="text-primary text-sm font-semibold">See All</button>
+            </div>
+            <!-- Category Grid (2x2) -->
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Wisdom Encounter -->
+                <div
+                    class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col gap-3 group active:scale-95 transition-transform cursor-pointer">
+                    <div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                        <span class="material-symbols-outlined">menu_book</span>
+                    </div>
+                    <div>
+                        <p class="text-[15px] font-bold dark:text-white leading-tight">Wisdom Encounter</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Sundays • 8:00 AM</p>
+                    </div>
+                </div>
+                <!-- Fresh Oil -->
+                <div
+                    class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col gap-3 active:scale-95 transition-transform cursor-pointer">
+                    <div class="size-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-600">
+                        <span class="material-symbols-outlined">water_drop</span>
+                    </div>
+                    <div>
+                        <p class="text-[15px] font-bold dark:text-white leading-tight">Fresh Oil Service</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Mid-week • 6:00 PM</p>
+                    </div>
+                </div>
+                <!-- Jesus Experience -->
+                <div
+                    class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col gap-3 active:scale-95 transition-transform cursor-pointer">
+                    <div class="size-10 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-600">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </div>
+                    <div>
+                        <p class="text-[15px] font-bold dark:text-white leading-tight">Jesus Experience</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Monthly • 7:00 PM</p>
+                    </div>
+                </div>
+                <!-- Bacenta Services -->
+                <div
+                    class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col gap-3 active:scale-95 transition-transform cursor-pointer">
+                    <div class="size-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600">
+                        <span class="material-symbols-outlined">groups</span>
+                    </div>
+                    <div>
+                        <p class="text-[15px] font-bold dark:text-white leading-tight">Bacenta Services</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Small Groups • Sat</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Section: Recent Services -->
+        <section class="mt-8 px-4">
+            <div class="flex items-center justify-between pb-4">
+                <h3 class="text-lg font-bold tracking-tight dark:text-white">Recent Services</h3>
+                <span class="material-symbols-outlined text-gray-400">filter_list</span>
+            </div>
+            <!-- List of Records -->
+            <div class="flex flex-col gap-3">
+                <!-- Record 1 -->
+                <div
+                    class="flex gap-4 bg-white dark:bg-gray-800 p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-[64px] shrink-0"
+                        data-alt="Modern church stage with purple lighting and pulpit"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBbsVYW3trDSy1EMdTLF8CtdMKWmTT993vPjggleQV0s1VMGySIvEM1ea7m0z3IOWMdIYqoQdCaHarjAKLmcygi5FJ51vwFWKrhl3TLfCdoFjwWIDjEUgWPnXKgm1i5SULUB5_AgNYuTEIAxWZxyIvytkqca30Uudjp96CJ1OUbrh0nxRzXBlYM07Et9K1DKY85-dp25fgTtHrOibUks-0gqrsYHDknJ4UF3M_UsCJZaGZb-sY2BKLoQm5TlVG7r73HEEe0mMTpMwZj");'>
+                    </div>
+                    <div class="flex flex-1 flex-col justify-center min-w-0">
+                        <div class="flex justify-between items-start">
+                            <p class="text-[#111318] dark:text-white text-sm font-bold truncate">Wisdom Encounter</p>
+                            <p class="text-primary text-sm font-bold shrink-0">$5,240</p>
+                        </div>
+                        <p class="text-[#616f89] dark:text-gray-400 text-xs mt-0.5">Oct 24, 2023 • 08:30 AM</p>
+                        <div class="flex items-center gap-1 mt-1 text-[#616f89] dark:text-gray-400">
+                            <span class="material-symbols-outlined text-[14px]">person</span>
+                            <p class="text-xs font-medium">Attendance: 1,240</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Record 2 -->
+                <div
+                    class="flex gap-4 bg-white dark:bg-gray-800 p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-[64px] shrink-0"
+                        data-alt="Worship team performing with stage smoke effects"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCjEkb3Z4mYHR7Pp5UyLfZ5zk--pfawrbI93SfvysQCtZaBpAxu5XRmoPhkcaoO6KeTp2t_GV7A8M5AzeB9WNb-l8dGRSOOn1TkmlzcwlV84wfdDibYNYezy-mA2f61VqSEKHmA4Axiuw2wS7_83cNrbPZ8BhcvYewCSOl2mexAm5GU--BF-hyyQdCYAKr60Ypg7RwKv1PaosxaAEorCSQFxvqEO5E4eAVYcDredvZDgabaLKDA5kt1uYxFJlrTi0ORo0dMP_HyPKO0");'>
+                    </div>
+                    <div class="flex flex-1 flex-col justify-center min-w-0">
+                        <div class="flex justify-between items-start">
+                            <p class="text-[#111318] dark:text-white text-sm font-bold truncate">Fresh Oil Service</p>
+                            <p class="text-primary text-sm font-bold shrink-0">$3,120</p>
+                        </div>
+                        <p class="text-[#616f89] dark:text-gray-400 text-xs mt-0.5">Oct 20, 2023 • 06:00 PM</p>
+                        <div class="flex items-center gap-1 mt-1 text-[#616f89] dark:text-gray-400">
+                            <span class="material-symbols-outlined text-[14px]">person</span>
+                            <p class="text-xs font-medium">Attendance: 856</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Record 3 -->
+                <div
+                    class="flex gap-4 bg-white dark:bg-gray-800 p-3 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-[64px] shrink-0"
+                        data-alt="Crowd of people during outdoor community service"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC6fdAWNcPCFe68b3H1N3lmeqZaYQ04hZQD7bUwNKHdB80aFH5usJ26bNznvyGsYugiBadXVe_vpyutpsiZ772yZw8P8QRe5TAX-2hT8xFY9UPPyJPTSdYeJPvLwzSlS2hmKb1uTuYhp03OurvV_QcZnbGHZUw3MQMokyU1RQPKTVHsybZclkkJR4C7aJhEYwecpWJSfr9Phy72haWZdUXo5wMBvK2lQY4KvsuTMsIv2UDNVIYX18_HZoi63HpcMQ8sEJjpWu5OaGN3");'>
+                    </div>
+                    <div class="flex flex-1 flex-col justify-center min-w-0">
+                        <div class="flex justify-between items-start">
+                            <p class="text-[#111318] dark:text-white text-sm font-bold truncate">Bacenta Service -
+                                Region A</p>
+                            <p class="text-primary text-sm font-bold shrink-0">$840</p>
+                        </div>
+                        <p class="text-[#616f89] dark:text-gray-400 text-xs mt-0.5">Oct 19, 2023 • 05:00 PM</p>
+                        <div class="flex items-center gap-1 mt-1 text-[#616f89] dark:text-gray-400">
+                            <span class="material-symbols-outlined text-[14px]">person</span>
+                            <p class="text-xs font-medium">Attendance: 142</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Bottom Navigation -->
+        <nav
+            class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl ios-tab-shadow px-6 pt-3 pb-8 flex justify-between items-center border-t border-gray-200 dark:border-gray-800">
+            <button class="flex flex-col items-center gap-1 text-gray-400">
+                <span class="material-symbols-outlined">dashboard</span>
+                <span class="text-[10px] font-medium uppercase tracking-wider">Home</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-primary">
+                <span class="material-symbols-outlined font-variation-fill">event_seat</span>
+                <span class="text-[10px] font-bold uppercase tracking-wider">Services</span>
+            </button>
+            <div class="relative -top-6">
+                <button
+                    class="size-14 bg-primary text-white rounded-full shadow-lg shadow-primary/40 flex items-center justify-center border-4 border-background-light dark:border-background-dark">
+                    <span class="material-symbols-outlined text-[32px]">add</span>
+                </button>
+            </div>
+            <button class="flex flex-col items-center gap-1 text-gray-400">
+                <span class="material-symbols-outlined">group</span>
+                <span class="text-[10px] font-medium uppercase tracking-wider">Members</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-gray-400">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="text-[10px] font-medium uppercase tracking-wider">Settings</span>
+            </button>
+        </nav>
+    </div>
+</body>
+
+</html>

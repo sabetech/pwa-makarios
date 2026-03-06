@@ -1,0 +1,228 @@
+.attendance-page {
+    min-height: calc(100vh - 80px);
+    background-color: var(--adm-bg-main);
+    margin: -1rem -1rem -2rem -1rem;
+    padding: 0 0 160px 0;
+    color: var(--adm-text-primary);
+    position: relative;
+}
+
+.attendance-content {
+    padding: 16px;
+}
+
+.calendar-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.calendar-card:active {
+    transform: scale(0.98);
+    background-color: #f8fafc;
+}
+
+[data-theme='dark'] .calendar-card:active {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .calendar-card {
+    background-color: var(--adm-color-slate);
+    box-shadow: none;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.date-selector-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.date-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.calendar-icon {
+    font-size: 24px;
+    color: var(--adm-color-primary);
+    background-color: var(--adm-color-primary-light);
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.date-text-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.date-label {
+    font-size: 11px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.selected-date-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--adm-text-primary);
+}
+
+.change-date-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--adm-color-primary);
+    font-size: 13px;
+    font-weight: 700;
+    background-color: var(--adm-color-primary-light);
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
+.attendance-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.tracking-text {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.present-badge {
+    background-color: rgba(19, 91, 236, 0.1);
+    color: var(--adm-color-primary);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.search-bar-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: var(--adm-bg-main);
+    padding: 8px 0;
+    margin-bottom: 16px;
+}
+
+.search-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] .search-container {
+    background-color: var(--adm-color-slate);
+}
+
+.search-icon {
+    color: #94a3b8;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    background: none;
+    padding: 12px 8px;
+    font-size: 15px;
+    color: var(--adm-text-primary);
+    outline: none;
+}
+
+.attendance-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.attendance-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] .attendance-item {
+    border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+.member-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    margin-right: 16px;
+}
+
+.member-info {
+    flex: 1;
+}
+
+.member-name {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.member-role {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.end-of-list {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 32px 0;
+}
+
+.attendance-footer {
+    position: fixed;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    padding: 16px;
+    background: linear-gradient(to top, var(--adm-bg-main) 70%, transparent);
+    z-index: 20;
+}
+
+.submit-attendance-btn {
+    height: 54px;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow: 0 8px 20px rgba(19, 91, 236, 0.2);
+}
+
+/* Custom Color Tokens for Avatars */
+:root {
+    --color-purple: #8b5cf6;
+    --color-purple-light: rgba(139, 92, 246, 0.1);
+    --color-emerald: #10b981;
+    --color-emerald-light: rgba(16, 185, 129, 0.1);
+    --color-orange: #f59e0b;
+    --color-orange-light: rgba(245, 158, 11, 0.1);
+    --adm-color-primary-light: rgba(19, 91, 236, 0.1);
+}

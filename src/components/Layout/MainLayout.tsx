@@ -12,7 +12,8 @@ const MainLayout: React.FC = () => {
     const [actionSheetVisible, setActionSheetVisible] = useState(false);
 
     // Check if we're on a page that should hide the header
-    const isSettingsPage = location.pathname === '/dashboard/settings';
+    const hideHeaderPaths = ['/dashboard/settings', '/dashboard/services', '/dashboard/service-selection', '/dashboard/bacenta-services', '/dashboard/bacenta-service', '/dashboard/members', '/dashboard/members/add', '/dashboard/members/attendance'];
+    const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
 
     const actions: Action[] = [
         { text: 'Admin Portal', key: 'admin' },
@@ -58,7 +59,7 @@ const MainLayout: React.FC = () => {
             </aside>
 
             <main className="main-area">
-                {!isSettingsPage && (
+                {!shouldHideHeader && (
                     <header className="main-header">
                         <div className="header-left">
                             <div className="profile-img-container">
@@ -76,7 +77,7 @@ const MainLayout: React.FC = () => {
                         </div>
                     </header>
                 )}
-                <div className={`main-content ${isSettingsPage ? 'no-header' : ''}`}>
+                <div className={`main-content ${shouldHideHeader ? 'no-header' : ''}`}>
                     <Outlet />
                 </div>
             </main>

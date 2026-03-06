@@ -1,0 +1,144 @@
+.add-member-page {
+    min-height: calc(100vh - 80px);
+    background-color: var(--adm-bg-main);
+    margin: -1rem -1rem -2rem -1rem;
+    padding: 0 0 120px 0;
+    color: var(--adm-text-primary);
+}
+
+.add-member-content {
+    padding: 16px;
+}
+
+.add-member-form {
+    --background-color: transparent;
+}
+
+.picture-upload-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.picture-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 60px;
+    background-color: #f1f5f9;
+    border: 2px dashed #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+[data-theme='dark'] .picture-preview {
+    background-color: #1e293b;
+    border-color: #334155;
+}
+
+.picture-preview:hover {
+    border-color: var(--adm-color-secondary);
+}
+
+.picture-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.picture-preview .placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #64748b;
+    font-size: 10px;
+    text-align: center;
+    padding: 8px;
+}
+
+.picture-preview .placeholder span {
+    margin-top: 4px;
+}
+
+.submit-btn {
+    background-color: var(--adm-color-primary) !important;
+    border-color: var(--adm-color-primary) !important;
+    margin-top: 24px;
+    height: 50px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+/* Adjust Ant Design Mobile Form Styles for our Theme */
+.adm-form-header {
+    background-color: transparent !important;
+    color: var(--adm-color-secondary) !important;
+    font-weight: 700 !important;
+    padding: 24px 0 8px 0 !important;
+    font-size: 14px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.adm-form-item {
+    background-color: #ffffff !important;
+    margin-bottom: 12px !important;
+    border-radius: 12px !important;
+    padding: 4px 12px !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --border-inner: none !important;
+    --border-bottom: none !important;
+    --border-top: none !important;
+}
+
+[data-theme='dark'] .adm-form-item {
+    background-color: var(--adm-color-slate) !important;
+    box-shadow: none;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.adm-form-item-label {
+    color: #64748b !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+[data-theme='dark'] .adm-form-item-label {
+    color: #94a3b8 !important;
+}
+
+.adm-input-element,
+.adm-text-area-element {
+    color: #0f172a !important;
+    font-size: 15px !important;
+}
+
+[data-theme='dark'] .adm-input-element,
+[data-theme='dark'] .adm-text-area-element {
+    color: #ffffff !important;
+}
+
+.adm-selector-item {
+    border-radius: 8px !important;
+    font-size: 14px !important;
+}
+
+.adm-selector-item-active {
+    background-color: var(--adm-color-secondary) !important;
+    color: #000000 !important;
+    border-color: var(--adm-color-secondary) !important;
+}
+
+.adm-space-item {
+    flex: 1;
+}
+
+/* Fix for picker/datepicker padding in our layout */
+.adm-picker,
+.adm-date-picker {
+    --background-color: var(--adm-bg-main);
+}
