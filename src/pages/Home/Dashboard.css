@@ -22,6 +22,45 @@
     text-align: center;
     gap: 0.25rem;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.stat-card.skeleton {
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    background: linear-gradient(90deg, #ffffff 25%, rgba(0, 0, 0, 0.02) 50%, #ffffff 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+[data-theme='dark'] .stat-card.skeleton {
+    background: linear-gradient(90deg, var(--adm-color-slate) 25%, rgba(255, 255, 255, 0.05) 50%, var(--adm-color-slate) 75%);
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.stat-label-skeleton {
+    height: 9px;
+    width: 60%;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 2px;
+}
+
+[data-theme='dark'] .stat-label-skeleton {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.stat-value-skeleton {
+    height: 1.25rem;
+    width: 40%;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+[data-theme='dark'] .stat-value-skeleton {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .stat-label {

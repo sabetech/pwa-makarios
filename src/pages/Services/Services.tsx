@@ -1,11 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiMenu, FiDroplet, FiHeart, FiUsers, FiFilter, FiUser } from 'react-icons/fi';
 import PageHeader from '../../components/PageHeader/PageHeader';
+import { fetchServices, Service } from '../../api/services';
 import './Services.css';
 
 const Services: React.FC = () => {
     const navigate = useNavigate();
+    const [services, setServices] = useState<Service[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadServices = async () => {
+            try {
+                setLoading(true);
+                const data = await fetchServices();
+                setServices(data);
+            } catch (error) {
+                console.error('Error fetching services:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadServices();
+    }, []);
 
     const categories = [
         {
@@ -39,32 +58,6 @@ const Services: React.FC = () => {
         }
     ];
 
-    const recentServices = [
-        {
-            id: 1,
-            title: 'Wisdom Encounter',
-            amount: '$5,240',
-            date: 'Oct 24, 2023 • 08:30 AM',
-            attendance: '1,240',
-            image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBbsVYW3trDSy1EMdTLF8CtdMKWmTT993vPjggleQV0s1VMGySIvEM1ea7m0z3IOWMdIYqoQdCaHarjAKLmcygi5FJ51vwFWKrhl3TLfCdoFjwWIDjEUgWPnXKgm1i5SULUB5_AgNYuTEIAxWZxyIvytkqca30Uudjp96CJ1OUbrh0nxRzXBlYM07Et9K1DKY85-dp25fgTtHrOibUks-0gqrsYHDknJ4UF3M_UsCJZaGZb-sY2BKLoQm5TlVG7r73HEEe0mMTpMwZj'
-        },
-        {
-            id: 2,
-            title: 'Fresh Oil Service',
-            amount: '$3,120',
-            date: 'Oct 20, 2023 • 06:00 PM',
-            attendance: '856',
-            image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCjEkb3Z4mYHR7Pp5UyLfZ5zk--pfawrbI93SfvysQCtZaBpAxu5XRmoPhkcaoO6KeTp2t_GV7A8M5AzeB9WNb-l8dGRSOOn1TkmlzcwlV84wfdDibYNYezy-mA2f61VqSEKHmA4Axiuw2wS7_83cNrbPZ8BhcvYewCSOl2mexAm5GU--BF-hyyQdCYAKr60Ypg7RwKv1PaosxaAEorCSQFxvqEO5E4eAVYcDredvZDgabaLKDA5kt1uYxFJlrTi0ORo0dMP_HyPKO0'
-        },
-        {
-            id: 3,
-            title: 'Bacenta Service - Region A',
-            amount: '$840',
-            date: 'Oct 19, 2023 • 05:00 PM',
-            attendance: '142',
-            image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC6fdAWNcPCFe68b3H1N3lmeqZaYQ04hZQD7bUwNKHdB80aFH5usJ26bNznvyGsYugiBadXVe_vpyutpsiZ772yZw8P8QRe5TAX-2hT8xFY9UPPyJPTSdYeJPvLwzSlS2hmKb1uTuYhp03OurvV_QcZnbGHZUw3MQMokyU1RQPKTVHsybZclkkJR4C7aJhEYwecpWJSfr9Phy72haWZdUXo5wMBvK2lQY4KvsuTMsIv2UDNVIYX18_HZoi63HpcMQ8sEJjpWu5OaGN3'
-        }
-    ];
 
     return (
         <div className="services-page">
@@ -102,27 +95,54 @@ const Services: React.FC = () => {
                     </button>
                 </div>
                 <div className="recent-list">
-                    {recentServices.map(service => (
-                        <div key={service.id} className="service-card">
-                            <div
-                                className="service-image"
-                                style={{ backgroundImage: `url("${service.image}")` }}
-                            />
-                            <div className="service-details">
-                                <div className="service-top">
-                                    <p className="service-name">{service.title}</p>
-                                    <p className="service-amount">{service.amount}</p>
-                                </div>
-                                <p className="service-date">{service.date}</p>
-                                <div className="service-meta">
-                                    <FiUser size={14} />
-                                    <p className="service-attendance">Attendance: {service.attendance}</p>
+                    {loading ? (
+                        Array(3).fill(0).map((_, i) => (
+                            <div className="service-card skeleton-card" key={i}>
+                                <div className="service-image skeleton" />
+                                <div className="service-details">
+                                    <div className="service-top">
+                                        <div className="skeleton-text skeleton-title" />
+                                        <div className="skeleton-text skeleton-amount" />
+                                    </div>
+                                    <div className="skeleton-text skeleton-date" />
+                                    <div className="skeleton-text skeleton-meta" />
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    ) : (
+                        services.map(service => (
+                            <div key={service.id} className="service-card">
+                                <div
+                                    className="service-image"
+                                    style={{ backgroundImage: `url("${service.service_photo}")` }}
+                                />
+                                <div className="service-details">
+                                    <div className="service-top">
+                                        <div className="service-title-container">
+                                            <p className="service-name">{service.title}</p>
+                                            <span className="service-type-badge">
+                                                {service.service_type.service_type}
+                                            </span>
+                                        </div>
+                                        <div className="service-amount-container">
+                                            <p className="service-amount">{service.amount}</p>
+                                            <p className="service-offering">Offering: {service.offering}</p>
+                                        </div>
+                                    </div>
+                                    <p className="service-date">{service.date}</p>
+                                    <div className="service-meta">
+                                        <FiUser size={14} />
+                                        <p className="service-attendance">Attendance: {service.attendance}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    ) || (
+                        <p className="empty-state">No recent services found.</p>
+                    )}
                 </div>
             </section>
+
         </div>
     );
 };

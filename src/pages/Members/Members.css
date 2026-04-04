@@ -3,20 +3,40 @@
     background-color: var(--adm-bg-main);
     margin: -1rem -1rem -2rem -1rem;
     /* Offset parent padding from MainLayout.css */
-    padding: 1rem 1rem 120px 1rem;
-    /* Re-add internal padding and extra bottom for FAB/Nav */
+    padding: 0;
+    /* Remove internal padding here, moved to sub-containers */
     position: relative;
     color: var(--adm-text-primary);
+    display: flex;
+    flex-direction: column;
+}
+
+.sticky-header-container {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--adm-bg-main);
+    padding: 0 1rem 0.5rem 1rem;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] .sticky-header-container {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .members-content {
-    padding: 16px 4px;
+    padding: 1rem 1rem 120px 1rem;
+    /* Added top padding back here for the scrollable list */
+    flex: 1;
 }
 
 .search-filter-bar {
     display: flex;
     gap: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
+    margin-top: 0;
+    /* Align directly under header */
 }
 
 .search-input-container {
@@ -28,8 +48,11 @@
 
 .search-icon {
     position: absolute;
-    left: 14px;
+    left: 5px;
     color: #94a3b8;
+    z-index: 10;
+    pointer-events: none;
+    font-size: 20px;
 }
 
 .search-input {
@@ -37,12 +60,15 @@
     background-color: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 12px;
-    padding: 12px 12px 12px 42px;
+    padding: 12px 12px 12px 27px;
+    /* Increased from 42px to 52px to move placeholder right */
     color: #0f172a;
     font-size: 15px;
     outline: none;
     transition: all 0.2s ease;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    position: relative;
+    z-index: 1;
 }
 
 [data-theme='dark'] .search-input {

@@ -1,0 +1,24 @@
+.insights-page {
+    min-height: 100vh;
+    background-color: var(--bg-primary, #0f172a);
+    color: var(--text-primary, #ffffff);
+}
+
+.insights-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 64px);
+    gap: 16px;
+}
+
+.insights-content h2 {
+    color: #00F5FF;
+    margin: 0;
+}
+
+.insights-content p {
+    color: #94a3b8;
+    margin: 0;
+}

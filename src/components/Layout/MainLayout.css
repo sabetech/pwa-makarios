@@ -230,7 +230,11 @@
 /* When header is hidden (e.g., Settings page) */
 .main-content.no-header {
     margin-top: 0;
-    padding-top: 1rem;
+    /* padding-top: 1rem; */
+}
+
+.main-content.admin-portal {
+    padding: 0 !important;
 }
 
 /* Mobile Nav Visibility */

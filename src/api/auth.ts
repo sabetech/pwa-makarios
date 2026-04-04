@@ -7,12 +7,20 @@ export interface LoginPayload {
 }
 
 export interface LoginResponse {
-    token: string;
-    user: {
-        id: string;
-        email: string;
-        name: string;
-        // Add other user properties as needed
+    success: boolean;
+    data: {
+        token: string;
+        user: {
+            id: number;
+            name: string;
+            email: string;
+            roles: Array<{
+                name: string;
+                permissions: Array<{
+                    name: string;
+                }>;
+            }>;
+        };
     };
 }
 

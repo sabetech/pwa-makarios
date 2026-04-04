@@ -1,0 +1,231 @@
+.member-profile-page {
+    /* Let the parent container handle scrolling */
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background);
+}
+
+.member-profile-page .page-header {
+    position: sticky;
+    top: 0rem;
+    z-index: 50;
+    background-color: var(--adm-bg-main, #ffffff);
+    margin: 0rem -1rem 1rem -1rem;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] .member-profile-page .page-header {
+    background-color: var(--adm-bg-main, #121212);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.profile-content {
+    /* No overflow-y here, let .main-content scroll */
+    padding-bottom: 24px;
+}
+
+.profile-content.not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px;
+    text-align: center;
+    color: var(--text-secondary);
+    gap: 16px;
+}
+
+/* Hero Section */
+.profile-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 24px 24px;
+    background: linear-gradient(135deg, var(--primary-light) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+}
+
+.dark .profile-hero {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, transparent 100%);
+}
+
+.profile-avatar-container {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid var(--card-bg);
+    box-shadow: var(--shadow-md);
+    margin-bottom: 16px;
+    position: relative;
+    /* For edit-badge */
+}
+
+.profile-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    /* Added here since container overflow is removed */
+}
+
+.edit-badge {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    background-color: var(--adm-color-primary, #570a22);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.edit-badge .material-symbols-outlined {
+    font-size: 18px;
+}
+
+.profile-name {
+    margin: 0 0 4px 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.profile-primary-role {
+    margin: 0 0 20px 0;
+    font-size: 15px;
+    color: var(--text-secondary);
+}
+
+/* Quick Actions */
+.profile-quick-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+.quick-action-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+    color: white;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quick-action-btn:active {
+    transform: scale(0.95);
+}
+
+.quick-action-btn.primary {
+    background-color: var(--primary);
+}
+
+.quick-action-btn.whatsapp {
+    background-color: #25D366;
+    /* WhatsApp brand color */
+}
+
+.quick-action-btn.message-icon {
+    background-color: var(--primary);
+}
+
+/* Profile Details */
+.profile-details {
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.profile-card {
+    border-radius: 16px;
+    border: 1px solid var(--border) !important;
+    background-color: var(--card-bg) !important;
+    box-shadow: var(--shadow-sm) !important;
+    overflow: hidden;
+    /* For smooth rounded corners with Ant Mobile's internal elements */
+}
+
+.profile-card .adm-card-header {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+}
+
+.profile-card .adm-card-body {
+    padding: 16px;
+}
+
+/* Info Rows */
+.info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 4px 0;
+}
+
+.info-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background-color: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.dark .info-icon {
+    background-color: rgba(59, 130, 246, 0.15);
+}
+
+.info-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.info-value {
+    font-size: 15px;
+    color: var(--text-primary);
+    font-weight: 500;
+    word-break: break-word;
+}
+
+.profile-divider {
+    margin: 8px 0 !important;
+    border-color: var(--border) !important;
+}
+
+/* Profile Actions */
+.profile-actions {
+    padding: 24px 16px;
+}
+
+.edit-profile-btn {
+    border-radius: 12px;
+    height: 48px;
+    font-size: 16px;
+    font-weight: 600;
+}

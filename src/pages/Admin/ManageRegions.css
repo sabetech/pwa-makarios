@@ -1,0 +1,268 @@
+.manage-regions-container {
+    padding-bottom: 5rem;
+    background-color: var(--admin-bg);
+    color: var(--admin-text);
+    min-height: 100vh;
+}
+
+.regions-content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.regions-header {
+    margin-bottom: 3rem;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.regions-title {
+    font-family: 'Manrope', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    color: var(--admin-text);
+}
+
+@media (min-width: 1024px) {
+    .regions-title {
+        font-size: 3.5rem;
+    }
+}
+
+.regions-subtitle {
+    font-size: 1.125rem;
+    font-weight: 300;
+    color: var(--admin-text-muted);
+    max-width: 42rem;
+    line-height: 1.6;
+}
+
+/* Stats Section */
+.region-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.stat-card-regions {
+    background-color: rgba(128, 0, 32, 0.1);
+    border-radius: 1.5rem;
+    padding: 2rem 3rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 140px;
+}
+
+.search-section {
+    display: flex;
+    align-items: center;
+}
+
+.admin-search-bar {
+    width: 100%;
+    background-color: var(--admin-card-bg);
+    border: 1px solid var(--admin-border);
+    border-radius: 1.5rem;
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.admin-search-bar:focus-within {
+    border-color: var(--admin-primary);
+    box-shadow: 0 0 0 4px rgba(128, 0, 32, 0.1);
+}
+
+.admin-search-bar span {
+    color: var(--admin-text-muted);
+}
+
+.admin-search-bar input {
+    background: none;
+    border: none;
+    color: var(--admin-text);
+    font-size: 1.125rem;
+    width: 100%;
+    outline: none;
+}
+
+.admin-search-bar input::placeholder {
+    color: var(--admin-text-muted);
+    opacity: 0.5;
+}
+
+.stat-card-regions .card-icon {
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
+    opacity: 0.1;
+    font-size: 6rem !important;
+    color: var(--admin-primary);
+}
+
+/* Region List */
+.region-list-header {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 2fr 100px;
+    padding: 1rem 2rem;
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--admin-text-muted);
+    opacity: 0.6;
+}
+
+.region-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.region-card {
+    background-color: var(--admin-card-bg);
+    border-radius: 1rem;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 2fr 100px;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid var(--admin-border);
+}
+
+.region-card:hover {
+    background-color: var(--admin-card-hover);
+    transform: translateY(-2px);
+}
+
+.region-accent {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: var(--admin-secondary);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.region-card:hover .region-accent {
+    transform: scaleY(1);
+}
+
+.region-identity {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.region-icon-box {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background-color: rgba(175, 141, 17, 0.1);
+    color: var(--admin-secondary);
+}
+
+.region-name {
+    font-family: 'Manrope', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--admin-text);
+    margin-bottom: 0.25rem;
+}
+
+.region-metrics-group {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.region-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.metric-label {
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--admin-text-muted);
+}
+
+.metric-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--admin-text);
+}
+
+.region-leader {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.leader-avatar, .leader-initials {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: var(--admin-card-hover);
+}
+
+.leader-initials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--admin-text-muted);
+}
+
+.leader-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--admin-text);
+    margin: 0;
+}
+
+.region-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .stat-card-regions {
+        padding: 1.5rem;
+    }
+    
+    .region-list-header {
+        display: none;
+    }
+    
+    .region-card {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+    
+    .region-actions {
+        border-top: 1px solid var(--admin-border);
+        padding-top: 1rem;
+    }
+}

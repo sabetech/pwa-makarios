@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
     Form,
     Input,
@@ -9,58 +9,94 @@ import {
     Picker,
     TextArea,
     Toast,
-    Space
+    Space,
+    DotLoading
 } from 'antd-mobile';
-import { FiCamera, FiMapPin, FiArrowLeft } from 'react-icons/fi';
+import { FiMapPin } from 'react-icons/fi';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import ImageUpload from '../../components/ImageUpload/ImageUpload';
-import './AddMember.css';
+import { useMember } from '../../hooks/useMembers';
+import { useUpdateMember } from '../../hooks/useUpdateMember';
+import './EditMember.css';
 
-const AddMember: React.FC = () => {
+const EditMember: React.FC = () => {
+    const { id = '' } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [form] = Form.useForm();
+    const { data: member, isLoading } = useMember(id);
+    const updateMutation = useUpdateMember();
+    
     const [image, setImage] = useState<string | null>(null);
     const [dateVisible, setDateVisible] = useState(false);
     const [bacentaVisible, setBacentaVisible] = useState(false);
     const [basontaVisible, setBasontaVisible] = useState(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Mock data for dropdowns
+    useEffect(() => {
+        if (member) {
+            form.setFieldsValue({
+                ...member,
+                dob: member.dob ? new Date(member.dob) : undefined,
+                picture: member.img_url,
+                bacenta: member.bacenta ? [member.bacenta] : undefined,
+                basonta: member.basonta ? [member.basonta] : undefined
+            });
+            setImage(member.img_url);
+        }
+    }, [member, form]);
+
     const bacentas = [
         [
-            { label: 'Bacenta A', value: 'bacenta-a' },
-            { label: 'Bacenta B', value: 'bacenta-b' },
-            { label: 'Bacenta C', value: 'bacenta-c' },
+            { label: 'Bacenta A', value: 'Bacenta A' },
+            { label: 'Bacenta B', value: 'Bacenta B' },
+            { label: 'Bacenta C', value: 'Bacenta C' },
         ]
     ];
 
     const basontas = [
         [
-            { label: 'Basonta X', value: 'basonta-x' },
-            { label: 'Basonta Y', value: 'basonta-y' },
-            { label: 'Basonta Z', value: 'basonta-z' },
+            { label: 'Basonta X', value: 'Basonta X' },
+            { label: 'Basonta Y', value: 'Basonta Y' },
+            { label: 'Basonta Z', value: 'Basonta Z' },
         ]
     ];
 
     const genderOptions = [
-        { label: 'Male', value: 'male' },
-        { label: 'Female', value: 'female' },
+        { label: 'Male', value: 'Male' },
+        { label: 'Female', value: 'Female' },
     ];
 
     const maritalStatusOptions = [
-        { label: 'Single', value: 'single' },
-        { label: 'Married', value: 'married' },
-        { label: 'Divorced', value: 'divorced' },
-        { label: 'Widowed', value: 'widowed' },
+        { label: 'Single', value: 'Single' },
+        { label: 'Married', value: 'Married' },
+        { label: 'Divorced', value: 'Divorced' },
+        { label: 'Widowed', value: 'Widowed' },
     ];
 
     const onFinish = (values: any) => {
-        console.log('Form values:', values);
-        Toast.show({
-            content: 'Member added successfully (Mock)',
-            position: 'bottom',
+        const formattedValues = {
+            ...values,
+            dob: values.dob ? values.dob.toISOString().split('T')[0] : null,
+            img_url: image,
+            bacenta: Array.isArray(values.bacenta) ? values.bacenta[0] : values.bacenta,
+            basonta: Array.isArray(values.basonta) ? values.basonta[0] : values.basonta
+        };
+
+        updateMutation.mutate({ id, data: formattedValues }, {
+            onSuccess: () => {
+                Toast.show({
+                    icon: 'success',
+                    content: 'Member updated successfully',
+                    position: 'bottom',
+                });
+                setTimeout(() => navigate(`/dashboard/members/${id}`), 1000);
+            },
+            onError: (error) => {
+                Toast.show({
+                    icon: 'fail',
+                    content: 'Failed to update member',
+                });
+            }
         });
-        setTimeout(() => navigate('/dashboard/members'), 1500);
     };
 
     const handleGetLocation = () => {
@@ -78,35 +114,55 @@ const AddMember: React.FC = () => {
         }
     };
 
-    const handleCapture = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                setImage(event.target?.result as string);
-            };
-            reader.readAsDataURL(e.target.files[0]);
-        }
-    };
+    if (isLoading) {
+        return (
+            <div className="edit-member-page">
+                <PageHeader title="Loading Member..." />
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '50px' }}>
+                    <DotLoading color='primary' />
+                </div>
+            </div>
+        );
+    }
+
+    if (!member) {
+        return (
+            <div className="edit-member-page">
+                <PageHeader title="Member Not Found" />
+                <div style={{ padding: '20px', textAlign: 'center' }}>
+                    <p>The member protocol could not be found.</p>
+                    <Button color="primary" onClick={() => navigate('/dashboard/members')}>Back to Members</Button>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div className="add-member-page">
-            <PageHeader title="Add New Member" />
+        <div className="edit-member-page">
+            <PageHeader title="Edit Member Profile" />
 
-            <div className="add-member-content">
+            <div className="edit-member-content">
                 <Form
                     form={form}
                     layout="vertical"
                     onFinish={onFinish}
                     footer={
-                        <Button block type="submit" color="primary" size="large" className="submit-btn">
-                            Save Member
+                        <Button 
+                            block 
+                            type="submit" 
+                            color="primary" 
+                            size="large" 
+                            className="submit-btn"
+                            loading={updateMutation.isLoading}
+                        >
+                            Save Changes
                         </Button>
                     }
-                    className="add-member-form"
+                    className="edit-member-form"
                 >
                     <div className="picture-upload-section">
                         <ImageUpload
-                            label=""
+                            label="Profile Photo"
                             value={image || ''}
                             onChange={(imageData: string) => {
                                 setImage(imageData);
@@ -114,7 +170,7 @@ const AddMember: React.FC = () => {
                             }}
                             preferCamera={true}
                         />
-                        <Form.Item name="picture" hidden rules={[{ required: true, message: 'Picture is required' }]}>
+                        <Form.Item name="picture" hidden>
                             <Input />
                         </Form.Item>
                     </div>
@@ -125,10 +181,10 @@ const AddMember: React.FC = () => {
                     </Form.Item>
 
                     <Space block direction="horizontal">
-                        <Form.Item name="phone" label="Phone" rules={[{ required: true }]}>
+                        <Form.Item name="phone" label="Phone" rules={[{ required: true }]} style={{ flex: 1 }}>
                             <Input placeholder="Phone number" />
                         </Form.Item>
-                        <Form.Item name="whatsapp" label="WhatsApp">
+                        <Form.Item name="whatsapp" label="WhatsApp" style={{ flex: 1 }}>
                             <Input placeholder="WhatsApp number" />
                         </Form.Item>
                     </Space>
@@ -146,12 +202,16 @@ const AddMember: React.FC = () => {
                         <DatePicker
                             visible={dateVisible}
                             onClose={() => setDateVisible(false)}
-                            defaultValue={new Date('2000-01-01')}
                             onConfirm={(val) => {
                                 setDateVisible(false);
                             }}
                         >
-                            {value => value ? value.toDateString() : <span style={{ color: '#94a3b8' }}>Select date</span>}
+                            {value => {
+                                if (value instanceof Date) {
+                                  return value.toDateString();
+                                }
+                                return <span style={{ color: '#94a3b8' }}>Select date</span>;
+                            }}
                         </DatePicker>
                     </Form.Item>
 
@@ -201,7 +261,13 @@ const AddMember: React.FC = () => {
                             onClose={() => setBacentaVisible(false)}
                             onConfirm={() => setBacentaVisible(false)}
                         >
-                            {value => value[0] ? value[0].label : <span style={{ color: '#94a3b8' }}>Select Bacenta</span>}
+                            {value => {
+                                if (Array.isArray(value) && value.length > 0 && value[0] !== null) {
+                                    const item = value[0] as any;
+                                    return item.label || String(item);
+                                }
+                                return <span style={{ color: '#94a3b8' }}>Select Bacenta</span>;
+                            }}
                         </Picker>
                     </Form.Item>
 
@@ -217,7 +283,13 @@ const AddMember: React.FC = () => {
                             onClose={() => setBasontaVisible(false)}
                             onConfirm={() => setBasontaVisible(false)}
                         >
-                            {value => value[0] ? value[0].label : <span style={{ color: '#94a3b8' }}>Select Basonta</span>}
+                            {value => {
+                                if (Array.isArray(value) && value.length > 0 && value[0] !== null) {
+                                    const item = value[0] as any;
+                                    return item.label || String(item);
+                                }
+                                return <span style={{ color: '#94a3b8' }}>Select Basonta</span>;
+                            }}
                         </Picker>
                     </Form.Item>
                 </Form>
@@ -226,4 +298,4 @@ const AddMember: React.FC = () => {
     );
 };
 
-export default AddMember;
+export default EditMember;

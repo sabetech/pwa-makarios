@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { FiUsers, FiCalendar, FiDollarSign, FiChevronRight, FiChevronDown } from 'react-icons/fi';
 import PageHeader from '../../components/PageHeader/PageHeader';
@@ -76,28 +77,27 @@ const getOrdinal = (n: number): string => {
 
 const generateWeekOptions = (): { value: string; label: string }[] => {
     const options: { value: string; label: string }[] = [];
-    const today = new Date('2026-02-18');
-    
+    const today = dayjs();
+    const currentSunday = today.startOf('week');
+
     for (let i = 0; i < 8; i++) {
-        const weekStart = new Date(today);
-        weekStart.setDate(today.getDate() - today.getDay() - (i * 7));
-        const weekEnd = new Date(weekStart);
-        weekEnd.setDate(weekStart.getDate() + 6);
-        
-        const startMonth = weekStart.toLocaleString('default', { month: 'short' });
-        const endMonth = weekEnd.toLocaleString('default', { month: 'short' });
-        
-        const startDay = getOrdinal(weekStart.getDate());
-        const endDay = getOrdinal(weekEnd.getDate());
-        
-        const label = startMonth === endMonth 
+        const weekStart = currentSunday.subtract(i, 'week');
+        const weekEnd = weekStart.add(6, 'day');
+
+        const startMonth = weekStart.format('MMM');
+        const endMonth = weekEnd.format('MMM');
+
+        const startDay = getOrdinal(weekStart.date());
+        const endDay = getOrdinal(weekEnd.date());
+
+        const label = startMonth === endMonth
             ? `${startMonth} ${startDay} - ${endDay}`
             : `${startMonth} ${startDay} - ${endMonth} ${endDay}`;
-        
-        const weekStartStr = weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+        const weekStartStr = weekStart.format('MMM D, YYYY');
         options.push({ value: weekStartStr, label });
     }
-    
+
     return options;
 };
 
@@ -148,7 +148,7 @@ const BacentaServicesList: React.FC = () => {
             <div className="bacenta-list-content">
                 {/* Week Selector */}
                 <div className="week-selector">
-                    <select 
+                    <select
                         className="week-dropdown"
                         value={selectedWeek}
                         onChange={(e) => setSelectedWeek(e.target.value)}
@@ -179,8 +179,8 @@ const BacentaServicesList: React.FC = () => {
                 <div className="bacenta-services-list">
                     {regions.map(region => (
                         <div key={region} className="region-group">
-                            <button 
-                                className="region-header" 
+                            <button
+                                className="region-header"
                                 onClick={() => toggleRegion(region)}
                             >
                                 <span className="region-name">{region}</span>

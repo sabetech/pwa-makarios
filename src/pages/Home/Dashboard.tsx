@@ -1,20 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { fetchDashboardData, DashboardData } from '../../api/dashboard';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
-    // Data from HTML
-    const stats = [
-        { label: 'Churches', value: '1' },
-        { label: 'Streams', value: '3' },
-        { label: 'Regions', value: '13' },
-        { label: 'Zones', value: '55' },
-        { label: 'Bacentas', value: '82' },
-        { label: 'Members', value: '460' },
-        { label: 'Micro', value: '3' },
-        { label: 'Leaders', value: '84' },
-        { label: 'Guests', value: '22' },
-    ];
+    const [stats, setStats] = useState<{ label: string; value: string }[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadDashboardData = async () => {
+            try {
+                setLoading(true);
+                const data = await fetchDashboardData();
+                const formattedStats = Object.entries(data).map(([key, value]) => ({
+                    label: key.toUpperCase(),
+                    value: String(value)
+                }));
+                setStats(formattedStats);
+            } catch (error) {
+                console.error('Error fetching dashboard data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadDashboardData();
+    }, []);
 
     // Chart Data
     const data = [
@@ -28,12 +39,21 @@ const Dashboard: React.FC = () => {
         <div className="dashboard-container">
             {/* Stats Grid */}
             <div className="stats-grid">
-                {stats.map((stat, index) => (
-                    <div className="stat-card" key={index}>
-                        <div className="stat-label">{stat.label}</div>
-                        <div className="stat-value">{stat.value}</div>
-                    </div>
-                ))}
+                {loading ? (
+                    Array(6).fill(0).map((_, i) => (
+                        <div className="stat-card skeleton" key={i}>
+                            <div className="stat-label-skeleton"></div>
+                            <div className="stat-value-skeleton"></div>
+                        </div>
+                    ))
+                ) : (
+                    stats.map((stat, index) => (
+                        <div className="stat-card" key={index}>
+                            <div className="stat-label">{stat.label}</div>
+                            <div className="stat-value">{stat.value}</div>
+                        </div>
+                    ))
+                )}
             </div>
 
             {/* Summary Row */}

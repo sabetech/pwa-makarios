@@ -9,7 +9,7 @@ const BottomNav: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [visible, setVisible] = useState(false);
-    const shouldHideFAB = location.pathname === '/dashboard/members';
+    const shouldHideFAB = location.pathname.startsWith('/dashboard/members') || location.pathname.startsWith('/dashboard/admin');
 
     const actions: Action[] = [
         { text: 'Fill Service Form', key: 'service-form' },

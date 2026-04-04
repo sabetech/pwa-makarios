@@ -1,4 +1,4 @@
-.add-member-page {
+.edit-member-page {
     min-height: calc(100vh - 80px);
     background-color: var(--adm-bg-main);
     margin: -1rem -1rem -2rem -1rem;
@@ -6,19 +6,12 @@
     color: var(--adm-text-primary);
 }
 
-.add-member-content {
+.edit-member-content {
     padding: 16px;
 }
 
-.add-member-form {
+.edit-member-form {
     --background-color: transparent;
-}
-
-.picture-upload-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 24px;
 }
 
 .picture-upload-section {
@@ -102,7 +95,6 @@
     flex: 1;
 }
 
-/* Fix for picker/datepicker padding in our layout */
 .adm-picker,
 .adm-date-picker {
     --background-color: var(--adm-bg-main);

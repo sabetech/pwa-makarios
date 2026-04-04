@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Makarios Admin Portal</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-lowest": "#0e0e0e",
+            "surface-container-high": "#2a2a2a",
+            "surface": "#131313",
+            "secondary-fixed": "#ffe088",
+            "inverse-primary": "#af2b3e",
+            "surface-container-low": "#1c1b1b",
+            "on-primary-fixed": "#40000b",
+            "on-primary-fixed-variant": "#8e0f28",
+            "primary-fixed-dim": "#ffb3b5",
+            "surface-container-highest": "#353534",
+            "tertiary-fixed": "#d4e4f6",
+            "surface-tint": "#ffb3b5",
+            "primary": "#ffb3b5",
+            "surface-bright": "#393939",
+            "tertiary": "#b8c8da",
+            "on-tertiary": "#223240",
+            "inverse-on-surface": "#313030",
+            "tertiary-fixed-dim": "#b8c8da",
+            "outline": "#a78a8a",
+            "on-primary-container": "#ff828a",
+            "on-secondary": "#3c2f00",
+            "on-secondary-fixed-variant": "#574500",
+            "on-surface-variant": "#e0bfbf",
+            "on-tertiary-fixed": "#0d1d2a",
+            "surface-container": "#201f1f",
+            "inverse-surface": "#e5e2e1",
+            "on-tertiary-fixed-variant": "#394857",
+            "secondary": "#e9c349",
+            "surface-variant": "#353534",
+            "on-error": "#690005",
+            "primary-fixed": "#ffdada",
+            "outline-variant": "#584141",
+            "on-background": "#e5e2e1",
+            "secondary-fixed-dim": "#e9c349",
+            "primary-container": "#800020",
+            "on-surface": "#e5e2e1",
+            "on-secondary-fixed": "#241a00",
+            "background": "#131313",
+            "tertiary-container": "#2f3f4d",
+            "on-primary": "#680018",
+            "surface-dim": "#131313",
+            "on-error-container": "#ffdad6",
+            "secondary-container": "#af8d11",
+            "error-container": "#93000a",
+            "error": "#ffb4ab",
+            "on-tertiary-container": "#9aaabb",
+            "on-secondary-container": "#342800"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    body {
+      background-color: #131313;
+      color: #E5E2E1;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .editorial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
+      gap: 2rem;
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+
+<body class="bg-background text-on-background selection:bg-primary-container selection:text-primary min-h-screen pb-32">
+  <!-- TopAppBar -->
+  <header
+    class="docked full-width top-0 z-50 bg-[#131313] bg-gradient-to-b from-[#800020]/20 to-transparent flex justify-between items-center w-full px-6 py-4 sticky">
+    <div class="flex items-center gap-4">
+      <div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant/30 overflow-hidden">
+        <img alt="Admin Profile Photo" class="w-full h-full object-cover"
+          data-alt="Professional headshot of a mature administrator with a kind expression, soft studio lighting on a dark neutral background"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPFM9AVj1BOMp34skdzz2-W2q7U1D8bpdospqjmlBPBXPrymJRLwMv6D1fvG0MVphQWEv2aBgzT1rIp_v17TybqPX8nG7b9KJHuzy97dBxqeLWn1FOifNH8alk2erTRg25AwJ2qN2mtf-rXrsGQK1S25s7mh2-PZzYIk85G95n5z8z1j1nU0ex4jyGj8juSPA7Xtx9byCNrMsddHrejKMfJJRw9XxEV8eh7jod6z7YYDGf0Ctt8Ruf1Dhb7Q--A5YQuwUHKbFcl8Nr" />
+      </div>
+      <h1 class="text-2xl font-black tracking-widest text-[#E9C349] uppercase">Makarios</h1>
+    </div>
+    <div class="hidden md:flex items-center gap-8">
+      <nav class="flex gap-6 font-manrope text-sm font-bold tracking-tight">
+        <a class="text-[#E9C349] hover:bg-[#393939]/60 hover:backdrop-blur-lg transition-all duration-300 px-3 py-1 rounded-lg"
+          href="#">Dashboard</a>
+        <a class="text-[#E5E2E1] hover:bg-[#393939]/60 hover:backdrop-blur-lg transition-all duration-300 px-3 py-1 rounded-lg"
+          href="#">Directory</a>
+        <a class="text-[#E5E2E1] hover:bg-[#393939]/60 hover:backdrop-blur-lg transition-all duration-300 px-3 py-1 rounded-lg"
+          href="#">Reports</a>
+      </nav>
+      <button
+        class="material-symbols-outlined text-[#FFB3B5] hover:bg-[#393939]/60 p-2 rounded-full transition-all scale-95 active:scale-90"
+        data-icon="settings">settings</button>
+    </div>
+  </header>
+  <main class="max-w-7xl mx-auto px-6 pt-12">
+    <!-- Hero Section -->
+    <section class="mb-16">
+      <p class="font-label text-on-surface-variant label-sm uppercase tracking-[0.2em] mb-2">Management Console</p>
+      <h2 class="font-headline display-lg font-extrabold tracking-tight text-on-surface mb-4 lg:text-6xl text-4xl">
+        Welcome <span class="text-secondary italic">Admin</span>
+      </h2>
+      <div class="h-1 w-24 bg-primary-container rounded-full mb-8"></div>
+      <p class="max-w-2xl text-on-surface-variant title-md leading-relaxed">
+        Centralized oversight for the Makarios ecosystem. Navigate through ecclesiastical structures, manage leadership
+        hierarchies, and monitor the spiritual growth of the community.
+      </p>
+    </section>
+    <!-- Bento Grid Management Cards -->
+    <div class="editorial-grid">
+      <!-- Manage Churches -->
+      <div
+        class="group bg-surface-container-low p-8 rounded-xl transition-all duration-300 hover:bg-surface-container-high relative overflow-hidden">
+        <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+          <span class="material-symbols-outlined text-[120px]" data-icon="church">church</span>
+        </div>
+        <div class="relative z-10">
+          <div
+            class="w-12 h-12 bg-primary-container/20 flex items-center justify-center rounded-lg mb-6 text-primary group-hover:bg-primary-container group-hover:text-on-primary-fixed transition-colors">
+            <span class="material-symbols-outlined" data-icon="church">church</span>
+          </div>
+          <h3 class="font-headline text-2xl font-bold text-on-surface mb-3 tracking-tight">Manage Churches</h3>
+          <p class="font-body text-on-surface-variant text-sm mb-8 leading-relaxed">
+            Oversee global church locations, establish new sanctuaries, and manage institutional records.
+          </p>
+          <button
+            class="flex items-center gap-2 text-secondary font-label text-xs uppercase tracking-widest font-bold group/btn">
+            Explore Directory
+            <span class="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1"
+              data-icon="arrow_forward">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+      <!-- Manage Streams -->
+      <div
+        class="group bg-surface-container-low p-8 rounded-xl transition-all duration-300 hover:bg-surface-container-high relative overflow-hidden">
+        <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+          <span class="material-symbols-outlined text-[120px]" data-icon="waves">waves</span>
+        </div>
+        <div class="relative z-10">
+          <div
+            class="w-12 h-12 bg-tertiary-container/20 flex items-center justify-center rounded-lg mb-6 text-tertiary group-hover:bg-tertiary-container group-hover:text-white transition-colors">
+            <span class="material-symbols-outlined" data-icon="waves">waves</span>
+          </div>
+          <h3 class="font-headline text-2xl font-bold text-on-surface mb-3 tracking-tight">Manage Streams</h3>
+          <p class="font-body text-on-surface-variant text-sm mb-8 leading-relaxed">
+            Configure ministry streams, align departmental flows, and track specialized community movements.
+          </p>
+          <button
+            class="flex items-center gap-2 text-secondary font-label text-xs uppercase tracking-widest font-bold group/btn">
+            Manage Flows
+            <span class="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1"
+              data-icon="arrow_forward">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+      <!-- Manage Regions -->
+      <div
+        class="group bg-surface-container-low p-8 rounded-xl transition-all duration-300 hover:bg-surface-container-high relative overflow-hidden">
+        <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+          <span class="material-symbols-outlined text-[120px]" data-icon="map">map</span>
+        </div>
+        <div class="relative z-10">
+          <div
+            class="w-12 h-12 bg-secondary-container/20 flex items-center justify-center rounded-lg mb-6 text-secondary group-hover:bg-secondary-container group-hover:text-on-secondary-container transition-colors">
+            <span class="material-symbols-outlined" data-icon="map">map</span>
+          </div>
+          <h3 class="font-headline text-2xl font-bold text-on-surface mb-3 tracking-tight">Manage Regions</h3>
+          <p class="font-body text-on-surface-variant text-sm mb-8 leading-relaxed">
+            Define geographic territories, manage regional councils, and optimize territorial expansion.
+          </p>
+          <button
+            class="flex items-center gap-2 text-secondary font-label text-xs uppercase tracking-widest font-bold group/btn">
+            View Map
+            <span class="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1"
+              data-icon="arrow_forward">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+      <!-- Manage Bacentas -->
+      <div
+        class="group bg-surface-container-low p-8 rounded-xl transition-all duration-300 hover:bg-surface-container-high relative overflow-hidden">
+        <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+          <span class="material-symbols-outlined text-[120px]" data-icon="hub">hub</span>
+        </div>
+        <div class="relative z-10">
+          <div
+            class="w-12 h-12 bg-primary-container/20 flex items-center justify-center rounded-lg mb-6 text-primary group-hover:bg-primary-container group-hover:text-on-primary-fixed transition-colors">
+            <span class="material-symbols-outlined" data-icon="hub">hub</span>
+          </div>
+          <h3 class="font-headline text-2xl font-bold text-on-surface mb-3 tracking-tight">Manage Bacentas</h3>
+          <p class="font-body text-on-surface-variant text-sm mb-8 leading-relaxed">
+            The heartbeat of the church. Manage cell groups, home gatherings, and grassroots spiritual nodes.
+          </p>
+          <button
+            class="flex items-center gap-2 text-secondary font-label text-xs uppercase tracking-widest font-bold group/btn">
+            Cell Management
+            <span class="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1"
+              data-icon="arrow_forward">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+      <!-- Manage Leaders -->
+      <div
+        class="group bg-surface-container-low p-8 rounded-xl transition-all duration-300 hover:bg-surface-container-high relative overflow-hidden">
+        <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+          <span class="material-symbols-outlined text-[120px]" data-icon="stars">stars</span>
+        </div>
+        <div class="relative z-10">
+          <div
+            class="w-12 h-12 bg-secondary-container/20 flex items-center justify-center rounded-lg mb-6 text-secondary group-hover:bg-secondary-container group-hover:text-on-secondary-container transition-colors">
+            <span class="material-symbols-outlined" data-icon="stars">stars</span>
+          </div>
+          <h3 class="font-headline text-2xl font-bold text-on-surface mb-3 tracking-tight">Manage Leaders</h3>
+          <p class="font-body text-on-surface-variant text-sm mb-8 leading-relaxed">
+            Track leadership development, assign ministerial roles, and manage the ordained hierarchy.
+          </p>
+          <button
+            class="flex items-center gap-2 text-secondary font-label text-xs uppercase tracking-widest font-bold group/btn">
+            Leadership Profile
+            <span class="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1"
+              data-icon="arrow_forward">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+      <!-- Manage Members -->
+      <div
+        class="group bg-surface-container-low p-8 rounded-xl transition-all duration-300 hover:bg-surface-container-high relative overflow-hidden">
+        <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+          <span class="material-symbols-outlined text-[120px]" data-icon="groups">groups</span>
+        </div>
+        <div class="relative z-10">
+          <div
+            class="w-12 h-12 bg-tertiary-container/20 flex items-center justify-center rounded-lg mb-6 text-tertiary group-hover:bg-tertiary-container group-hover:text-white transition-colors">
+            <span class="material-symbols-outlined" data-icon="groups">groups</span>
+          </div>
+          <h3 class="font-headline text-2xl font-bold text-on-surface mb-3 tracking-tight">Manage Members</h3>
+          <p class="font-body text-on-surface-variant text-sm mb-8 leading-relaxed">
+            Comprehensive database of the congregation. Manage attendance, spiritual growth, and demographics.
+          </p>
+          <button
+            class="flex items-center gap-2 text-secondary font-label text-xs uppercase tracking-widest font-bold group/btn">
+            Member Database
+            <span class="material-symbols-outlined text-sm transition-transform group-hover/btn:translate-x-1"
+              data-icon="arrow_forward">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- BottomNavBar (Mobile Only) -->
+  <nav
+    class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#1C1B1B]/90 backdrop-blur-xl rounded-t-3xl shadow-[0_-10px_40px_rgba(128,0,32,0.15)]">
+    <div
+      class="flex flex-col items-center justify-center bg-[#800020] text-[#FFB3B5] rounded-xl px-4 py-2 Active: scale-95 duration-200">
+      <span class="material-symbols-outlined" data-icon="home">home</span>
+      <span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium mt-1">Home</span>
+    </div>
+    <div
+      class="flex flex-col items-center justify-center text-[#E0BFBF] opacity-60 px-4 py-2 hover:opacity-100 hover:text-[#FFB3B5] transition-opacity">
+      <span class="material-symbols-outlined" data-icon="church">church</span>
+      <span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium mt-1">Services</span>
+    </div>
+    <div
+      class="flex flex-col items-center justify-center text-[#E0BFBF] opacity-60 px-4 py-2 hover:opacity-100 hover:text-[#FFB3B5] transition-opacity">
+      <span class="material-symbols-outlined" data-icon="campaign">campaign</span>
+      <span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium mt-1">Campaigns</span>
+    </div>
+    <div
+      class="flex flex-col items-center justify-center text-[#E0BFBF] opacity-60 px-4 py-2 hover:opacity-100 hover:text-[#FFB3B5] transition-opacity">
+      <span class="material-symbols-outlined" data-icon="groups">groups</span>
+      <span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium mt-1">Members</span>
+    </div>
+    <div
+      class="flex flex-col items-center justify-center text-[#E0BFBF] opacity-60 px-4 py-2 hover:opacity-100 hover:text-[#FFB3B5] transition-opacity">
+      <span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+      <span class="font-manrope text-[10px] uppercase tracking-[0.05em] font-medium mt-1">Arrivals</span>
+    </div>
+  </nav>
+  <!-- Floating Action Button Contextual Check: Suppressed for Index/Dashboard focus as per rule -->
+</body>
+
+</html>
