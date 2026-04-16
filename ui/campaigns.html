@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Church Admin Portal - Campaigns</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "maroon": "#800000",
+                        "charcoal": "#1A1A1A",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .active-nav .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-charcoal dark:text-slate-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header
+        class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-4">
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-maroon text-3xl">campaign</span>
+                <h1 class="text-2xl font-bold tracking-tight">Campaigns</h1>
+            </div>
+            <button class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+                <span class="material-symbols-outlined text-charcoal dark:text-slate-100">notifications</span>
+            </button>
+        </div>
+        <!-- Search Bar -->
+        <div class="relative">
+            <span
+                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+            <input
+                class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl py-3 pl-10 pr-4 focus:ring-2 focus:ring-maroon focus:border-maroon outline-none transition-all text-sm"
+                placeholder="Search initiatives..." type="text" />
+        </div>
+    </header>
+    <!-- Main Content -->
+    <main class="flex-1 px-4 py-6 space-y-6">
+        <section>
+            <h2 class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-4 px-1">Active
+                Initiatives</h2>
+            <div class="grid gap-4">
+                <!-- Antibrutish Card -->
+                <div
+                    class="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4 hover:shadow-md transition-shadow">
+                    <div
+                        class="size-12 rounded-lg bg-maroon/10 dark:bg-maroon/20 flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-maroon">shield_with_heart</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-lg leading-tight">Antibrutish</h3>
+                            <span
+                                class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 uppercase">Ongoing</span>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Focus on shepherd training and
+                            quality member care.</p>
+                        <div class="mt-3 flex items-center gap-2">
+                            <div class="flex-1 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                <div class="bg-maroon h-full w-[60%] rounded-full"></div>
+                            </div>
+                            <span class="text-xs font-medium text-maroon">12 Sessions</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Sheep Seeking Card -->
+                <div
+                    class="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4 hover:shadow-md transition-shadow">
+                    <div
+                        class="size-12 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-primary">person_search</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-lg leading-tight">Sheep Seeking</h3>
+                            <span
+                                class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 uppercase">Active</span>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Soul winning and aggressive
+                            evangelism drive.</p>
+                        <p class="text-xs font-bold text-charcoal dark:text-slate-200 mt-3 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">trending_up</span>
+                            45 New Souls Registered
+                        </p>
+                    </div>
+                </div>
+                <!-- Multiplication Card -->
+                <div
+                    class="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4 hover:shadow-md transition-shadow">
+                    <div
+                        class="size-12 rounded-lg bg-maroon/10 dark:bg-maroon/20 flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-maroon">groups_3</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-lg leading-tight">Multiplication</h3>
+                            <span
+                                class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 uppercase">In
+                                Progress</span>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Strategic growth of existing cell
+                            structures.</p>
+                        <div class="mt-3 flex items-center justify-between">
+                            <span class="text-xs text-slate-500">Target: 2x Growth</span>
+                            <button class="text-xs font-bold text-maroon hover:underline">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Bacenta Proliferation Card -->
+                <div
+                    class="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-800 flex items-start gap-4 hover:shadow-md transition-shadow">
+                    <div
+                        class="size-12 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-primary">add_home_work</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-lg leading-tight">Bacenta Proliferation</h3>
+                            <span
+                                class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 uppercase">Milestone</span>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Focus on starting and stabilizing new
+                            Bacentas.</p>
+                        <div
+                            class="mt-3 py-2 px-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg flex items-center justify-between">
+                            <span class="text-xs font-medium">Launched this month:</span>
+                            <span class="text-sm font-bold text-maroon">5 New</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Secondary Banner -->
+        <div class="bg-maroon rounded-xl p-6 text-white relative overflow-hidden group">
+            <div class="relative z-10">
+                <h4 class="text-xl font-bold mb-2">Campaign Reports</h4>
+                <p class="text-white/80 text-sm mb-4">Download the latest analysis of all active church initiatives.</p>
+                <button
+                    class="bg-white text-maroon px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 group-hover:scale-105 transition-transform">
+                    <span class="material-symbols-outlined text-sm">download</span>
+                    Get Monthly PDF
+                </button>
+            </div>
+            <span
+                class="material-symbols-outlined absolute -right-4 -bottom-4 text-9xl text-white/10 rotate-12 pointer-events-none">analytics</span>
+        </div>
+    </main>
+    <!-- Bottom Navigation -->
+    <nav
+        class="sticky bottom-0 w-full bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pb-safe pb-4 pt-2">
+        <div class="flex items-center justify-around max-w-lg mx-auto">
+            <a class="flex flex-col items-center gap-1 group" href="#">
+                <span
+                    class="material-symbols-outlined text-slate-400 group-hover:text-maroon transition-colors">home</span>
+                <span class="text-[10px] font-medium text-slate-500 group-hover:text-maroon">Home</span>
+            </a>
+            <a class="flex flex-col items-center gap-1 group" href="#">
+                <span
+                    class="material-symbols-outlined text-slate-400 group-hover:text-maroon transition-colors">calendar_month</span>
+                <span class="text-[10px] font-medium text-slate-500 group-hover:text-maroon">Services</span>
+            </a>
+            <a class="flex flex-col items-center gap-1 active-nav relative" href="#">
+                <div class="absolute -top-1 w-8 h-1 bg-maroon rounded-full"></div>
+                <span class="material-symbols-outlined text-maroon">campaign</span>
+                <span class="text-[10px] font-bold text-maroon">Campaigns</span>
+            </a>
+            <a class="flex flex-col items-center gap-1 group" href="#">
+                <span
+                    class="material-symbols-outlined text-slate-400 group-hover:text-maroon transition-colors">group</span>
+                <span class="text-[10px] font-medium text-slate-500 group-hover:text-maroon">Members</span>
+            </a>
+            <a class="flex flex-col items-center gap-1 group" href="#">
+                <span
+                    class="material-symbols-outlined text-slate-400 group-hover:text-maroon transition-colors">login</span>
+                <span class="text-[10px] font-medium text-slate-500 group-hover:text-maroon">Arrivals</span>
+            </a>
+        </div>
+    </nav>
+    <!-- Decorative Bottom Spacer for Mobile Safebars -->
+    <div class="h-6 bg-white dark:bg-slate-900"></div>
+</body>
+
+</html>

@@ -20,6 +20,7 @@ import ManageStreams from './pages/Admin/ManageStreams';
 import ManageRegions from './pages/Admin/ManageRegions';
 import ManageBacentas from './pages/Admin/ManageBacentas';
 import ManageLeaders from './pages/Admin/ManageLeaders';
+import Campaigns from './pages/Campaigns/Campaigns';
 import './App.css';
 
 const queryClient = new QueryClient();
@@ -39,7 +40,7 @@ function App() {
               <Route path="service-selection" element={<ServiceSelection />} />
               <Route path="bacenta-services" element={<BacentaServicesList />} />
               <Route path="bacenta-service" element={<BacentaServiceForm />} />
-              <Route path="campaigns" element={<div>Campaigns Page</div>} />
+              <Route path="campaigns" element={<Campaigns />} />
                <Route path="members" element={<Members />} />
               <Route path="members/add" element={<AddMember />} />
               <Route path="members/edit/:id" element={<EditMember />} />
