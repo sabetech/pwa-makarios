@@ -52,3 +52,52 @@ h1 {
   transition: border-color 0.25s;
 } */
 
+
+/* Global Utilities for Admin Loading Spinners */
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.rounded-full {
+    border-radius: 9999px;
+}
+
+.h-12 {
+    height: 3rem;
+}
+
+.w-12 {
+    width: 3rem;
+}
+
+.border-b-2 {
+    border: 3px solid rgba(128, 0, 32, 0.1); /* Base faint ring */
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+}
+
+.border-primary {
+    border-bottom-color: var(--admin-primary, #a0003f) !important;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.text-center {
+    text-align: center;
+}

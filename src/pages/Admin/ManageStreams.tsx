@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchStreams, Stream } from '../../api/streams';
 import './ManageStreams.css';
+import './AdminShared.css';
 
 const ManageStreams: React.FC = () => {
     const navigate = useNavigate();

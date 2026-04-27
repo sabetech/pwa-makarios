@@ -10,6 +10,9 @@ export interface Bacenta {
             name: string;
         };
     };
+    zone?: {
+        name: string;
+    };
     leader?: {
         name: string;
         img_url?: string;
@@ -28,6 +31,11 @@ export const fetchBacentas = async (): Promise<Bacenta[]> => {
 
 export const deleteBacenta = async (id: number): Promise<void> => {
     await api.delete(`/v2/bacentas/${id}`);
+};
+
+export const createBacenta = async (data: { name: string; region_id?: number; leader_id?: number }): Promise<Bacenta> => {
+    const response = await api.post<{ success: boolean; data: Bacenta }>('/v2/bacentas', data);
+    return response.data.data;
 };
 
 export const updateBacenta = async (id: number, data: Partial<Bacenta>): Promise<Bacenta> => {

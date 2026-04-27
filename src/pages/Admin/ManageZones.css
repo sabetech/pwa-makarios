@@ -1,24 +1,24 @@
-.manage-bacentas-container {
+.manage-zones-container {
     padding-bottom: 5rem;
     background-color: var(--admin-bg);
     color: var(--admin-text);
     min-height: 100vh;
 }
 
-.bacentas-content-wrapper {
+.zones-content-wrapper {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 1.5rem;
 }
 
-.bacentas-header {
-    margin-bottom: 3.5rem;
+.zones-header {
+    margin-bottom: 3rem;
     animation: fadeIn 0.6s ease-out;
 }
 
-.bacentas-title {
+.zones-title {
     font-family: 'Manrope', sans-serif;
-    font-size: 2.25rem;
+    font-size: 2.5rem;
     font-weight: 800;
     letter-spacing: -0.02em;
     margin-bottom: 0.5rem;
@@ -26,12 +26,12 @@
 }
 
 @media (min-width: 1024px) {
-    .bacentas-title {
-        font-size: 3rem;
+    .zones-title {
+        font-size: 3.5rem;
     }
 }
 
-.bacentas-subtitle {
+.zones-subtitle {
     font-size: 1.125rem;
     font-weight: 300;
     color: var(--admin-text-muted);
@@ -40,17 +40,17 @@
 }
 
 /* Stats Section */
-.bacenta-stats {
+.zone-stats {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
     margin-bottom: 4rem;
 }
 
-.stat-card-bacentas {
+.stat-card-zones {
     background-color: rgba(128, 0, 32, 0.1);
     border-radius: 1.5rem;
-    padding: 2.5rem 3rem;
+    padding: 2rem 3rem;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -59,7 +59,7 @@
     min-height: 140px;
 }
 
-.stat-card-bacentas .card-icon {
+.stat-card-zones .card-icon {
     position: absolute;
     top: 1rem;
     right: 2rem;
@@ -68,33 +68,10 @@
     color: var(--admin-primary);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Bacenta List */
-.bacenta-list-header {
+/* Zone List */
+.zone-list-header {
     display: grid;
-    grid-template-columns: 2fr 1.5fr 2fr 1fr 100px;
+    grid-template-columns: 2fr 1.5fr 2fr 100px;
     padding: 1rem 2rem;
     font-size: 0.625rem;
     text-transform: uppercase;
@@ -103,18 +80,18 @@
     opacity: 0.6;
 }
 
-.bacenta-list {
+.zone-list {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.bacenta-card {
+.zone-card {
     background-color: var(--admin-card-bg);
     border-radius: 1rem;
     padding: 2rem;
     display: grid;
-    grid-template-columns: 2fr 1.5fr 2fr 1fr 100px;
+    grid-template-columns: 2fr 1.5fr 2fr 100px;
     align-items: center;
     gap: 1.5rem;
     position: relative;
@@ -123,12 +100,13 @@
     border: 1px solid var(--admin-border);
 }
 
-.bacenta-card:hover {
+.zone-card:hover {
     background-color: var(--admin-card-hover);
     transform: translateY(-2px);
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3);
 }
 
-.bacenta-accent {
+.zone-accent {
     position: absolute;
     left: 0;
     top: 0;
@@ -139,21 +117,17 @@
     transition: transform 0.3s ease;
 }
 
-.bacenta-card:hover {
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3);
-}
-
-.bacenta-card:hover .bacenta-accent {
+.zone-card:hover .zone-accent {
     transform: scaleY(1);
 }
 
-.bacenta-identity {
+.zone-identity {
     display: flex;
     align-items: center;
     gap: 1.5rem;
 }
 
-.bacenta-icon-box {
+.zone-icon-box {
     width: 4rem;
     height: 4rem;
     border-radius: 0.75rem;
@@ -165,54 +139,29 @@
     color: var(--admin-primary);
 }
 
-.bacenta-name {
+.zone-name {
     font-family: 'Manrope', sans-serif;
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--admin-text);
-    margin-bottom: 0.25rem;
-}
-
-.bacenta-info-sub {
-    font-size: 0.75rem;
-    color: var(--admin-text-muted);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.bacenta-leader {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.leader-avatar,
-.leader-initials {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: var(--admin-card-hover);
-}
-
-.leader-initials {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: var(--admin-text-muted);
-}
-
-.leader-name {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--admin-text);
     margin: 0;
 }
 
-.bacenta-metrics {
+.zone-region {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--admin-text);
+}
+
+.zone-metrics-group {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.zone-metrics {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
@@ -231,35 +180,14 @@
     color: var(--admin-text);
 }
 
-.bacenta-actions {
+.zone-actions {
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;
 }
 
-@media (max-width: 768px) {
-    .stat-card-bacentas {
-        padding: 1.5rem;
-    }
-
-    .bacenta-list-header {
-        display: none;
-    }
-
-    .bacenta-card {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        padding: 1.5rem;
-    }
-
-    .bacenta-actions {
-        border-top: 1px solid var(--admin-border);
-        padding-top: 1rem;
-    }
-}
-
 /* FAB */
-.add-region-fab {
+.add-zone-fab {
     position: fixed;
     bottom: 110px;
     right: 24px;
@@ -279,21 +207,21 @@
     animation: fabPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-.add-region-fab span {
+.add-zone-fab span {
     font-size: 28px;
     transition: transform 0.3s ease;
 }
 
-.add-region-fab:hover {
+.add-zone-fab:hover {
     transform: scale(1.08);
     box-shadow: 0 12px 40px rgba(128, 0, 32, 0.5);
 }
 
-.add-region-fab:hover span {
+.add-zone-fab:hover span {
     transform: rotate(90deg);
 }
 
-.add-region-fab:active {
+.add-zone-fab:active {
     transform: scale(0.95);
 }
 
@@ -302,7 +230,6 @@
         opacity: 0;
         transform: scale(0) rotate(-45deg);
     }
-
     100% {
         opacity: 1;
         transform: scale(1) rotate(0deg);
@@ -327,13 +254,8 @@
 }
 
 @keyframes overlayFadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .modal-content {
@@ -352,7 +274,6 @@
         opacity: 0;
         transform: translateY(30px) scale(0.96);
     }
-
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -429,18 +350,6 @@
     appearance: none;
 }
 
-.form-group select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8.825L.675 3.5l.85-.85L6 7.125l4.475-4.475.85.85z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 1.25rem center;
-    padding-right: 2.5rem;
-}
-
-.form-group input::placeholder {
-    color: var(--admin-text-muted);
-    opacity: 0.5;
-}
-
 .form-group input:focus,
 .form-group select:focus {
     border-color: var(--admin-primary);
@@ -459,45 +368,16 @@
     border: 1px solid var(--admin-border);
     border-radius: 1rem;
     padding: 0.875rem 1.5rem;
-}
-
-/* FAB */
-.add-bacenta-fab {
-    position: fixed;
-    bottom: 110px;
-    right: 24px;
-    width: 60px;
-    height: 60px;
-    border-radius: 18px;
-    background: linear-gradient(135deg, var(--admin-primary), #a0003f);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 30px rgba(128, 0, 32, 0.4);
-    border: none;
+    color: var(--admin-text-muted);
+    font-size: 0.9375rem;
+    font-weight: 600;
     cursor: pointer;
-    z-index: 100;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: fabPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    transition: all 0.2s ease;
 }
 
-.add-bacenta-fab span {
-    font-size: 28px;
-    transition: transform 0.3s ease;
-}
-
-.add-bacenta-fab:hover {
-    transform: scale(1.08);
-    box-shadow: 0 12px 40px rgba(128, 0, 32, 0.5);
-}
-
-.add-bacenta-fab:hover span {
-    transform: rotate(90deg);
-}
-
-.add-bacenta-fab:active {
-    transform: scale(0.95);
+.btn-cancel:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--admin-text);
 }
 
 .btn-submit {
@@ -523,6 +403,7 @@
     cursor: not-allowed;
 }
 
+/* Search & Dropdowns */
 .search-wrapper {
     position: relative;
 }
@@ -551,6 +432,17 @@
     overflow-y: auto;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
     animation: dropdownSlide 0.2s ease;
+}
+
+@keyframes dropdownSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .dropdown-empty {
@@ -593,6 +485,43 @@
     border-radius: 1rem;
     padding: 0.75rem 1rem;
     transition: all 0.2s ease;
+}
+
+.chip-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.chip-name {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--admin-text);
+}
+
+.chip-remove {
+    background: none;
+    border: none;
+    color: var(--admin-text-muted);
+    cursor: pointer;
+    padding: 0.375rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.chip-remove span {
+    font-size: 18px;
+}
+
+.chip-remove:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--admin-text);
 }
 
 /* Toast Notification */
@@ -642,14 +571,53 @@
         opacity: 0;
         transform: translate(-50%, -50%) scale(0.9);
     }
-
     to {
         opacity: 1;
         transform: translate(-50%, -50%) scale(1);
     }
 }
 
-to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
+/* Action Buttons */
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--admin-text-muted);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--admin-text);
+}
+
+.action-btn.delete:hover {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+@media (max-width: 768px) {
+    .stat-card-zones {
+        padding: 1.5rem;
+    }
+    
+    .zone-list-header {
+        display: none;
+    }
+    
+    .zone-card {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+    
+    .zone-actions {
+        border-top: 1px solid var(--admin-border);
+        padding-top: 1rem;
+    }
 }

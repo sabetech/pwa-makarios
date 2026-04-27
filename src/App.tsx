@@ -18,6 +18,7 @@ import Insights from './pages/Home/Insights';
 import AdminPortal from './pages/Admin/AdminPortal';
 import ManageStreams from './pages/Admin/ManageStreams';
 import ManageRegions from './pages/Admin/ManageRegions';
+import ManageZones from './pages/Admin/ManageZones';
 import ManageBacentas from './pages/Admin/ManageBacentas';
 import ManageLeaders from './pages/Admin/ManageLeaders';
 import Campaigns from './pages/Campaigns/Campaigns';
@@ -52,6 +53,7 @@ function App() {
               <Route path="admin" element={<AdminPortal />} />
               <Route path="admin/streams" element={<ManageStreams />} />
               <Route path="admin/regions" element={<ManageRegions />} />
+              <Route path="admin/zones" element={<ManageZones />} />
               <Route path="admin/bacentas" element={<ManageBacentas />} />
               <Route path="admin/leaders" element={<ManageLeaders />} />
             </Route>

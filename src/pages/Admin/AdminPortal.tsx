@@ -37,6 +37,14 @@ const managementItems: ManagementItem[] = [
         actionLabel: 'View Map'
     },
     {
+        id: 'zones',
+        title: 'Manage Zones',
+        description: 'Zones are the areas a collection of bacentas belong to.',
+        icon: 'share_location',
+        type: 'tertiary',
+        actionLabel: 'Zone Setup'
+    },
+    {
         id: 'bacentas',
         title: 'Manage Bacentas',
         description: 'The heartbeat of the church. Manage cell groups, home gatherings, and grassroots spiritual nodes.',
@@ -109,6 +117,8 @@ const AdminPortal: React.FC = () => {
                                 navigate('/dashboard/admin/streams');
                             } else if (item.id === 'regions') {
                                 navigate('/dashboard/admin/regions');
+                            } else if (item.id === 'zones') {
+                                navigate('/dashboard/admin/zones');
                             } else if (item.id === 'bacentas') {
                                 navigate('/dashboard/admin/bacentas');
                             } else if (item.id === 'leaders') {

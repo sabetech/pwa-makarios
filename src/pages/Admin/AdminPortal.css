@@ -5,7 +5,7 @@
     --admin-card-bg: #ffffff;
     --admin-card-hover: #f0f0f0;
     --admin-primary: #800020;
-    --admin-secondary: #af8d11;
+    --admin-condary: #af8d11;
     --admin-tertiary: #2f3f4d;
     --admin-header-bg: #ffffff;
     --admin-header-gradient: rgba(128, 0, 32, 0.05);
@@ -58,7 +58,8 @@
     gap: 1rem;
 }
 
-.back-button, .icon-btn {
+.back-button,
+.icon-btn {
     background: none;
     border: none;
     color: var(--admin-primary);
@@ -71,7 +72,8 @@
     transition: background-color 0.3s ease;
 }
 
-.back-button:hover, .icon-btn:hover {
+.back-button:hover,
+.icon-btn:hover {
     background-color: rgba(128, 128, 128, 0.1);
 }
 
@@ -218,9 +220,19 @@
 }
 
 /* Colors for specific card types */
-.card-primary .icon-wrapper { color: var(--admin-primary); }
-.card-secondary .icon-wrapper { color: var(--admin-secondary); background-color: rgba(175, 141, 17, 0.1); }
-.card-tertiary .icon-wrapper { color: var(--admin-tertiary); background-color: rgba(47, 63, 77, 0.1); }
+.card-primary .icon-wrapper {
+    color: var(--admin-primary);
+}
+
+.card-secondary .icon-wrapper {
+    color: var(--admin-secondary);
+    background-color: rgba(175, 141, 17, 0.1);
+}
+
+.card-tertiary .icon-wrapper {
+    color: var(--admin-tertiary);
+    background-color: rgba(47, 63, 77, 0.1);
+}
 
 
 .card-title {
@@ -260,6 +272,13 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
