@@ -28,21 +28,24 @@ const ManageBacentas: React.FC = () => {
     const [selectedLeader, setSelectedLeader] = useState<Leader | null>(null);
     const [showRegionDropdown, setShowRegionDropdown] = useState(false);
     const [showLeaderDropdown, setShowLeaderDropdown] = useState(false);
+    const [showZoneDropdown, setShowZoneDropdown] = useState(false);
     const [showEditRegionDropdown, setShowEditRegionDropdown] = useState(false);
     const [editName, setEditName] = useState('');
     const [editRegionSearch, setEditRegionSearch] = useState('');
     const [selectedEditRegion, setSelectedEditRegion] = useState<Region | null>(null);
     const [submitting, setSubmitting] = useState(false);
     const [zones, setZones] = useState<Zone[]>([]);
+    const [zoneSearch, setZoneSearch] = useState('');
+    const [selectedZone, setSelectedZone] = useState<Zone | null>(null);
     const [editZoneSearch, setEditZoneSearch] = useState('');
     const [selectedEditZone, setSelectedEditZone] = useState<Zone | null>(null);
     const [showEditZoneDropdown, setShowEditZoneDropdown] = useState(false);
-    const [toast, setToast] = useState<{message: string, type: 'success' | 'error'} | null>(null);
+    const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
     const regionDropdownRef = useRef<HTMLDivElement>(null);
     const leaderDropdownRef = useRef<HTMLDivElement>(null);
 
 
-    
+
     // Close dropdowns when clicking outside
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -93,7 +96,7 @@ const ManageBacentas: React.FC = () => {
         loadInitialData();
     }, []);
 
-    
+
 
     const showToast = (message: string, type: 'success' | 'error') => {
         setToast({ message, type });
@@ -104,10 +107,11 @@ const ManageBacentas: React.FC = () => {
         if (!newBacentaName.trim()) return;
         try {
             setSubmitting(true);
-            const payload: { name: string; region_id?: number; leader_id?: number } = { name: newBacentaName.trim() };
+            const payload: { name: string; region_id?: number; leader_id?: number; zone_id?: number } = { name: newBacentaName.trim() };
             if (selectedRegion) payload.region_id = selectedRegion.id;
             if (selectedLeader) payload.leader_id = selectedLeader.id;
-            
+            if (selectedZone) payload.zone_id = selectedZone.id;
+
             await createBacenta(payload);
             resetModal();
             // Reload bacentas
@@ -126,10 +130,13 @@ const ManageBacentas: React.FC = () => {
         setNewBacentaName('');
         setSelectedRegion(null);
         setSelectedLeader(null);
+        setSelectedZone(null);
+        setZoneSearch('');
         setRegionSearch('');
         setLeaderSearch('');
         setShowRegionDropdown(false);
         setShowLeaderDropdown(false);
+        setShowZoneDropdown(false);
         setShowAddModal(false);
         setShowEditModal(false);
         setBacentaToEdit(null);
@@ -144,6 +151,10 @@ const ManageBacentas: React.FC = () => {
 
     const filteredRegions = regions.filter(region =>
         region.name.toLowerCase().includes(regionSearch.toLowerCase())
+    );
+
+    const filteredZones = zones.filter(zone =>
+        zone.name.toLowerCase().includes(zoneSearch.toLowerCase())
     );
 
     const filteredEditRegions = regions.filter(region =>
@@ -161,7 +172,7 @@ const ManageBacentas: React.FC = () => {
     const handleEditClick = (bacenta: Bacenta) => {
         setBacentaToEdit(bacenta);
         setEditName(bacenta.name);
-        
+
         // Find existing region
         if (bacenta.region) {
             const currentRegion = regions.find(r => r.name === bacenta.region?.name);
@@ -174,7 +185,7 @@ const ManageBacentas: React.FC = () => {
             setSelectedEditRegion(null);
         }
         setEditRegionSearch('');
-        
+
         // Find existing leader in the leaders array to pre-select
         if (bacenta.leader) {
             const currentLeader = leaders.find(l => l.name === bacenta.leader?.name);
@@ -188,7 +199,7 @@ const ManageBacentas: React.FC = () => {
         }
         setLeaderSearch('');
         setShowEditModal(true);
-        
+
         // Find existing zone
         if (bacenta.zone) {
             const currentZone = zones.find(z => z.name === bacenta.zone?.name);
@@ -208,31 +219,31 @@ const ManageBacentas: React.FC = () => {
         try {
             setSubmitting(true);
             const payload: any = {};
-            
+
             if (editName.trim() && editName.trim() !== bacentaToEdit.name) {
                 payload.name = editName.trim();
             }
-            
+
             if (selectedEditRegion) {
                 payload.region_id = selectedEditRegion.id;
             } else if (bacentaToEdit.region) {
                 payload.region_id = null; // Unassign region
             }
-            
+
             if (selectedEditZone) {
                 payload.zone_id = selectedEditZone.id;
             } else if (bacentaToEdit.zone) {
                 payload.zone_id = null; // Unassign zone
             }
-            
+
             if (selectedLeader) {
                 payload.leader_id = selectedLeader.id;
             } else if (bacentaToEdit.leader) {
                 payload.leader_id = null; // Unassign leader
             }
-            
+
             await updateBacenta(bacentaToEdit.id, payload);
-            
+
             // Reload bacentas
             const newBacentas = await fetchBacentas();
             setBacentas(newBacentas);
@@ -267,9 +278,9 @@ const ManageBacentas: React.FC = () => {
         const matchesSearch = bacenta.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             (bacenta.leader?.name && bacenta.leader.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
             (bacenta.region?.name && bacenta.region.name.toLowerCase().includes(searchTerm.toLowerCase()));
-        
+
         const matchesStream = !selectedStream || bacenta.region?.stream?.name === selectedStream;
-        
+
         return matchesSearch && matchesStream;
     });
 
@@ -337,16 +348,16 @@ const ManageBacentas: React.FC = () => {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
-                        
+
                         <div className="filter-chips-row">
-                            <button 
+                            <button
                                 className={`filter-chip ${!selectedStream ? 'active' : ''}`}
                                 onClick={() => setSelectedStream(null)}
                             >
                                 All Streams
                             </button>
                             {streams.map(stream => (
-                                <button 
+                                <button
                                     key={stream.id}
                                     className={`filter-chip ${selectedStream === stream.name ? 'active' : ''}`}
                                     onClick={() => setSelectedStream(stream.name)}
@@ -450,7 +461,7 @@ const ManageBacentas: React.FC = () => {
                                     autoFocus
                                 />
                             </div>
-                            
+
                             <div className="form-group" ref={regionDropdownRef}>
                                 <label htmlFor="bacenta-region">Region</label>
                                 {selectedRegion ? (
@@ -575,6 +586,66 @@ const ManageBacentas: React.FC = () => {
                                                     <div className="dropdown-info">
                                                         <span className="dropdown-name">{leader.name}</span>
                                                         <span className="dropdown-role">{leader.role}</span>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="bacenta-zone">Zone (Optional)</label>
+                                {selectedZone ? (
+                                    <div className="selected-item-chip">
+                                        <div className="chip-info">
+                                            <span className="chip-name">{selectedZone.name}</span>
+                                        </div>
+                                        <button
+                                            className="chip-remove"
+                                            onClick={() => {
+                                                setSelectedZone(null);
+                                                setZoneSearch('');
+                                            }}
+                                        >
+                                            <span className="material-symbols-outlined">close</span>
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="search-wrapper">
+                                        <span className="material-symbols-outlined search-icon">search</span>
+                                        <input
+                                            id="bacenta-zone"
+                                            type="text"
+                                            placeholder="Search for a zone..."
+                                            value={zoneSearch}
+                                            onChange={(e) => {
+                                                setZoneSearch(e.target.value);
+                                                setShowZoneDropdown(true);
+                                            }}
+                                            onFocus={() => setShowZoneDropdown(true)}
+                                        />
+                                    </div>
+                                )}
+                                {showZoneDropdown && !selectedZone && (
+                                    <div className="custom-dropdown">
+                                        {filteredZones.length === 0 ? (
+                                            <div className="dropdown-empty">
+                                                <p>No zones found</p>
+                                            </div>
+                                        ) : (
+                                            filteredZones.slice(0, 8).map((zone) => (
+                                                <div
+                                                    key={zone.id}
+                                                    className="dropdown-item"
+                                                    onClick={() => {
+                                                        setSelectedZone(zone);
+                                                        setZoneSearch('');
+                                                        setShowZoneDropdown(false);
+                                                    }}
+                                                >
+                                                    <div className="dropdown-info">
+                                                        <span className="dropdown-name">{zone.name}</span>
                                                     </div>
                                                 </div>
                                             ))
