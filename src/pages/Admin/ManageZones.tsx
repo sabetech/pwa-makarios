@@ -76,7 +76,11 @@ const ManageZones: React.FC = () => {
         if (!newZoneName.trim() || !selectedRegion) return;
         try {
             setSubmitting(true);
-            await createZone({ name: newZoneName.trim(), region_id: selectedRegion.id });
+            const payload: { name: string; region_id: number; leader_id?: number } = { name: newZoneName.trim(), region_id: selectedRegion.id };
+            if (selectedLeader) {
+                payload.leader_id = selectedLeader.id;
+            }
+            await createZone(payload);
             resetModal();
             await loadData();
             showToast('Zone created successfully!', 'success');
@@ -94,6 +98,9 @@ const ManageZones: React.FC = () => {
         setSelectedRegion(null);
         setRegionSearch('');
         setShowRegionDropdown(false);
+        setSelectedLeader(null);
+        setLeaderSearch('');
+        setShowLeaderDropdown(false);
         setShowAddModal(false);
     };
 
@@ -351,6 +358,77 @@ const ManageZones: React.FC = () => {
                                                 >
                                                     <div className="dropdown-info">
                                                         <span className="dropdown-name">{region.name}</span>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="form-group" ref={leaderDropdownRef}>
+                                <label htmlFor="zone-leader">Leader (Optional)</label>
+                                {selectedLeader ? (
+                                    <div className="selected-item-chip">
+                                        {selectedLeader.img_url ? (
+                                            <img src={selectedLeader.img_url} alt={selectedLeader.name} className="chip-avatar" />
+                                        ) : (
+                                            <div className="chip-initials">{getInitials(selectedLeader.name)}</div>
+                                        )}
+                                        <div className="chip-info">
+                                            <span className="chip-name">{selectedLeader.name}</span>
+                                            <span className="chip-role">{selectedLeader.role}</span>
+                                        </div>
+                                        <button
+                                            className="chip-remove"
+                                            onClick={() => {
+                                                setSelectedLeader(null);
+                                                setLeaderSearch('');
+                                            }}
+                                        >
+                                            <span className="material-symbols-outlined">close</span>
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="search-wrapper">
+                                        <span className="material-symbols-outlined search-icon">search</span>
+                                        <input
+                                            id="zone-leader"
+                                            type="text"
+                                            placeholder="Search for a leader..."
+                                            value={leaderSearch}
+                                            onChange={(e) => {
+                                                setLeaderSearch(e.target.value);
+                                                setShowLeaderDropdown(true);
+                                            }}
+                                            onFocus={() => setShowLeaderDropdown(true)}
+                                        />
+                                    </div>
+                                )}
+                                {showLeaderDropdown && !selectedLeader && (
+                                    <div className="custom-dropdown">
+                                        {filteredLeaders.length === 0 ? (
+                                            <div className="dropdown-empty">
+                                                <p>No leaders found</p>
+                                            </div>
+                                        ) : (
+                                            filteredLeaders.slice(0, 8).map((leader) => (
+                                                <div
+                                                    key={leader.id}
+                                                    className="dropdown-item"
+                                                    onClick={() => {
+                                                        setSelectedLeader(leader);
+                                                        setLeaderSearch('');
+                                                        setShowLeaderDropdown(false);
+                                                    }}
+                                                >
+                                                    {leader.img_url ? (
+                                                        <img src={leader.img_url} alt={leader.name} className="dropdown-avatar" />
+                                                    ) : (
+                                                        <div className="dropdown-initials">{getInitials(leader.name)}</div>
+                                                    )}
+                                                    <div className="dropdown-info">
+                                                        <span className="dropdown-name">{leader.name}</span>
+                                                        <span className="dropdown-role">{leader.role}</span>
                                                     </div>
                                                 </div>
                                             ))
