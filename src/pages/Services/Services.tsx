@@ -3,60 +3,53 @@ import { useNavigate } from 'react-router-dom';
 import { FiMenu, FiDroplet, FiHeart, FiUsers, FiFilter, FiUser } from 'react-icons/fi';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import { fetchServices, Service } from '../../api/services';
+import { fetchStreams, Stream } from '../../api/streams';
 import './Services.css';
 
 const Services: React.FC = () => {
     const navigate = useNavigate();
     const [services, setServices] = useState<Service[]>([]);
+    const [streams, setStreams] = useState<Stream[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const loadServices = async () => {
+        const loadData = async () => {
             try {
                 setLoading(true);
-                const data = await fetchServices();
-                setServices(data);
+                const [servicesData, streamsData] = await Promise.all([
+                    fetchServices(),
+                    fetchStreams()
+                ]);
+                setServices(servicesData);
+                setStreams(streamsData);
             } catch (error) {
-                console.error('Error fetching services:', error);
+                console.error('Error fetching data:', error);
             } finally {
                 setLoading(false);
             }
         };
 
-        loadServices();
+        loadData();
     }, []);
 
-    const categories = [
-        {
-            id: 1,
-            title: 'Wisdom Encounter',
-            schedule: 'Sundays • 8:00 AM',
-            icon: <FiMenu />,
-            iconClass: 'icon-primary'
-        },
-        {
-            id: 2,
-            title: 'Fresh Oil Service',
-            schedule: 'Mid-week • 6:00 PM',
-            icon: <FiDroplet />,
-            iconClass: 'icon-amber'
-        },
-        {
-            id: 3,
-            title: 'Jesus Experience',
-            schedule: 'Monthly • 7:00 PM',
-            icon: <FiHeart />,
-            iconClass: 'icon-rose'
-        },
-        {
-            id: 4,
-            title: 'Bacenta Services',
-            schedule: 'Small Groups • Sat',
-            icon: <FiUsers />,
-            iconClass: 'icon-emerald',
-            route: '/dashboard/bacenta-services'
-        }
-    ];
+    const getStreamIcon = (index: number) => {
+        const icons = [<FiMenu />, <FiDroplet />, <FiHeart />, <FiUsers />];
+        return icons[index % icons.length];
+    };
+
+    const getIconClass = (index: number) => {
+        const classes = ['icon-primary', 'icon-amber', 'icon-rose', 'icon-emerald'];
+        return classes[index % classes.length];
+    };
+
+    const categories = streams.map((stream, index) => ({
+        id: stream.id,
+        title: stream.name,
+        schedule: stream.description || 'Service',
+        icon: getStreamIcon(index),
+        iconClass: getIconClass(index),
+        route: stream.name.toLowerCase().includes('bacenta') ? '/dashboard/bacenta-services' : undefined
+    }));
 
 
     return (
