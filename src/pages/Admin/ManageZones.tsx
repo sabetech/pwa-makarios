@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchZones, Zone, createZone, updateZone } from '../../api/zones';
 import { fetchRegions, Region } from '../../api/regions';
 import { fetchLeaders, Leader } from '../../api/leaders';
+import { fetchBacentas, Bacenta } from '../../api/bacentas';
 import './ManageZones.css';
 import './AdminShared.css';
 
@@ -11,6 +12,7 @@ const ManageZones: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [zones, setZones] = useState<Zone[]>([]);
     const [regions, setRegions] = useState<Region[]>([]);
+    const [bacentas, setBacentas] = useState<Bacenta[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [showAddModal, setShowAddModal] = useState(false);
@@ -54,10 +56,11 @@ const ManageZones: React.FC = () => {
     const loadData = async () => {
         try {
             setLoading(true);
-            const [zonesData, regionsData, leadersData] = await Promise.all([fetchZones(), fetchRegions(), fetchLeaders()]);
+            const [zonesData, regionsData, leadersData, bacentasData] = await Promise.all([fetchZones(), fetchRegions(), fetchLeaders(), fetchBacentas()]);
             setZones(zonesData);
             setRegions(regionsData);
             setLeaders(leadersData);
+            setBacentas(bacentasData);
             setError(null);
         } catch (err) {
             console.error('Error fetching data:', err);
@@ -65,6 +68,10 @@ const ManageZones: React.FC = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const getZoneBacentaCount = (zoneId: number) => {
+        return bacentas.filter(b => b.zone?.id === zoneId).length;
     };
 
     const showToast = (message: string, type: 'success' | 'error') => {
@@ -254,7 +261,7 @@ const ManageZones: React.FC = () => {
                             <div className="zone-metrics-group">
                                 <div className="zone-metrics">
                                     <span className="metric-label">Bacentas</span>
-                                    <span className="metric-value">{zone.bacenta_count || 0}</span>
+                                    <span className="metric-value">{getZoneBacentaCount(zone.id)}</span>
                                 </div>
                                 <div className="zone-metrics">
                                     <span className="metric-label">Members</span>

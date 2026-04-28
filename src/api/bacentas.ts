@@ -11,6 +11,7 @@ export interface Bacenta {
         };
     };
     zone?: {
+        id: number;
         name: string;
     };
     leader?: {
