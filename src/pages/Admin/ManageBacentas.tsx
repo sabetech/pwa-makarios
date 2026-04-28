@@ -412,6 +412,13 @@ const ManageBacentas: React.FC = () => {
                                 </span>
                             </div>
 
+                            {bacenta.zone && (
+                                <div className="bacenta-metrics">
+                                    <span className="metric-label">Zone</span>
+                                    <span className="metric-value">{bacenta.zone.name}</span>
+                                </div>
+                            )}
+
                             <div className="bacenta-metrics">
                                 <span className="metric-label">Members</span>
                                 <span className="metric-value">{bacenta.members_count}</span>
