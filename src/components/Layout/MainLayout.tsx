@@ -86,7 +86,7 @@ const MainLayout: React.FC = () => {
                     <header className="main-header">
                         <div className="header-left">
                             <div className="profile-img-container">
-                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGbULG3nrHtJyy-h0O17JBNpxnUdZiOsUIsLHZdnBOmNuE8E5VDav27O5Zz2aOVIutvdTol7CbWUu3nJRKuBxwjVfAOsmVajT_FdQpFg9883ZeVdJ3uBqUUnLYYMa9sN7qXbvDvmb-FVMcnMq1i3ddTHrTIE_FULqUe32-aHWYFrwJqok1BmGr3TiYBiA4E4Qe4h7tB_YAO2kxrZF4-EToscePQz8juFJ44UCfkvKa_tBj7bV2ZBY6zBni2v5VWeKOz3bcEtDujTOf" alt="Profile" className="profile-img" />
+                                <img src={user.img_url} alt="Profile" className="profile-img" />
                             </div>
                             <div>
                                 <h1 className="header-greeting">Hi, {user.name ? user.name.split(' ')[0] : 'Admin'}</h1>
