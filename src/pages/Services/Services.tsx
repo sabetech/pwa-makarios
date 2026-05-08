@@ -2,26 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiMenu, FiDroplet, FiHeart, FiUsers, FiFilter, FiUser } from 'react-icons/fi';
 import PageHeader from '../../components/PageHeader/PageHeader';
-import { fetchServices, Service } from '../../api/services';
-import { fetchStreams, Stream } from '../../api/streams';
+import { fetchServices, fetchServiceTypes, Service, ServiceType } from '../../api/services';
 import './Services.css';
+
+const iconMap: Record<string, { icon: JSX.Element; iconClass: string }> = {
+    'wisdom': { icon: <FiMenu />, iconClass: 'icon-primary' },
+    'fresh-oil': { icon: <FiDroplet />, iconClass: 'icon-amber' },
+    'jesus-experience': { icon: <FiHeart />, iconClass: 'icon-rose' },
+    'bacenta': { icon: <FiUsers />, iconClass: 'icon-emerald' },
+};
 
 const Services: React.FC = () => {
     const navigate = useNavigate();
     const [services, setServices] = useState<Service[]>([]);
-    const [streams, setStreams] = useState<Stream[]>([]);
+    const [serviceTypes, setServiceTypes] = useState<ServiceType[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadData = async () => {
             try {
                 setLoading(true);
-                const [servicesData, streamsData] = await Promise.all([
+                const [servicesData, serviceTypesData] = await Promise.all([
                     fetchServices(),
-                    fetchStreams()
+                    fetchServiceTypes()
                 ]);
                 setServices(servicesData);
-                setStreams(streamsData);
+                setServiceTypes(serviceTypesData);
             } catch (error) {
                 console.error('Error fetching data:', error);
             } finally {
@@ -32,24 +38,18 @@ const Services: React.FC = () => {
         loadData();
     }, []);
 
-    const getStreamIcon = (index: number) => {
-        const icons = [<FiMenu />, <FiDroplet />, <FiHeart />, <FiUsers />];
-        return icons[index % icons.length];
-    };
-
-    const getIconClass = (index: number) => {
-        const classes = ['icon-primary', 'icon-amber', 'icon-rose', 'icon-emerald'];
-        return classes[index % classes.length];
-    };
-
-    const categories = streams.map((stream, index) => ({
-        id: stream.id,
-        title: stream.name,
-        schedule: stream.description || 'Service',
-        icon: getStreamIcon(index),
-        iconClass: getIconClass(index),
-        route: stream.name.toLowerCase().includes('bacenta') ? '/dashboard/bacenta-services' : undefined
-    }));
+    const categories = serviceTypes.map(serviceType => {
+        const iconInfo = iconMap[serviceType.id] || { icon: <FiMenu />, iconClass: 'icon-primary' };
+        const isBacenta = serviceType.service_type?.toLowerCase().includes('bacenta');
+        return {
+            id: serviceType.id,
+            title: serviceType.service_type,
+            schedule: serviceType.description || 'Service',
+            icon: iconInfo.icon,
+            iconClass: iconInfo.iconClass,
+            route: isBacenta ? '/dashboard/bacenta-services' : undefined
+        };
+    });
 
 
     return (
@@ -114,7 +114,7 @@ const Services: React.FC = () => {
                                         <div className="service-title-container">
                                             <p className="service-name">{service.title}</p>
                                             <span className="service-type-badge">
-                                                {service.service_type.service_type}
+                                                {service.service_type?.service_type}
                                             </span>
                                         </div>
                                         <div className="service-amount-container">

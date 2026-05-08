@@ -9,6 +9,7 @@ import Services from './pages/Services/Services';
 import ServiceSelection from './pages/Services/ServiceSelection';
 import BacentaServiceForm from './pages/Services/BacentaServiceForm';
 import BacentaServicesList from './pages/Services/BacentaServicesList';
+import BacentaSelect from './pages/Services/BacentaSelect';
 import Members from './pages/Members/Members';
 import AddMember from './pages/Members/AddMember';
 import EditMember from './pages/Members/EditMember';
@@ -39,6 +40,7 @@ function App() {
               <Route index element={<Dashboard />} />
               <Route path="services" element={<Services />} />
               <Route path="service-selection" element={<ServiceSelection />} />
+              <Route path="bacenta-select" element={<BacentaSelect />} />
               <Route path="bacenta-services" element={<BacentaServicesList />} />
               <Route path="bacenta-service" element={<BacentaServiceForm />} />
               <Route path="campaigns" element={<Campaigns />} />

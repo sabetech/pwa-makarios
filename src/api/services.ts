@@ -19,7 +19,23 @@ export interface ServicesResponse {
     data: Service[];
 }
 
+export interface ServiceType {
+    id: string;
+    service_type: string;
+    description: string;
+}
+
+export interface ServiceTypesResponse {
+    success: boolean;
+    data: ServiceType[];
+}
+
 export const fetchServices = async (): Promise<Service[]> => {
     const response = await api.get<ServicesResponse>('/v2/services');
+    return response.data.data;
+};
+
+export const fetchServiceTypes = async (): Promise<ServiceType[]> => {
+    const response = await api.get<ServiceTypesResponse>('/v2/services/types');
     return response.data.data;
 };

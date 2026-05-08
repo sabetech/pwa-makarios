@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FiArrowLeft, FiCalendar, FiUsers, FiDollarSign } from 'react-icons/fi';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { FiCalendar, FiUsers, FiDollarSign, FiMapPin, FiLoader } from 'react-icons/fi';
+import { Toast } from 'antd-mobile';
+import api from '../../api/axios';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import ImageUpload from '../../components/ImageUpload/ImageUpload';
 import './BacentaServiceForm.css';
@@ -17,6 +19,8 @@ interface BacentaFormData {
 
 const BacentaServiceForm: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { bacentaId, bacentaName, serviceTypeId } = (location.state as { bacentaId: number; bacentaName: string; serviceTypeId: string }) || {};
   const [formData, setFormData] = useState<BacentaFormData>({
     serviceDate: '',
     attendance: '',
@@ -27,6 +31,7 @@ const BacentaServiceForm: React.FC = () => {
     servicePicture: ''
   });
   const [treasureInput, setTreasureInput] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -58,16 +63,51 @@ const BacentaServiceForm: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Bacenta Service Form Data:', formData);
-    alert('Bacenta Service form submitted successfully!');
-    navigate('/dashboard/services');
+    if (submitting) return;
+
+    const payload = {
+      service_type_id: serviceTypeId,
+      bacenta_id: bacentaId,
+      bacenta_name: bacentaName,
+      service_date: formData.serviceDate,
+      attendance: parseInt(formData.attendance, 10),
+      offering: parseFloat(formData.offering),
+      foreign_currency: formData.foreignCurrency ? parseFloat(formData.foreignCurrency) : undefined,
+      treasures: formData.treasures.filter(t => t.trim()),
+      treasures_picture: formData.treasuresPicture,
+      service_img: formData.servicePicture,
+    };
+    console.log('Bacenta Service Request Payload:', JSON.stringify(payload, null, 2));
+
+    setSubmitting(true);
+    try {
+      await api.post('/v2/services', payload);
+      Toast.show({
+        icon: 'success',
+        content: 'Bacenta Service form submitted successfully!',
+      });
+      navigate('/dashboard/services');
+    } catch (err) {
+      console.error('Error submitting bacenta service:', err);
+      Toast.show({
+        icon: 'fail',
+        content: 'Failed to submit. Please try again.',
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <div className="bacenta-form-page">
       <PageHeader title="Bacenta Service" />
+
+      <div className="bacenta-form-notice">
+        <FiMapPin className="notice-icon" />
+        <span>Filling form for: <strong>{bacentaName || 'Unknown Bacenta'}</strong></span>
+      </div>
 
       <form className="bacenta-form" onSubmit={handleSubmit}>
         <div className="form-group">
@@ -205,8 +245,8 @@ const BacentaServiceForm: React.FC = () => {
           required
         />
 
-        <button type="submit" className="btn-submit">
-          Submit Bacenta Service
+        <button type="submit" className="btn-submit" disabled={submitting}>
+          {submitting ? <><FiLoader className="spinner" /> Submitting...</> : 'Submit Bacenta Service'}
         </button>
       </form>
     </div>
