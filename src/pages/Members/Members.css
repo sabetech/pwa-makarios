@@ -1,5 +1,5 @@
 .members-page {
-    min-height: calc(100vh - 80px);
+    height: calc(100vh - 80px);
     background-color: var(--adm-bg-main);
     margin: -1rem -1rem -2rem -1rem;
     /* Offset parent padding from MainLayout.css */
@@ -26,9 +26,9 @@
 }
 
 .members-content {
-    padding: 1rem 1rem 120px 1rem;
-    /* Added top padding back here for the scrollable list */
+    padding: 1rem 1rem 12px 1rem;
     flex: 1;
+    overflow: hidden;
 }
 
 .search-filter-bar {
@@ -104,9 +104,7 @@
 }
 
 .members-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    height: 100%;
 }
 
 .member-card {

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiPlus, FiSearch, FiFilter } from 'react-icons/fi';
+import { FiSearch, FiFilter } from 'react-icons/fi';
 import { ActionSheet } from 'antd-mobile';
 import type { Action } from 'antd-mobile/es/components/action-sheet';
+import { List } from 'react-virtualized';
+import 'react-virtualized/styles.css';
 import { useMembers } from '../../hooks/useMembers';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import './Members.css';
@@ -11,6 +13,8 @@ const Members: React.FC = () => {
     const [visible, setVisible] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const { data: members = [], isLoading, isError } = useMembers();
+    const listRef = useRef<HTMLDivElement>(null);
+    const [listDimensions, setListDimensions] = useState({ width: 0, height: 0 });
 
     const actions: Action[] = [
         { text: 'Add Member', key: 'add-member' },
@@ -34,6 +38,28 @@ const Members: React.FC = () => {
         member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (member.phone && member.phone.includes(searchTerm))
     );
+
+    const isLoaded = !isLoading && !isError && filteredMembers.length > 0;
+
+    useLayoutEffect(() => {
+        if (!isLoaded) return;
+
+        const container = listRef.current;
+        if (!container) return;
+
+        const width = container.clientWidth || window.innerWidth - 32;
+        const height = container.clientHeight || window.innerHeight - 250;
+
+        setListDimensions({ width, height });
+
+        const observer = new ResizeObserver(([entry]) => {
+            const { width, height } = entry.contentRect;
+            setListDimensions({ width, height });
+        });
+
+        observer.observe(container);
+        return () => observer.disconnect();
+    }, [isLoaded]);
 
     const headerRight = (
         <button
@@ -74,7 +100,7 @@ const Members: React.FC = () => {
                 </div>
             </div>
 
-            <div className="members-content scrollable-area">
+            <div className="members-content">
                 {isLoading && (
                     <div className="loading-container" style={{ textAlign: 'center', padding: '40px' }}>
                         <p>Loading members...</p>
@@ -88,31 +114,49 @@ const Members: React.FC = () => {
                 )}
 
                 {!isLoading && !isError && (
-                    <div className="members-list">
-                        {filteredMembers.map((member) => (
-                            <div key={member.id} className="member-card" onClick={() => navigate(`/dashboard/members/${member.id}`)}>
-                                <div className="member-image-container">
-                                    <img
-                                        src={member.img_url || 'https://via.placeholder.com/150?text=No+Image'}
-                                        alt={member.name}
-                                        className="member-image"
-                                    />
+                    filteredMembers.length === 0 ? (
+                        <div className="no-results" style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
+                            <p>No members found matching "{searchTerm}"</p>
+                        </div>
+                    ) : (
+                        <div className="members-list" ref={listRef}>
+                            {listDimensions.width > 0 && listDimensions.height > 0 ? (
+                                <List
+                                    width={listDimensions.width}
+                                    height={listDimensions.height}
+                                    rowCount={filteredMembers.length}
+                                    rowHeight={90}
+                                    rowRenderer={({ index, key, style }) => {
+                                        const member = filteredMembers[index];
+                                        return (
+                                            <div key={key} style={style}>
+                                                <div className="member-card" onClick={() => navigate(`/dashboard/members/${member.id}`)}>
+                                                    <div className="member-image-container">
+                                                        <img
+                                                            src={member.img_url || 'https://via.placeholder.com/150?text=No+Image'}
+                                                            alt={member.name}
+                                                            className="member-image"
+                                                        />
+                                                    </div>
+                                                    <div className="member-info">
+                                                        <h3 className="member-name">{member.name}</h3>
+                                                        <p className="member-phone">{member.phone || 'No phone'}</p>
+                                                    </div>
+                                                    <button className="member-action-button" aria-label="More options" onClick={(e) => { e.stopPropagation(); console.log('options clicked'); }}>
+                                                        <span className="material-symbols-outlined">more_vert</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        );
+                                    }}
+                                />
+                            ) : (
+                                <div className="loading-container" style={{ textAlign: 'center', padding: '40px' }}>
+                                    <p>Preparing list...</p>
                                 </div>
-                                <div className="member-info">
-                                    <h3 className="member-name">{member.name}</h3>
-                                    <p className="member-phone">{member.phone || 'No phone'}</p>
-                                </div>
-                                <button className="member-action-button" aria-label="More options" onClick={(e) => { e.stopPropagation(); console.log('options clicked'); }}>
-                                    <span className="material-symbols-outlined">more_vert</span>
-                                </button>
-                            </div>
-                        ))}
-                        {filteredMembers.length === 0 && (
-                            <div className="no-results" style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
-                                <p>No members found matching "{searchTerm}"</p>
-                            </div>
-                        )}
-                    </div>
+                            )}
+                        </div>
+                    )
                 )}
             </div>
 

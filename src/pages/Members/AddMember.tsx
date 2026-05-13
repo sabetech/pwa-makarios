@@ -14,6 +14,7 @@ import {
 import { FiCamera, FiMapPin, FiArrowLeft } from 'react-icons/fi';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import ImageUpload from '../../components/ImageUpload/ImageUpload';
+import api from '../../api/axios';
 import './AddMember.css';
 
 const AddMember: React.FC = () => {
@@ -25,22 +26,30 @@ const AddMember: React.FC = () => {
     const [basontaVisible, setBasontaVisible] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Mock data for dropdowns
-    const bacentas = [
-        [
-            { label: 'Bacenta A', value: 'bacenta-a' },
-            { label: 'Bacenta B', value: 'bacenta-b' },
-            { label: 'Bacenta C', value: 'bacenta-c' },
-        ]
-    ];
+    const [bacentas, setBacentas] = useState<any[][]>([[]]);
+    const [basontas, setBasontas] = useState<any[][]>([[]]);
 
-    const basontas = [
-        [
-            { label: 'Basonta X', value: 'basonta-x' },
-            { label: 'Basonta Y', value: 'basonta-y' },
-            { label: 'Basonta Z', value: 'basonta-z' },
-        ]
-    ];
+    React.useEffect(() => {
+        const fetchDropdownData = async () => {
+            try {
+                const [bacentasRes, basontasRes] = await Promise.all([
+                    api.get('/v2/bacentas'),
+                    api.get('/v2/basontas').catch(() => ({ data: { data: [] } }))
+                ]);
+
+                if (bacentasRes.data?.data) {
+                    setBacentas([bacentasRes.data.data.map((b: any) => ({ label: b.name, value: String(b.id) }))]);
+                }
+
+                if (basontasRes.data?.data) {
+                    setBasontas([basontasRes.data.data.map((b: any) => ({ label: b.name, value: String(b.id) }))]);
+                }
+            } catch (error) {
+                console.error("Error fetching dropdown data:", error);
+            }
+        };
+        fetchDropdownData();
+    }, []);
 
     const genderOptions = [
         { label: 'Male', value: 'male' },
@@ -54,13 +63,20 @@ const AddMember: React.FC = () => {
         { label: 'Widowed', value: 'widowed' },
     ];
 
-    const onFinish = (values: any) => {
-        console.log('Form values:', values);
-        Toast.show({
-            content: 'Member added successfully (Mock)',
-            position: 'bottom',
-        });
-        setTimeout(() => navigate('/dashboard/members'), 1500);
+    const onFinish = async (values: any) => {
+        try {
+            await api.post('/v2/members', values);
+            Toast.show({
+                content: 'Member added successfully',
+                position: 'bottom',
+            });
+            setTimeout(() => navigate('/dashboard/members'), 1500);
+        } catch (error) {
+            Toast.show({
+                content: 'Failed to add member',
+                position: 'bottom',
+            });
+        }
     };
 
     const handleGetLocation = () => {
@@ -147,6 +163,8 @@ const AddMember: React.FC = () => {
                             visible={dateVisible}
                             onClose={() => setDateVisible(false)}
                             defaultValue={new Date('2000-01-01')}
+                            min={new Date(1930, 0, 1)}
+                            max={new Date()}
                             onConfirm={(val) => {
                                 setDateVisible(false);
                             }}
