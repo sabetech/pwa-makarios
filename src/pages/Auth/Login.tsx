@@ -57,7 +57,7 @@ const Login: React.FC = () => {
                 <div className="login-logo-container">
                     <img src={logo} alt="Makarios Logo" className="login-logo-img" />
                 </div>
-                <h1 className="login-title">Welcome Back to Western North Admin</h1>
+                <h1 className="login-title">Welcome Back to Makarios Admin</h1>
                 <p className="login-subtitle">Sign in to your account to continue</p>
 
                 <form className="login-form" onSubmit={handleSubmit}>
