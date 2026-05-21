@@ -39,3 +39,14 @@ export const fetchServiceTypes = async (): Promise<ServiceType[]> => {
     const response = await api.get<ServiceTypesResponse>('/v2/services/types');
     return response.data.data;
 };
+
+export const fetchBacentaServices = async (from: string, to: string): Promise<any[]> => {
+    const response = await api.get<ServicesResponse>('/v2/services', {
+        params: {
+            from,
+            to,
+            service_type_id: 3
+        }
+    });
+    return response.data.data;
+};

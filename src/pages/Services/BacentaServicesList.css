@@ -180,7 +180,7 @@
 }
 
 .bacenta-name {
-    font-size: 0.9375rem;
+    font-size: calc(0.9375rem - 3pt);
     font-weight: 700;
     color: #0f172a;
     margin: 0;
