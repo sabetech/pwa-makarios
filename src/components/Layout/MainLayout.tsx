@@ -24,7 +24,7 @@ const MainLayout: React.FC = () => {
     }, []);
 
     // Check if we're on a page that should hide the header
-    const hideHeaderPaths = ['/dashboard/settings', '/dashboard/services', '/dashboard/service-selection', '/dashboard/bacenta-select', '/dashboard/bacenta-services', '/dashboard/bacenta-service', '/dashboard/members', '/dashboard/members/add', '/dashboard/members/attendance', '/dashboard/insights', '/dashboard/admin', '/dashboard/admin/streams', '/dashboard/admin/regions', '/dashboard/admin/zones', '/dashboard/admin/bacentas', '/dashboard/admin/leaders', '/dashboard/campaigns'];
+    const hideHeaderPaths = ['/dashboard/settings', '/dashboard/services', '/dashboard/service-selection', '/dashboard/bacenta-select', '/dashboard/bacenta-services', '/dashboard/bacenta-service', '/dashboard/members', '/dashboard/members/add', '/dashboard/members/attendance', '/dashboard/insights', '/dashboard/admin', '/dashboard/admin/streams', '/dashboard/admin/regions', '/dashboard/admin/zones', '/dashboard/admin/bacentas', '/dashboard/admin/leaders', '/dashboard/campaigns', '/dashboard/campaigns/update'];
     const shouldHideHeader = hideHeaderPaths.includes(location.pathname) || location.pathname.startsWith('/dashboard/members/');
 
     const actions: Action[] = [

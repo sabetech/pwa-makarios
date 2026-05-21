@@ -20,8 +20,8 @@ const BottomNav: React.FC = () => {
         setVisible(false);
         if (action.key === 'service-form') {
             navigate('/dashboard/service-selection');
-        } else {
-            console.log('FAB Action:', action.key);
+        } else if (action.key === 'campaign-info') {
+            navigate('/dashboard/campaigns/update');
         }
     };
 

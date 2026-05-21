@@ -1,8 +1,105 @@
-import React from 'react';
-import { FiBell, FiSearch, FiTrendingUp, FiDownload } from 'react-icons/fi';
+import React, { useState, useEffect, useMemo } from 'react';
+import { FiBell, FiSearch, FiDownload, FiCalendar, FiTrendingUp } from 'react-icons/fi';
+import dayjs from 'dayjs';
+import { fetchCampaigns, Campaign } from '../../api/campaigns';
 import './Campaigns.css';
 
+const campaignStyles: Record<string, { icon: string; bgClass: string }> = {
+    'antibrutish': { icon: 'shield_with_heart', bgClass: 'maroon-bg' },
+    'sheep seeking': { icon: 'person_search', bgClass: 'primary-bg' },
+    'multiplication': { icon: 'groups_3', bgClass: 'maroon-bg' },
+    'bacenta proliferation': { icon: 'add_home_work', bgClass: 'primary-bg' },
+};
+
+const getCampaignStyle = (name: string, index: number) => {
+    const key = name.toLowerCase().trim();
+    if (campaignStyles[key]) {
+        return campaignStyles[key];
+    }
+    // Fallback: alternate icons and backgrounds
+    const icons = ['campaign', 'shield_with_heart', 'person_search', 'groups_3', 'add_home_work'];
+    const bgs = ['maroon-bg', 'primary-bg'];
+    return {
+        icon: icons[index % icons.length],
+        bgClass: bgs[index % bgs.length]
+    };
+};
+
 const Campaigns: React.FC = () => {
+    const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>('');
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
+    useEffect(() => {
+        const loadCampaigns = async () => {
+            try {
+                setLoading(true);
+                setError('');
+                const data = await fetchCampaigns();
+                setCampaigns(data);
+            } catch (err) {
+                console.error('Error fetching campaigns:', err);
+                setError('Failed to load campaigns. Please try again.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadCampaigns();
+    }, []);
+
+    const filteredCampaigns = useMemo(() => {
+        return campaigns.filter(c => 
+            c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            c.description.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [campaigns, searchQuery]);
+
+    const renderCampaignTarget = (campaign: Campaign) => {
+        const nameKey = campaign.name.toLowerCase().trim();
+        
+        switch (nameKey) {
+            case 'antibrutish':
+                return (
+                    <div className="initiative-progress">
+                        <div className="progress-bar-container">
+                            <div className="progress-bar maroon" style={{ width: '60%' }}></div>
+                        </div>
+                        <span className="progress-label">{Math.round(campaign.target * 0.6)} {campaign.unit}</span>
+                    </div>
+                );
+            case 'sheep seeking':
+                return (
+                    <div className="initiative-metric">
+                        <FiTrendingUp className="metric-icon" />
+                        <span>{Math.round(campaign.target * 0.9)} New {campaign.unit} Registered</span>
+                    </div>
+                );
+            case 'multiplication':
+                return (
+                    <div className="initiative-footer">
+                        <span className="target-label">Target: {campaign.target} {campaign.unit}</span>
+                        <button className="text-link">View Details</button>
+                    </div>
+                );
+            case 'bacenta proliferation':
+                return (
+                    <div className="initiative-stats">
+                        <span className="stat-label">Target {campaign.unit}:</span>
+                        <span className="stat-value">{campaign.target} New</span>
+                    </div>
+                );
+            default:
+                return (
+                    <div className="initiative-stats">
+                        <span className="stat-label">Target / Goal:</span>
+                        <span className="stat-value">{campaign.target} {campaign.unit}</span>
+                    </div>
+                );
+        }
+    };
+
     return (
         <div className="campaigns-page">
             <header className="campaigns-header">
@@ -21,6 +118,8 @@ const Campaigns: React.FC = () => {
                         type="text"
                         placeholder="Search initiatives..."
                         className="search-input"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
             </header>
@@ -28,80 +127,62 @@ const Campaigns: React.FC = () => {
             <main className="campaigns-content">
                 <section>
                     <h2 className="section-label">Active Initiatives</h2>
+                    
+                    {error && (
+                        <div className="error-container" style={{ textAlign: 'center', padding: '2rem 1rem', color: '#ef4444' }}>
+                            <p>{error}</p>
+                        </div>
+                    )}
+
+                    {!error && !loading && filteredCampaigns.length === 0 && (
+                        <div className="empty-container" style={{ textAlign: 'center', padding: '2rem 1rem', color: '#64748b' }}>
+                            <p>No initiatives found matching your search.</p>
+                        </div>
+                    )}
+
                     <div className="initiatives-grid">
-                        {/* Antibrutish */}
-                        <div className="initiative-card">
-                            <div className="initiative-icon-container maroon-bg">
-                                <span className="material-symbols-outlined">shield_with_heart</span>
-                            </div>
-                            <div className="initiative-details">
-                                <div className="initiative-header">
-                                    <h3 className="initiative-name">Antibrutish</h3>
-                                    <span className="status-badge ongoing">Ongoing</span>
-                                </div>
-                                <p className="initiative-description">Focus on shepherd training and quality member care.</p>
-                                <div className="initiative-progress">
-                                    <div className="progress-bar-container">
-                                        <div className="progress-bar maroon" style={{ width: '60%' }}></div>
+                        {loading ? (
+                            Array(4).fill(0).map((_, i) => (
+                                <div className="initiative-card skeleton-card" key={i} style={{ opacity: 0.6 }}>
+                                    <div className="initiative-icon-container" style={{ backgroundColor: '#e2e8f0', width: '3rem', height: '3rem', borderRadius: '0.5rem' }} />
+                                    <div className="initiative-details" style={{ flex: 1 }}>
+                                        <div className="initiative-header" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                            <div className="skeleton-text" style={{ backgroundColor: '#e2e8f0', height: '1.25rem', width: '40%', borderRadius: '4px' }} />
+                                            <div className="skeleton-text" style={{ backgroundColor: '#e2e8f0', height: '1rem', width: '15%', borderRadius: '9999px' }} />
+                                        </div>
+                                        <div className="skeleton-text" style={{ backgroundColor: '#e2e8f0', height: '0.875rem', width: '80%', borderRadius: '4px', marginBottom: '0.5rem' }} />
+                                        <div className="skeleton-text" style={{ backgroundColor: '#e2e8f0', height: '0.75rem', width: '60%', borderRadius: '4px' }} />
                                     </div>
-                                    <span className="progress-label">12 Sessions</span>
                                 </div>
-                            </div>
-                        </div>
+                            ))
+                        ) : (
+                            filteredCampaigns.map((campaign, index) => {
+                                const style = getCampaignStyle(campaign.name, index);
+                                return (
+                                    <div className="initiative-card" key={campaign.id}>
+                                        <div className={`initiative-icon-container ${style.bgClass}`}>
+                                            <span className="material-symbols-outlined">{style.icon}</span>
+                                        </div>
+                                        <div className="initiative-details">
+                                            <div className="initiative-header">
+                                                <h3 className="initiative-name">{campaign.name}</h3>
+                                                <span className={`status-badge ${campaign.is_active === 1 ? 'active' : 'progress'}`}>
+                                                    {campaign.is_active === 1 ? 'Active' : 'Inactive'}
+                                                </span>
+                                            </div>
+                                            <p className="initiative-description">{campaign.description}</p>
+                                            
+                                            {renderCampaignTarget(campaign)}
 
-                        {/* Sheep Seeking */}
-                        <div className="initiative-card">
-                            <div className="initiative-icon-container primary-bg">
-                                <span className="material-symbols-outlined">person_search</span>
-                            </div>
-                            <div className="initiative-details">
-                                <div className="initiative-header">
-                                    <h3 className="initiative-name">Sheep Seeking</h3>
-                                    <span className="status-badge active">Active</span>
-                                </div>
-                                <p className="initiative-description">Soul winning and aggressive evangelism drive.</p>
-                                <div className="initiative-metric">
-                                    <FiTrendingUp className="metric-icon" />
-                                    <span>45 New Souls Registered</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Multiplication */}
-                        <div className="initiative-card">
-                            <div className="initiative-icon-container maroon-bg">
-                                <span className="material-symbols-outlined">groups_3</span>
-                            </div>
-                            <div className="initiative-details">
-                                <div className="initiative-header">
-                                    <h3 className="initiative-name">Multiplication</h3>
-                                    <span className="status-badge progress">In Progress</span>
-                                </div>
-                                <p className="initiative-description">Strategic growth of existing cell structures.</p>
-                                <div className="initiative-footer">
-                                    <span className="target-label">Target: 2x Growth</span>
-                                    <button className="text-link">View Details</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Bacenta Proliferation */}
-                        <div className="initiative-card">
-                            <div className="initiative-icon-container primary-bg">
-                                <span className="material-symbols-outlined">add_home_work</span>
-                            </div>
-                            <div className="initiative-details">
-                                <div className="initiative-header">
-                                    <h3 className="initiative-name">Bacenta Proliferation</h3>
-                                    <span className="status-badge milestone">Milestone</span>
-                                </div>
-                                <p className="initiative-description">Focus on starting and stabilizing new Bacentas.</p>
-                                <div className="initiative-stats">
-                                    <span className="stat-label">Launched this month:</span>
-                                    <span className="stat-value">5 New</span>
-                                </div>
-                            </div>
-                        </div>
+                                            <div className="campaign-cycle" style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.75rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                <FiCalendar size={14} />
+                                                <span>Cycle: {dayjs(campaign.cycle_start).format('MMM D, YYYY')} - {dayjs(campaign.cycle_end).format('MMM D, YYYY')}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        )}
                     </div>
                 </section>
 
