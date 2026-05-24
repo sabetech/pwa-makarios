@@ -226,6 +226,8 @@
     position: relative;
     display: flex;
     align-items: center;
+
+
 }
 
 .form-input-icon {
@@ -239,6 +241,7 @@
 .form-control-input {
     width: 100%;
     padding: 0.6rem 0.75rem 0.6rem 2.25rem;
+
     font-size: 0.875rem;
     color: #0f172a;
     background-color: #f8fafc;
@@ -352,6 +355,197 @@ textarea.form-control-input {
 
 .spinner {
     animation: spin 1s linear infinite;
+}
+
+/* Searchable Member Dropdown */
+.selected-item-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    background-color: rgba(128, 0, 0, 0.08);
+    border: 1px solid rgba(128, 0, 0, 0.2);
+    border-radius: 1rem;
+    padding: 0.75rem 1rem;
+}
+
+[data-theme='dark'] .selected-item-chip {
+    background-color: rgba(236, 91, 19, 0.1);
+    border-color: rgba(236, 91, 19, 0.25);
+}
+
+.chip-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.chip-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #0f172a;
+}
+
+[data-theme='dark'] .chip-name {
+    color: #f1f5f9;
+}
+
+.chip-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #94a3b8;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.chip-remove:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #ef4444;
+}
+
+[data-theme='dark'] .chip-remove:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.search-wrapper input {
+    width: 100%;
+    padding: 0.6rem 0.75rem 0.6rem 2.25rem;
+    font-size: 0.875rem;
+    color: #0f172a;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.search-wrapper input:focus {
+    border-color: #800000;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.15);
+}
+
+[data-theme='dark'] .search-wrapper input {
+    background-color: #0f172a;
+    border-color: #334155;
+    color: #f1f5f9;
+}
+
+[data-theme='dark'] .search-wrapper input:focus {
+    border-color: #ec5b13;
+    background-color: #0f172a;
+    box-shadow: 0 0 0 3px rgba(236, 91, 19, 0.15);
+}
+
+.custom-dropdown {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    margin-top: 0.5rem;
+    max-height: 280px;
+    overflow-y: auto;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    animation: dropdownSlide 0.2s ease;
+}
+
+[data-theme='dark'] .custom-dropdown {
+    background-color: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes dropdownSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-empty {
+    padding: 1.5rem;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.875rem;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1.25rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(128, 0, 0, 0.06);
+}
+
+[data-theme='dark'] .dropdown-item:hover {
+    background-color: rgba(236, 91, 19, 0.1);
+}
+
+.dropdown-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.dropdown-initials {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #800000;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+[data-theme='dark'] .dropdown-initials {
+    background-color: #ec5b13;
+}
+
+.dropdown-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.dropdown-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+[data-theme='dark'] .dropdown-name {
+    color: #f1f5f9;
+}
+
+.dropdown-phone {
+    font-size: 0.75rem;
+    color: #94a3b8;
 }
 
 @keyframes spin {

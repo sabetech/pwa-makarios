@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { FiBell, FiSearch, FiDownload, FiCalendar, FiTrendingUp } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
+import { FiBell, FiSearch, FiDownload, FiCalendar, FiChevronRight } from 'react-icons/fi';
 import dayjs from 'dayjs';
 import { fetchCampaigns, Campaign } from '../../api/campaigns';
+import { fetchAntibrutishTotalHours } from '../../api/antibrutish';
+import { fetchSheepSeekingTotalVisits } from '../../api/sheep-seeking';
+import { fetchMultiplicationTotalSouls } from '../../api/multiplication-campaigns';
 import './Campaigns.css';
 
 const campaignStyles: Record<string, { icon: string; bgClass: string }> = {
@@ -26,10 +30,14 @@ const getCampaignStyle = (name: string, index: number) => {
 };
 
 const Campaigns: React.FC = () => {
+    const navigate = useNavigate();
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [antibrutishHours, setAntibrutishHours] = useState<number>(0);
+    const [sheepSeekingVisits, setSheepSeekingVisits] = useState<number>(0);
+    const [multiplicationSouls, setMultiplicationSouls] = useState<number>(0);
 
     useEffect(() => {
         const loadCampaigns = async () => {
@@ -38,6 +46,14 @@ const Campaigns: React.FC = () => {
                 setError('');
                 const data = await fetchCampaigns();
                 setCampaigns(data);
+                const [hours, visits, souls] = await Promise.all([
+                    fetchAntibrutishTotalHours(1),
+                    fetchSheepSeekingTotalVisits(1),
+                    fetchMultiplicationTotalSouls(1),
+                ]);
+                setAntibrutishHours(hours);
+                setSheepSeekingVisits(visits);
+                setMultiplicationSouls(souls);
             } catch (err) {
                 console.error('Error fetching campaigns:', err);
                 setError('Failed to load campaigns. Please try again.');
@@ -60,29 +76,39 @@ const Campaigns: React.FC = () => {
         const nameKey = campaign.name.toLowerCase().trim();
         
         switch (nameKey) {
-            case 'antibrutish':
+            case 'antibrutish': {
+                const pct = campaign.target > 0 ? Math.min((antibrutishHours / campaign.target) * 100, 100) : 0;
                 return (
                     <div className="initiative-progress">
                         <div className="progress-bar-container">
-                            <div className="progress-bar maroon" style={{ width: '60%' }}></div>
+                            <div className="progress-bar maroon" style={{ width: `${pct}%` }}></div>
                         </div>
-                        <span className="progress-label">{Math.round(campaign.target * 0.6)} {campaign.unit}</span>
+                        <span className="progress-label">{antibrutishHours} / {campaign.target} {campaign.unit}</span>
                     </div>
                 );
-            case 'sheep seeking':
+            }
+            case 'sheep seeking': {
+                const pct = campaign.target > 0 ? Math.min((sheepSeekingVisits / campaign.target) * 100, 100) : 0;
                 return (
-                    <div className="initiative-metric">
-                        <FiTrendingUp className="metric-icon" />
-                        <span>{Math.round(campaign.target * 0.9)} New {campaign.unit} Registered</span>
+                    <div className="initiative-progress">
+                        <div className="progress-bar-container">
+                            <div className="progress-bar primary" style={{ width: `${pct}%` }}></div>
+                        </div>
+                        <span className="progress-label">{sheepSeekingVisits} / {campaign.target} {campaign.unit}</span>
                     </div>
                 );
-            case 'multiplication':
+            }
+            case 'multiplication': {
+                const pct = campaign.target > 0 ? Math.min((multiplicationSouls / campaign.target) * 100, 100) : 0;
                 return (
-                    <div className="initiative-footer">
-                        <span className="target-label">Target: {campaign.target} {campaign.unit}</span>
-                        <button className="text-link">View Details</button>
+                    <div className="initiative-progress">
+                        <div className="progress-bar-container">
+                            <div className="progress-bar primary" style={{ width: `${pct}%` }}></div>
+                        </div>
+                        <span className="progress-label">{multiplicationSouls} / {campaign.target} {campaign.unit}</span>
                     </div>
                 );
+            }
             case 'bacenta proliferation':
                 return (
                     <div className="initiative-stats">
@@ -159,7 +185,21 @@ const Campaigns: React.FC = () => {
                             filteredCampaigns.map((campaign, index) => {
                                 const style = getCampaignStyle(campaign.name, index);
                                 return (
-                                    <div className="initiative-card" key={campaign.id}>
+                                    <div
+                                        className="initiative-card"
+                                        key={campaign.id}
+                                        onClick={() => {
+                                            const key = campaign.name.toLowerCase().trim();
+                                            const cycleId = campaign.shepherdorial_cycle.id;
+                                            if (key === 'antibrutish') {
+                                                navigate('/dashboard/campaigns/antibrutish', { state: { cycleId } });
+                                            } else if (key === 'sheep seeking') {
+                                                navigate('/dashboard/campaigns/sheep-seeking', { state: { cycleId } });
+                                            } else {
+                                                navigate('/dashboard/campaigns/update');
+                                            }
+                                        }}
+                                    >
                                         <div className={`initiative-icon-container ${style.bgClass}`}>
                                             <span className="material-symbols-outlined">{style.icon}</span>
                                         </div>
@@ -174,11 +214,12 @@ const Campaigns: React.FC = () => {
                                             
                                             {renderCampaignTarget(campaign)}
 
-                                            <div className="campaign-cycle" style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.75rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <div className="campaign-cycle">
                                                 <FiCalendar size={14} />
-                                                <span>Cycle: {dayjs(campaign.cycle_start).format('MMM D, YYYY')} - {dayjs(campaign.cycle_end).format('MMM D, YYYY')}</span>
+                                                <span>{campaign.shepherdorial_cycle.name}: {dayjs(campaign.shepherdorial_cycle.cycle_start).format('MMM D, YYYY')} - {dayjs(campaign.shepherdorial_cycle.cycle_end).format('MMM D, YYYY')}</span>
                                             </div>
                                         </div>
+                                        <FiChevronRight className="campaign-card-chevron" />
                                     </div>
                                 );
                             })

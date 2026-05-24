@@ -7,9 +7,14 @@ export interface Campaign {
     is_active: number;
     target: number;
     unit: string;
-    cycle_start: string;
-    cycle_end: string;
     icon: string | null;
+    shepherdorial_cycle_id: number;
+    shepherdorial_cycle: {
+        id: number;
+        name: string;
+        cycle_start: string;
+        cycle_end: string;
+    };
 }
 
 export interface CampaignsResponse {

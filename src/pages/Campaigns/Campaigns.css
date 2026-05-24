@@ -28,8 +28,6 @@
 
 .header-top {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 1rem;
 }
 
@@ -139,6 +137,8 @@
     display: flex;
     gap: 1rem;
     transition: box-shadow 0.2s;
+    cursor: pointer;
+    position: relative;
 }
 
 [data-theme='dark'] .initiative-card {
@@ -286,10 +286,18 @@
     background-color: #800000;
 }
 
+.progress-bar.primary {
+    background-color: #ec5b13;
+}
+
 .progress-label {
     font-size: 0.75rem;
     font-weight: 500;
     color: #800000;
+}
+
+[data-theme='dark'] .progress-label {
+    color: #ec5b13;
 }
 
 .initiative-metric {
@@ -412,4 +420,34 @@
     opacity: 0.1;
     transform: rotate(12deg);
     pointer-events: none;
+}
+
+.campaign-cycle {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+[data-theme='dark'] .campaign-cycle {
+    color: #94a3b8;
+}
+
+.campaign-card-chevron {
+    color: #cbd5e1;
+    font-size: 20px;
+    align-self: center;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+}
+
+.initiative-card:hover .campaign-card-chevron {
+    color: #800000;
+    transform: translateX(3px);
+}
+
+[data-theme='dark'] .initiative-card:hover .campaign-card-chevron {
+    color: #ec5b13;
 }

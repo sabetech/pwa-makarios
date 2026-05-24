@@ -24,6 +24,8 @@ import ManageBacentas from './pages/Admin/ManageBacentas';
 import ManageLeaders from './pages/Admin/ManageLeaders';
 import Campaigns from './pages/Campaigns/Campaigns';
 import UpdateCampaignInfo from './pages/Campaigns/UpdateCampaignInfo';
+import AntibrutishLeaders from './pages/Campaigns/AntibrutishLeaders';
+import SheepSeekingRecords from './pages/Campaigns/SheepSeekingRecords';
 import './App.css';
 
 const queryClient = new QueryClient();
@@ -46,6 +48,8 @@ function App() {
               <Route path="bacenta-service" element={<BacentaServiceForm />} />
               <Route path="campaigns" element={<Campaigns />} />
               <Route path="campaigns/update" element={<UpdateCampaignInfo />} />
+              <Route path="campaigns/antibrutish" element={<AntibrutishLeaders />} />
+              <Route path="campaigns/sheep-seeking" element={<SheepSeekingRecords />} />
                <Route path="members" element={<Members />} />
               <Route path="members/add" element={<AddMember />} />
               <Route path="members/edit/:id" element={<EditMember />} />

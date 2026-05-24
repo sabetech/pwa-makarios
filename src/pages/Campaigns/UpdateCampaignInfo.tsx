@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-    FiCalendar, 
-    FiChevronRight, 
-    FiUsers, 
-    FiClock, 
-    FiMessageSquare, 
-    FiAward, 
-    FiLoader, 
-    FiMapPin, 
-    FiActivity 
+import {
+    FiCalendar,
+    FiChevronRight,
+    FiUsers,
+    FiClock,
+    FiMessageSquare,
+    FiAward,
+    FiLoader,
+    FiMapPin,
+    FiActivity
 } from 'react-icons/fi';
 import { Toast } from 'antd-mobile';
 import dayjs from 'dayjs';
@@ -48,8 +48,12 @@ const UpdateCampaignInfo: React.FC = () => {
     const [members, setMembers] = useState<Member[]>([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
-    
+
     const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
+
+    const [memberSearch, setMemberSearch] = useState('');
+    const [showMemberDropdown, setShowMemberDropdown] = useState(false);
+    const memberDropdownRef = useRef<HTMLDivElement>(null);
 
     // Dynamic Form States
     const [antibrutishForm, setAntibrutishForm] = useState({
@@ -76,6 +80,21 @@ const UpdateCampaignInfo: React.FC = () => {
         value: '',
         notes: '',
     });
+
+    const getInitials = (name: string) => {
+        if (!name) return '?';
+        return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (memberDropdownRef.current && !memberDropdownRef.current.contains(e.target as Node)) {
+                setShowMemberDropdown(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     useEffect(() => {
         const loadInitialData = async () => {
@@ -107,19 +126,18 @@ const UpdateCampaignInfo: React.FC = () => {
         e.preventDefault();
         if (!selectedCampaign || submitting) return;
 
-        const regionName = regions.find(r => r.id === Number(antibrutishForm.regionId))?.name || 'Unknown Region';
         const payload = {
             campaign_id: selectedCampaign.id,
-            campaign_name: selectedCampaign.name,
             date: antibrutishForm.date,
             region_id: Number(antibrutishForm.regionId),
-            region_name: regionName,
             hours_prayed: Number(antibrutishForm.hoursPrayed),
         };
 
+        console.log('Antibrutish form payload:', payload);
+
         setSubmitting(true);
         try {
-            await api.post(`/v2/campaigns/${selectedCampaign.id}/submit`, payload);
+            await api.post('/v2/antibrutish', payload);
             Toast.show({
                 icon: 'success',
                 content: 'Prayer progress updated successfully!'
@@ -142,19 +160,16 @@ const UpdateCampaignInfo: React.FC = () => {
         e.preventDefault();
         if (!selectedCampaign || submitting) return;
 
-        const memberName = members.find(m => m.id === Number(sheepSeekingForm.memberId))?.name || 'Unknown Member';
         const payload = {
             campaign_id: selectedCampaign.id,
-            campaign_name: selectedCampaign.name,
             date: sheepSeekingForm.date,
             member_id: Number(sheepSeekingForm.memberId),
-            member_name: memberName,
             report: sheepSeekingForm.report,
         };
 
         setSubmitting(true);
         try {
-            await api.post(`/v2/campaigns/${selectedCampaign.id}/submit`, payload);
+            await api.post('/v2/sheep-seeking', payload);
             Toast.show({
                 icon: 'success',
                 content: 'Visitation report submitted successfully!'
@@ -176,20 +191,17 @@ const UpdateCampaignInfo: React.FC = () => {
         e.preventDefault();
         if (!selectedCampaign || submitting) return;
 
-        const regionName = regions.find(r => r.id === Number(multiplicationForm.regionId))?.name || 'Unknown Region';
         const payload = {
-            campaign_id: selectedCampaign.id,
-            campaign_name: selectedCampaign.name,
             date: multiplicationForm.date,
+            souls_saved: Number(multiplicationForm.soulsWon),
             region_id: Number(multiplicationForm.regionId),
-            region_name: regionName,
-            activity: multiplicationForm.activity,
-            souls_won: Number(multiplicationForm.soulsWon),
+            campaign_id: selectedCampaign.id,
+            outreach_activity: multiplicationForm.activity,
         };
 
         setSubmitting(true);
         try {
-            await api.post(`/v2/campaigns/${selectedCampaign.id}/submit`, payload);
+            await api.post('/v2/multiplication-campaigns', payload);
             Toast.show({
                 icon: 'success',
                 content: 'Outreach campaign report submitted!'
@@ -266,7 +278,7 @@ const UpdateCampaignInfo: React.FC = () => {
                                     type="date"
                                     className="form-control-input"
                                     value={antibrutishForm.date}
-                                    onChange={(e) => setAntibrutishForm({...antibrutishForm, date: e.target.value})}
+                                    onChange={(e) => setAntibrutishForm({ ...antibrutishForm, date: e.target.value })}
                                     required
                                 />
                             </div>
@@ -282,7 +294,7 @@ const UpdateCampaignInfo: React.FC = () => {
                                     id="anti-region"
                                     className="form-control-input"
                                     value={antibrutishForm.regionId}
-                                    onChange={(e) => setAntibrutishForm({...antibrutishForm, regionId: e.target.value})}
+                                    onChange={(e) => setAntibrutishForm({ ...antibrutishForm, regionId: e.target.value })}
                                     required
                                 >
                                     <option value="">Select a region</option>
@@ -307,23 +319,23 @@ const UpdateCampaignInfo: React.FC = () => {
                                     placeholder="Enter hours prayed"
                                     className="form-control-input"
                                     value={antibrutishForm.hoursPrayed}
-                                    onChange={(e) => setAntibrutishForm({...antibrutishForm, hoursPrayed: e.target.value})}
+                                    onChange={(e) => setAntibrutishForm({ ...antibrutishForm, hoursPrayed: e.target.value })}
                                     required
                                 />
                             </div>
                         </div>
 
                         <div className="btn-row">
-                            <button 
-                                type="button" 
-                                className="btn-cancel" 
+                            <button
+                                type="button"
+                                className="btn-cancel"
                                 onClick={() => setSelectedCampaign(null)}
                             >
                                 Back
                             </button>
-                            <button 
-                                type="submit" 
-                                className="btn-submit-form" 
+                            <button
+                                type="submit"
+                                className="btn-submit-form"
                                 disabled={submitting}
                             >
                                 {submitting ? <FiLoader className="spinner" /> : 'Submit'}
@@ -355,31 +367,78 @@ const UpdateCampaignInfo: React.FC = () => {
                                     type="date"
                                     className="form-control-input"
                                     value={sheepSeekingForm.date}
-                                    onChange={(e) => setSheepSeekingForm({...sheepSeekingForm, date: e.target.value})}
+                                    onChange={(e) => setSheepSeekingForm({ ...sheepSeekingForm, date: e.target.value })}
                                     required
                                 />
                             </div>
                         </div>
 
-                        <div className="form-group">
-                            <label className="form-label" htmlFor="sheep-member">
+                        <div className="form-group" ref={memberDropdownRef}>
+                            <label className="form-label">
                                 Member Visited <span className="required-star">*</span>
                             </label>
-                            <div className="input-icon-wrapper">
-                                <FiUsers className="form-input-icon" />
-                                <select
-                                    id="sheep-member"
-                                    className="form-control-input"
-                                    value={sheepSeekingForm.memberId}
-                                    onChange={(e) => setSheepSeekingForm({...sheepSeekingForm, memberId: e.target.value})}
-                                    required
-                                >
-                                    <option value="">Select a member</option>
-                                    {members.map(m => (
-                                        <option key={m.id} value={m.id}>{m.name}</option>
-                                    ))}
-                                </select>
-                            </div>
+                            {sheepSeekingForm.memberId ? (
+                                <div className="selected-item-chip">
+                                    <div className="chip-info">
+                                        <span className="chip-name">
+                                            {members.find(m => m.id === Number(sheepSeekingForm.memberId))?.name || 'Unknown Member'}
+                                        </span>
+                                    </div>
+                                    <button type="button" className="chip-remove" onClick={() => {
+                                        setSheepSeekingForm({ ...sheepSeekingForm, memberId: '' });
+                                        setMemberSearch('');
+                                    }}>
+                                        <span className="material-symbols-outlined">close</span>
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="search-wrapper">
+                                    <FiUsers className="form-input-icon" />
+                                    <input
+                                        type="text"
+                                        placeholder="Search for a member..."
+                                        value={memberSearch}
+                                        onChange={(e) => {
+                                            setMemberSearch(e.target.value);
+                                            setShowMemberDropdown(true);
+                                        }}
+                                        onFocus={() => setShowMemberDropdown(true)}
+                                        required={!sheepSeekingForm.memberId}
+                                    />
+                                </div>
+                            )}
+                            {showMemberDropdown && !sheepSeekingForm.memberId && (
+                                <div className="custom-dropdown">
+                                    {members.filter(m =>
+                                        m.name.toLowerCase().includes(memberSearch.toLowerCase())
+                                    ).length === 0 ? (
+                                        <div className="dropdown-empty"><p>No members found</p></div>
+                                    ) : (
+                                        members
+                                            .filter(m =>
+                                                m.name.toLowerCase().includes(memberSearch.toLowerCase())
+                                            )
+                                            .slice(0, 8)
+                                            .map(m => (
+                                                <div key={m.id} className="dropdown-item" onClick={() => {
+                                                    setSheepSeekingForm({ ...sheepSeekingForm, memberId: String(m.id) });
+                                                    setMemberSearch('');
+                                                    setShowMemberDropdown(false);
+                                                }}>
+                                                    {m.img_url ? (
+                                                        <img src={m.img_url} alt={m.name} className="dropdown-avatar" />
+                                                    ) : (
+                                                        <div className="dropdown-initials">{getInitials(m.name)}</div>
+                                                    )}
+                                                    <div className="dropdown-info">
+                                                        <span className="dropdown-name">{m.name}</span>
+                                                        {m.phone && <span className="dropdown-phone">{m.phone}</span>}
+                                                    </div>
+                                                </div>
+                                            ))
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         <div className="form-group">
@@ -391,22 +450,22 @@ const UpdateCampaignInfo: React.FC = () => {
                                 placeholder="Write the visitation report details..."
                                 className="form-control-input"
                                 value={sheepSeekingForm.report}
-                                onChange={(e) => setSheepSeekingForm({...sheepSeekingForm, report: e.target.value})}
+                                onChange={(e) => setSheepSeekingForm({ ...sheepSeekingForm, report: e.target.value })}
                                 required
                             />
                         </div>
 
                         <div className="btn-row">
-                            <button 
-                                type="button" 
-                                className="btn-cancel" 
+                            <button
+                                type="button"
+                                className="btn-cancel"
                                 onClick={() => setSelectedCampaign(null)}
                             >
                                 Back
                             </button>
-                            <button 
-                                type="submit" 
-                                className="btn-submit-form" 
+                            <button
+                                type="submit"
+                                className="btn-submit-form"
                                 disabled={submitting}
                             >
                                 {submitting ? <FiLoader className="spinner" /> : 'Submit'}
@@ -438,7 +497,7 @@ const UpdateCampaignInfo: React.FC = () => {
                                     type="date"
                                     className="form-control-input"
                                     value={multiplicationForm.date}
-                                    onChange={(e) => setMultiplicationForm({...multiplicationForm, date: e.target.value})}
+                                    onChange={(e) => setMultiplicationForm({ ...multiplicationForm, date: e.target.value })}
                                     required
                                 />
                             </div>
@@ -454,7 +513,7 @@ const UpdateCampaignInfo: React.FC = () => {
                                     id="mult-region"
                                     className="form-control-input"
                                     value={multiplicationForm.regionId}
-                                    onChange={(e) => setMultiplicationForm({...multiplicationForm, regionId: e.target.value})}
+                                    onChange={(e) => setMultiplicationForm({ ...multiplicationForm, regionId: e.target.value })}
                                     required
                                 >
                                     <option value="">Select a region</option>
@@ -477,7 +536,7 @@ const UpdateCampaignInfo: React.FC = () => {
                                     placeholder="e.g. Park Evangelism, Neighborhood Drive"
                                     className="form-control-input"
                                     value={multiplicationForm.activity}
-                                    onChange={(e) => setMultiplicationForm({...multiplicationForm, activity: e.target.value})}
+                                    onChange={(e) => setMultiplicationForm({ ...multiplicationForm, activity: e.target.value })}
                                     required
                                 />
                             </div>
@@ -497,23 +556,23 @@ const UpdateCampaignInfo: React.FC = () => {
                                     placeholder="Number of souls won"
                                     className="form-control-input"
                                     value={multiplicationForm.soulsWon}
-                                    onChange={(e) => setMultiplicationForm({...multiplicationForm, soulsWon: e.target.value})}
+                                    onChange={(e) => setMultiplicationForm({ ...multiplicationForm, soulsWon: e.target.value })}
                                     required
                                 />
                             </div>
                         </div>
 
                         <div className="btn-row">
-                            <button 
-                                type="button" 
-                                className="btn-cancel" 
+                            <button
+                                type="button"
+                                className="btn-cancel"
                                 onClick={() => setSelectedCampaign(null)}
                             >
                                 Back
                             </button>
-                            <button 
-                                type="submit" 
-                                className="btn-submit-form" 
+                            <button
+                                type="submit"
+                                className="btn-submit-form"
                                 disabled={submitting}
                             >
                                 {submitting ? <FiLoader className="spinner" /> : 'Submit'}
@@ -545,7 +604,7 @@ const UpdateCampaignInfo: React.FC = () => {
                                 type="date"
                                 className="form-control-input"
                                 value={genericForm.date}
-                                onChange={(e) => setGenericForm({...genericForm, date: e.target.value})}
+                                onChange={(e) => setGenericForm({ ...genericForm, date: e.target.value })}
                                 required
                             />
                         </div>
@@ -563,7 +622,7 @@ const UpdateCampaignInfo: React.FC = () => {
                                 placeholder={`Enter amount of ${selectedCampaign.unit || 'units'}`}
                                 className="form-control-input"
                                 value={genericForm.value}
-                                onChange={(e) => setGenericForm({...genericForm, value: e.target.value})}
+                                onChange={(e) => setGenericForm({ ...genericForm, value: e.target.value })}
                                 required
                             />
                         </div>
@@ -578,21 +637,21 @@ const UpdateCampaignInfo: React.FC = () => {
                             placeholder="Add any extra details or comments..."
                             className="form-control-input"
                             value={genericForm.notes}
-                            onChange={(e) => setGenericForm({...genericForm, notes: e.target.value})}
+                            onChange={(e) => setGenericForm({ ...genericForm, notes: e.target.value })}
                         />
                     </div>
 
                     <div className="btn-row">
-                        <button 
-                            type="button" 
-                            className="btn-cancel" 
+                        <button
+                            type="button"
+                            className="btn-cancel"
                             onClick={() => setSelectedCampaign(null)}
                         >
                             Back
                         </button>
-                        <button 
-                            type="submit" 
-                            className="btn-submit-form" 
+                        <button
+                            type="submit"
+                            className="btn-submit-form"
                             disabled={submitting}
                         >
                             {submitting ? <FiLoader className="spinner" /> : 'Submit'}
@@ -620,8 +679,8 @@ const UpdateCampaignInfo: React.FC = () => {
                             {campaigns.map((campaign, index) => {
                                 const style = getCampaignStyle(campaign.name, index);
                                 return (
-                                    <button 
-                                        key={campaign.id} 
+                                    <button
+                                        key={campaign.id}
                                         className="campaign-select-card campaign-card-option"
                                         onClick={() => setSelectedCampaign(campaign)}
                                     >
