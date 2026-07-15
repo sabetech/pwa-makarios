@@ -13,8 +13,8 @@ export interface Member {
     occupation?: string | null;
     address?: string | null;
     gps_location?: string | null;
-    bacenta?: string | null;
-    basonta?: string | null;
+    bacenta?: string | { id: number; name: string; [key: string]: any } | null;
+    basonta?: string | { id: number; name: string; [key: string]: any } | null;
 }
 
 export interface MembersResponse {
