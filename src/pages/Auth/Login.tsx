@@ -3,6 +3,7 @@ import { useTheme } from '../../hooks/useTheme';
 import { FiSun, FiMoon } from 'react-icons/fi';
 import { useLogin } from '../../hooks/useLogin';
 import logo from '../../assets/makarios_log_trans_bg.png';
+import packageJson from '../../../package.json';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -111,6 +112,10 @@ const Login: React.FC = () => {
                     />
                     Sign in with Google
                 </button>
+
+                <div className="version-info">
+                    v{packageJson.version}
+                </div>
             </div>
         </div>
     );
