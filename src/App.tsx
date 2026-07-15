@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ThemeProvider } from './contexts/ThemeContext';
 import Login from './pages/Auth/Login';
+import CompleteProfile from './pages/Auth/CompleteProfile';
 import MainLayout from './components/Layout/MainLayout';
 import Dashboard from './pages/Home/Dashboard';
 import Settings from './pages/Settings/Settings';
@@ -38,6 +39,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/complete-profile" element={<CompleteProfile />} />
 
             <Route path="/dashboard" element={<MainLayout />}>
               <Route index element={<Dashboard />} />

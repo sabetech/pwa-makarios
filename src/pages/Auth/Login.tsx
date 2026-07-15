@@ -46,12 +46,17 @@ const Login: React.FC = () => {
     const googleLoginMutation = useMutation(loginWithGoogle, {
         onSuccess: (data) => {
             if (data.success && data.data) {
-                const { token, user } = data.data;
+                const { token, user, is_new_user } = data.data;
                 localStorage.setItem('token', token);
                 const role = user.roles?.[0]?.name || 'User';
                 const permissions = user.roles?.[0]?.permissions?.map(p => p.name) || [];
                 localStorage.setItem('user', JSON.stringify({ ...user, role, permissions }));
-                navigate('/dashboard');
+
+                if (is_new_user) {
+                    navigate('/complete-profile');
+                } else {
+                    navigate('/dashboard');
+                }
             }
         },
         onError: (error: any) => {
