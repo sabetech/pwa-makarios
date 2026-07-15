@@ -28,3 +28,12 @@ export const loginUser = async (data: LoginPayload): Promise<LoginResponse> => {
     const response = await api.post<LoginResponse>('/login', data);
     return response.data;
 };
+
+export interface GoogleLoginPayload {
+    token: string;
+}
+
+export const loginWithGoogle = async (data: GoogleLoginPayload): Promise<LoginResponse> => {
+    const response = await api.post<LoginResponse>('/v2/auth/google', data);
+    return response.data;
+};

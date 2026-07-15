@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../hooks/useTheme';
 import { FiSun, FiMoon } from 'react-icons/fi';
 import { useLogin } from '../../hooks/useLogin';
+import { useGoogleLogin } from '@react-oauth/google';
+import { loginWithGoogle } from '../../api/auth';
+import { useMutation } from 'react-query';
 import logo from '../../assets/makarios_log_trans_bg.png';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
@@ -17,8 +20,6 @@ const Login: React.FC = () => {
             navigate('/dashboard', { replace: true });
         }
     }, [navigate]);
-
-
 
     const [formData, setFormData] = useState({
         email: '',
@@ -42,10 +43,30 @@ const Login: React.FC = () => {
         });
     };
 
-    const handleGoogleLogin = () => {
-        console.log('Google login attempt');
-        // Add Google login logic here
-    };
+    const googleLoginMutation = useMutation(loginWithGoogle, {
+        onSuccess: (data) => {
+            if (data.success && data.data) {
+                const { token, user } = data.data;
+                localStorage.setItem('token', token);
+                const role = user.roles?.[0]?.name || 'User';
+                const permissions = user.roles?.[0]?.permissions?.map(p => p.name) || [];
+                localStorage.setItem('user', JSON.stringify({ ...user, role, permissions }));
+                navigate('/dashboard');
+            }
+        },
+        onError: (error: any) => {
+            console.error('Google login failed:', error);
+        },
+    });
+
+    const handleGoogleLogin = useGoogleLogin({
+        onSuccess: (credentialResponse) => {
+            googleLoginMutation.mutate({ token: credentialResponse.access_token });
+        },
+        onError: (error) => {
+            console.error('Google login failed:', error);
+        },
+    });
 
     return (
         <div className="login-container">
@@ -102,15 +123,24 @@ const Login: React.FC = () => {
 
                 <div className="divider">Or continue with</div>
 
-                <button className="google-btn" onClick={handleGoogleLogin}>
+                <button
+                    className="google-btn"
+                    onClick={() => handleGoogleLogin()}
+                    disabled={googleLoginMutation.isLoading}
+                >
                     <img
                         src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                         alt="Google logo"
                         width="20"
                         height="20"
                     />
-                    Sign in with Google
+                    {googleLoginMutation.isLoading ? 'Signing in...' : 'Sign in with Google'}
                 </button>
+                {googleLoginMutation.isError && (
+                    <p style={{ color: 'red', marginTop: '10px' }}>
+                        Google login failed. Please try again.
+                    </p>
+                )}
             </div>
         </div>
     );
