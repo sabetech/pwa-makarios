@@ -127,25 +127,29 @@ const Login: React.FC = () => {
                     )}
                 </form>
 
-                <div className="divider">Or continue with</div>
+                {import.meta.env.VITE_GOOGLE_CLIENT_ID && (
+                    <>
+                        <div className="divider">Or continue with</div>
 
-                <button
-                    className="google-btn"
-                    onClick={() => handleGoogleLogin()}
-                    disabled={googleLoginMutation.isLoading}
-                >
-                    <img
-                        src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                        alt="Google logo"
-                        width="20"
-                        height="20"
-                    />
-                    {googleLoginMutation.isLoading ? 'Signing in...' : 'Sign in with Google'}
-                </button>
-                {googleLoginMutation.isError && (
-                    <p style={{ color: 'red', marginTop: '10px' }}>
-                        Google login failed. Please try again.
-                    </p>
+                        <button
+                            className="google-btn"
+                            onClick={() => handleGoogleLogin()}
+                            disabled={googleLoginMutation.isLoading}
+                        >
+                            <img
+                                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                                alt="Google logo"
+                                width="20"
+                                height="20"
+                            />
+                            {googleLoginMutation.isLoading ? 'Signing in...' : 'Sign in with Google'}
+                        </button>
+                        {googleLoginMutation.isError && (
+                            <p style={{ color: 'red', marginTop: '10px' }}>
+                                Google login failed. Please try again.
+                            </p>
+                        )}
+                    </>
                 )}
 
                 <div className="version-info">
