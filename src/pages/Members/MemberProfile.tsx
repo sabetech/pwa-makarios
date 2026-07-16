@@ -69,7 +69,7 @@ const MemberProfile: React.FC = () => {
                         </div>
                     </div>
                     <h2 className="profile-name">{member.name}</h2>
-                    <p className="profile-primary-role">{member.bacenta || 'General'} Member</p>
+                    <p className="profile-primary-role">{(typeof member.bacenta === 'object' && member.bacenta ? member.bacenta.name : member.bacenta) || 'General'} Member</p>
 
                     <div className="profile-quick-actions">
                         {member.phone && (
@@ -82,7 +82,7 @@ const MemberProfile: React.FC = () => {
                                 <FaWhatsapp size={20} />
                             </a>
                         )}
-                        {member.email && (
+                        {member?.email && (
                             <a href={`mailto:${member.email}`} className="quick-action-btn message-icon">
                                 <FiMessageSquare size={20} />
                             </a>
@@ -95,7 +95,7 @@ const MemberProfile: React.FC = () => {
                         <Space direction="vertical" block>
                             <InfoRow icon={FiPhone} label="Phone" value={member.phone || undefined} />
                             <InfoRow icon={FiPhone} label="WhatsApp" value={member.whatsapp || undefined} />
-                            <InfoRow icon={FiMail} label="Email" value={member.email || undefined} />
+                            <InfoRow icon={FiMail} label="Email" value={member?.email || undefined} />
                             <Divider className="profile-divider" />
                             <InfoRow icon={FiCalendar} label="Date of Birth" value={member.dob || undefined} />
                             <InfoRow icon={FiUser} label="Gender" value={member.gender || undefined} />
@@ -109,8 +109,8 @@ const MemberProfile: React.FC = () => {
                             <InfoRow icon={FiMapPin} label="Address" value={member.address || undefined} />
                             <InfoRow icon={FiMapPin} label="GPS Location" value={member.gps_location || undefined} />
                             <Divider className="profile-divider" />
-                            <InfoRow icon={FiHome} label="Bacenta" value={member.bacenta || undefined} />
-                            <InfoRow icon={FiUsers} label="Basonta" value={member.basonta || undefined} />
+                            <InfoRow icon={FiHome} label="Bacenta" value={typeof member.bacenta === 'object' && member.bacenta ? member.bacenta.name : (member.bacenta || undefined)} />
+                            <InfoRow icon={FiUsers} label="Basonta" value={typeof member.basonta === 'object' && member.basonta ? member.basonta.name : (member.basonta || undefined)} />
                         </Space>
                     </Card>
                 </div>

@@ -23,6 +23,7 @@ import ManageRegions from './pages/Admin/ManageRegions';
 import ManageZones from './pages/Admin/ManageZones';
 import ManageBacentas from './pages/Admin/ManageBacentas';
 import ManageLeaders from './pages/Admin/ManageLeaders';
+import ManageCampaigns from './pages/Admin/ManageCampaigns';
 import Campaigns from './pages/Campaigns/Campaigns';
 import UpdateCampaignInfo from './pages/Campaigns/UpdateCampaignInfo';
 import AntibrutishLeaders from './pages/Campaigns/AntibrutishLeaders';
@@ -66,6 +67,7 @@ function App() {
               <Route path="admin/zones" element={<ManageZones />} />
               <Route path="admin/bacentas" element={<ManageBacentas />} />
               <Route path="admin/leaders" element={<ManageLeaders />} />
+              <Route path="admin/campaigns" element={<ManageCampaigns />} />
             </Route>
           </Routes>
         </Router>

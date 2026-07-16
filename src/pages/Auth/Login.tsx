@@ -6,6 +6,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { loginWithGoogle } from '../../api/auth';
 import { useMutation } from 'react-query';
 import logo from '../../assets/makarios_log_trans_bg.png';
+import packageJson from '../../../package.json';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -146,6 +147,10 @@ const Login: React.FC = () => {
                         Google login failed. Please try again.
                     </p>
                 )}
+
+                <div className="version-info">
+                    v{packageJson.version}
+                </div>
             </div>
         </div>
     );

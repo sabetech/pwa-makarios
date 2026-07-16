@@ -17,6 +17,7 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 import ImageUpload from '../../components/ImageUpload/ImageUpload';
 import { useMember } from '../../hooks/useMembers';
 import { useUpdateMember } from '../../hooks/useUpdateMember';
+import api from '../../api/axios';
 import './EditMember.css';
 
 const EditMember: React.FC = () => {
@@ -30,35 +31,49 @@ const EditMember: React.FC = () => {
     const [dateVisible, setDateVisible] = useState(false);
     const [bacentaVisible, setBacentaVisible] = useState(false);
     const [basontaVisible, setBasontaVisible] = useState(false);
+    const [bacentas, setBacentas] = useState<any[][]>([[]]);
+    const [basontas, setBasontas] = useState<any[][]>([[]]);
+
+    useEffect(() => {
+        const fetchDropdownData = async () => {
+            try {
+                const [bacentasRes, basontasRes] = await Promise.all([
+                    api.get('/v2/bacentas'),
+                    api.get('/v2/basontas').catch(() => ({ data: { data: [] } }))
+                ]);
+
+                if (bacentasRes.data?.data) {
+                    setBacentas([bacentasRes.data.data.map((b: any) => ({ label: b.name, value: String(b.id) }))]);
+                }
+
+                if (basontasRes.data?.data) {
+                    setBasontas([basontasRes.data.data.map((b: any) => ({ label: b.name, value: String(b.id) }))]);
+                }
+            } catch (error) {
+                console.error("Error fetching dropdown data:", error);
+            }
+        };
+        fetchDropdownData();
+    }, []);
 
     useEffect(() => {
         if (member) {
+            const bacentaVal = member.bacenta 
+                ? (typeof member.bacenta === 'object' ? String((member.bacenta as any).id) : String(member.bacenta))
+                : undefined;
+            const basontaVal = member.basonta 
+                ? (typeof member.basonta === 'object' ? String((member.basonta as any).id) : String(member.basonta))
+                : undefined;
             form.setFieldsValue({
                 ...member,
                 dob: member.dob ? new Date(member.dob) : undefined,
                 picture: member.img_url,
-                bacenta: member.bacenta ? [member.bacenta] : undefined,
-                basonta: member.basonta ? [member.basonta] : undefined
+                bacenta: bacentaVal ? [bacentaVal] : undefined,
+                basonta: basontaVal ? [basontaVal] : undefined
             });
             setImage(member.img_url);
         }
     }, [member, form]);
-
-    const bacentas = [
-        [
-            { label: 'Bacenta A', value: 'Bacenta A' },
-            { label: 'Bacenta B', value: 'Bacenta B' },
-            { label: 'Bacenta C', value: 'Bacenta C' },
-        ]
-    ];
-
-    const basontas = [
-        [
-            { label: 'Basonta X', value: 'Basonta X' },
-            { label: 'Basonta Y', value: 'Basonta Y' },
-            { label: 'Basonta Z', value: 'Basonta Z' },
-        ]
-    ];
 
     const genderOptions = [
         { label: 'Male', value: 'Male' },
@@ -264,7 +279,8 @@ const EditMember: React.FC = () => {
                             {value => {
                                 if (Array.isArray(value) && value.length > 0 && value[0] !== null) {
                                     const item = value[0] as any;
-                                    return item.label || String(item);
+                                    const selected = bacentas[0]?.find(b => b.value === String(item));
+                                    return selected ? selected.label : String(item);
                                 }
                                 return <span style={{ color: '#94a3b8' }}>Select Bacenta</span>;
                             }}
@@ -286,7 +302,8 @@ const EditMember: React.FC = () => {
                             {value => {
                                 if (Array.isArray(value) && value.length > 0 && value[0] !== null) {
                                     const item = value[0] as any;
-                                    return item.label || String(item);
+                                    const selected = basontas[0]?.find(b => b.value === String(item));
+                                    return selected ? selected.label : String(item);
                                 }
                                 return <span style={{ color: '#94a3b8' }}>Select Basonta</span>;
                             }}
