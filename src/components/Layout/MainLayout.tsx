@@ -90,7 +90,7 @@ const MainLayout: React.FC = () => {
                             </div>
                             <div>
                                 <h1 className="header-greeting">Hi, {user.name ? user.name.split(' ')[0] : 'Admin'}</h1>
-                                <p className="header-subtitle">{user.role}</p>
+                                <p className="header-subtitle">{user.role} - {user.isLeaderOf}</p>
                             </div>
                         </div>
                         <div className="header-actions">

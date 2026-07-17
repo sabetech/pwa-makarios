@@ -112,6 +112,10 @@
     border: 1px solid var(--admin-border);
 }
 
+.region-card.clickable {
+    cursor: pointer;
+}
+
 .region-card:hover {
     background-color: var(--admin-card-hover);
     transform: translateY(-2px);

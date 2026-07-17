@@ -48,12 +48,14 @@ const Login: React.FC = () => {
         onSuccess: (data) => {
             if (data.success && data.data) {
                 const { token, user, is_new_user } = data.data;
+
                 localStorage.setItem('token', token);
                 const role = user.roles?.[0]?.name || 'User';
                 const permissions = user.roles?.[0]?.permissions?.map(p => p.name) || [];
                 localStorage.setItem('user', JSON.stringify({ ...user, role, permissions }));
 
                 if (is_new_user) {
+                    
                     navigate('/complete-profile');
                 } else {
                     navigate('/dashboard');

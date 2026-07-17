@@ -229,7 +229,14 @@ const ManageRegions: React.FC = () => {
 
                 <div className="region-list">
                     {filteredRegions.map((region) => (
-                        <div key={region.id} className="region-card">
+                        <div 
+                            key={region.id} 
+                            className="region-card clickable"
+                            onClick={(e) => {
+                                if ((e.target as HTMLElement).closest('.region-actions')) return;
+                                navigate(`/dashboard/admin/regions/${region.id}`);
+                            }}
+                        >
                             <div className="region-accent"></div>
                             <div className="region-identity">
                                 <div className="region-icon-box">

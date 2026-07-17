@@ -25,6 +25,15 @@
     transition: all 0.3s ease;
 }
 
+.stat-card.clickable {
+    cursor: pointer;
+}
+
+.stat-card.clickable:hover {
+    border-color: var(--adm-color-secondary);
+    transform: translateY(-1px);
+}
+
 .stat-card.skeleton {
     border: 1px solid rgba(0, 0, 0, 0.05);
     background: linear-gradient(90deg, #ffffff 25%, rgba(0, 0, 0, 0.02) 50%, #ffffff 75%);
@@ -167,12 +176,3 @@
 }
 
 .badge {
-    font-size: 10px;
-    font-weight: 700;
-    color: #94a3b8;
-    background-color: rgba(0, 0, 0, 0.4);
-    padding: 6px 12px;
-    border-radius: 9999px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
