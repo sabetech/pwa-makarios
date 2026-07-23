@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { fetchDashboardData, DashboardData } from '../../api/dashboard';
+import { useMembersWithSeverity } from '../../hooks/useAttendance';
+import SeverityBadge from '../../components/SeverityBadge/SeverityBadge';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
@@ -42,6 +44,9 @@ const Dashboard: React.FC = () => {
 
         loadDashboardData();
     }, []);
+
+    const { data: membersWithSeverity = [] } = useMembersWithSeverity({ sort: 'severity' });
+    const attentionMembers = membersWithSeverity.filter(m => m.consecutive_absences > 0).slice(0, 5);
 
     // Chart Data
     const data = [
@@ -134,6 +139,40 @@ const Dashboard: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Members Needing Attention */}
+            {attentionMembers.length > 0 && (
+                <div className="attention-card">
+                    <div className="attention-header">
+                        <h3 className="attention-title">Members Needing Attention</h3>
+                        <span className="badge">{attentionMembers.length}</span>
+                    </div>
+                    <div className="attention-list">
+                        {attentionMembers.map((member) => (
+                            <div
+                                key={member.id}
+                                className="attention-item"
+                                onClick={() => navigate(`/dashboard/members/${member.id}`)}
+                            >
+                                <div className="attention-member-info">
+                                    <span className="attention-member-name">{member.name}</span>
+                                    <span className="attention-member-bacenta">
+                                        {member.bacenta?.name || 'Unassigned'}
+                                    </span>
+                                </div>
+                                {member.severity && (
+                                    <SeverityBadge
+                                        label={member.severity.label}
+                                        color={member.severity.color}
+                                        consecutiveAbsences={member.consecutive_absences}
+                                        size="small"
+                                    />
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

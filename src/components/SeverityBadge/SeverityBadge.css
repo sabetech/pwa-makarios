@@ -1,0 +1,85 @@
+.severity-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, var(--badge-color) 15%, transparent);
+    position: relative;
+    cursor: default;
+}
+
+.severity-badge--small {
+    padding: 2px 8px;
+    gap: 4px;
+}
+
+.severity-badge--small .severity-dot {
+    width: 6px;
+    height: 6px;
+}
+
+.severity-badge--small .severity-label {
+    font-size: 10px;
+}
+
+.severity-badge--large {
+    padding: 6px 14px;
+    gap: 8px;
+}
+
+.severity-badge--large .severity-dot {
+    width: 10px;
+    height: 10px;
+}
+
+.severity-badge--large .severity-label {
+    font-size: 13px;
+}
+
+.severity-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--badge-color);
+    flex-shrink: 0;
+}
+
+.severity-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--badge-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.severity-tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #1e2023;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.severity-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #1e2023;
+}
+
+.severity-badge:hover .severity-tooltip {
+    display: block;
+}

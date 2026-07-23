@@ -6,13 +6,18 @@ import type { Action } from 'antd-mobile/es/components/action-sheet';
 import { List } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import { useMembers } from '../../hooks/useMembers';
+import { useMembersWithSeverity } from '../../hooks/useAttendance';
+import SeverityBadge from '../../components/SeverityBadge/SeverityBadge';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import './Members.css';
 
 const Members: React.FC = () => {
     const [visible, setVisible] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [severityFilter, setSeverityFilter] = useState<string>('all');
     const { data: members = [], isLoading, isError } = useMembers();
+    const { data: membersWithSeverity = [] } = useMembersWithSeverity();
+    const severityMap = new Map(membersWithSeverity.map(m => [m.id, m]));
     const listRef = useRef<HTMLDivElement>(null);
     const [listDimensions, setListDimensions] = useState({ width: 0, height: 0 });
 
@@ -34,10 +39,18 @@ const Members: React.FC = () => {
         }
     };
 
-    const filteredMembers = members.filter(member =>
-        member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (member.phone && member.phone.includes(searchTerm))
-    );
+    const filteredMembers = members.filter(member => {
+        const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (member.phone && member.phone.includes(searchTerm));
+        
+        if (severityFilter === 'all') return matchesSearch;
+        
+        const memberSeverity = severityMap.get(member.id);
+        if (!memberSeverity || !memberSeverity.severity) return false;
+        
+        const label = memberSeverity.severity.label.toLowerCase();
+        return matchesSearch && label === severityFilter;
+    });
 
     const isLoaded = !isLoading && !isError && filteredMembers.length > 0;
 
@@ -94,10 +107,23 @@ const Members: React.FC = () => {
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-                    <button className="filter-button" aria-label="Filter">
+                    <button
+                        className={`filter-button ${severityFilter !== 'all' ? 'active' : ''}`}
+                        onClick={() => {
+                            const filters = ['all', 'severe', 'moderate', 'mild'];
+                            const currentIndex = filters.indexOf(severityFilter);
+                            setSeverityFilter(filters[(currentIndex + 1) % filters.length]);
+                        }}
+                    >
                         <FiFilter />
                     </button>
                 </div>
+                {severityFilter !== 'all' && (
+                    <div className="active-filter">
+                        <span>Filtered by: <strong>{severityFilter}</strong></span>
+                        <button className="clear-filter" onClick={() => setSeverityFilter('all')}>×</button>
+                    </div>
+                )}
             </div>
 
             <div className="members-content">
@@ -128,6 +154,7 @@ const Members: React.FC = () => {
                                     rowHeight={90}
                                     rowRenderer={({ index, key, style }) => {
                                         const member = filteredMembers[index];
+                                        const memberSeverity = severityMap.get(member.id);
                                         return (
                                             <div key={key} style={style}>
                                                 <div className="member-card" onClick={() => navigate(`/dashboard/members/${member.id}`)}>
@@ -141,6 +168,16 @@ const Members: React.FC = () => {
                                                     <div className="member-info">
                                                         <h3 className="member-name">{member.name}</h3>
                                                         <p className="member-phone">{member.phone || 'No phone'}</p>
+                                                        {memberSeverity && memberSeverity.severity && memberSeverity.consecutive_absences > 0 && (
+                                                            <div className="member-severity">
+                                                                <SeverityBadge
+                                                                    label={memberSeverity.severity.label}
+                                                                    color={memberSeverity.severity.color}
+                                                                    consecutiveAbsences={memberSeverity.consecutive_absences}
+                                                                    size="small"
+                                                                />
+                                                            </div>
+                                                        )}
                                                     </div>
                                                     <button className="member-action-button" aria-label="More options" onClick={(e) => { e.stopPropagation(); console.log('options clicked'); }}>
                                                         <span className="material-symbols-outlined">more_vert</span>

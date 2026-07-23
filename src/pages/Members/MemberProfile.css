@@ -229,3 +229,117 @@
     font-size: 16px;
     font-weight: 600;
 }
+
+/* Attendance Section */
+.attendance-severity-section {
+    margin-bottom: 16px;
+}
+
+.attendance-severity-display {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background-color: #f8fafc;
+    border-radius: 12px;
+}
+
+[data-theme='dark'] .attendance-severity-display {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.absence-count {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.attendance-date-filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.date-filter {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    background-color: #f8fafc;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    font-size: 13px;
+    color: #64748b;
+    cursor: pointer;
+}
+
+[data-theme='dark'] .date-filter {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+}
+
+.date-separator {
+    color: #94a3b8;
+}
+
+.attendance-loading {
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+}
+
+.attendance-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.no-attendance {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 14px;
+    padding: 24px;
+}
+
+.attendance-record {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-color: #f8fafc;
+    border-radius: 10px;
+}
+
+[data-theme='dark'] .attendance-record {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.record-date {
+    font-size: 14px;
+    color: #0f172a;
+    font-weight: 500;
+}
+
+[data-theme='dark'] .record-date {
+    color: white;
+}
+
+.record-status {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    text-transform: uppercase;
+}
+
+.record-status.present {
+    background-color: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+}
+
+.record-status.absent {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
