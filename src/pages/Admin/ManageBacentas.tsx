@@ -714,10 +714,6 @@ const ManageBacentas: React.FC = () => {
                             </button>
                         </div>
                         <div className="modal-body">
-                            <p className="modal-description" style={{ fontSize: '0.875rem', color: 'var(--admin-text-muted)', marginBottom: '1rem', opacity: 0.7 }}>
-                                Update the bacenta details, assign a new leader to oversee this bacenta and guide its strategic growth within the regional landscape.
-                            </p>
-
                             <div className="form-group">
                                 <label htmlFor="edit-bacenta-name">Bacenta Name</label>
                                 <input
