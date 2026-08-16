@@ -1,11 +1,27 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { fetchDashboardData, DashboardData } from '../../api/dashboard';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
+    const navigate = useNavigate();
     const [stats, setStats] = useState<{ label: string; value: string }[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const getStatRoute = (label: string): string | null => {
+        switch (label) {
+            case 'STREAMS': return '/dashboard/admin/streams';
+            case 'REGIONS': return '/dashboard/admin/regions';
+            case 'BACENTA':
+            case 'BACENTAS': return '/dashboard/admin/bacentas';
+            case 'MEMBER':
+            case 'MEMBERS': return '/dashboard/members';
+            case 'LEADER':
+            case 'LEADERS': return '/dashboard/admin/leaders';
+            default: return null;
+        }
+    };
 
     useEffect(() => {
         const loadDashboardData = async () => {
@@ -47,12 +63,19 @@ const Dashboard: React.FC = () => {
                         </div>
                     ))
                 ) : (
-                    stats.map((stat, index) => (
-                        <div className="stat-card" key={index}>
-                            <div className="stat-label">{stat.label}</div>
-                            <div className="stat-value">{stat.value}</div>
-                        </div>
-                    ))
+                    stats.map((stat, index) => {
+                        const route = getStatRoute(stat.label);
+                        return (
+                            <div
+                                className={`stat-card${route ? ' clickable' : ''}`}
+                                key={index}
+                                onClick={() => route && navigate(route)}
+                            >
+                                <div className="stat-label">{stat.label}</div>
+                                <div className="stat-value">{stat.value}</div>
+                            </div>
+                        );
+                    })
                 )}
             </div>
 

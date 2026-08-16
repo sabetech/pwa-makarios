@@ -5,6 +5,7 @@ export interface Bacenta {
     name: string;
     members_count: number;
     region?: {
+        id: number;
         name: string;
         stream?: {
             name: string;

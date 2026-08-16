@@ -129,8 +129,8 @@ const ManageLeaders: React.FC = () => {
 
     const filteredLeaders = leaders.filter(leader =>
         leader.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        leader.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        leader?.leading?.name.toLowerCase().includes(searchTerm.toLowerCase())
+        leader.role?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        leader?.leading?.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     if (loading) {

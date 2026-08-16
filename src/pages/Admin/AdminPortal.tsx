@@ -67,6 +67,14 @@ const managementItems: ManagementItem[] = [
         icon: 'groups',
         type: 'tertiary',
         actionLabel: 'Member Database'
+    },
+    {
+        id: 'campaigns',
+        title: 'Manage Campaigns',
+        description: 'Configure and oversee church campaigns, initiatives, and outreach programs.',
+        icon: 'campaign',
+        type: 'primary',
+        actionLabel: 'Campaign Setup'
     }
 ];
 
@@ -123,6 +131,8 @@ const AdminPortal: React.FC = () => {
                                 navigate('/dashboard/admin/bacentas');
                             } else if (item.id === 'leaders') {
                                 navigate('/dashboard/admin/leaders');
+                            } else if (item.id === 'campaigns') {
+                                navigate('/dashboard/admin/campaigns');
                             } else {
                                 console.log(`Navigating to ${item.id}`);
                             }

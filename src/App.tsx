@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ThemeProvider } from './contexts/ThemeContext';
 import Login from './pages/Auth/Login';
+import CompleteProfile from './pages/Auth/CompleteProfile';
 import MainLayout from './components/Layout/MainLayout';
 import Dashboard from './pages/Home/Dashboard';
 import Settings from './pages/Settings/Settings';
@@ -18,10 +19,13 @@ import MemberProfile from './pages/Members/MemberProfile';
 import Insights from './pages/Home/Insights';
 import AdminPortal from './pages/Admin/AdminPortal';
 import ManageStreams from './pages/Admin/ManageStreams';
+import StreamDetails from './pages/Admin/StreamDetails';
 import ManageRegions from './pages/Admin/ManageRegions';
+import RegionDetails from './pages/Admin/RegionDetails';
 import ManageZones from './pages/Admin/ManageZones';
 import ManageBacentas from './pages/Admin/ManageBacentas';
 import ManageLeaders from './pages/Admin/ManageLeaders';
+import ManageCampaigns from './pages/Admin/ManageCampaigns';
 import Campaigns from './pages/Campaigns/Campaigns';
 import UpdateCampaignInfo from './pages/Campaigns/UpdateCampaignInfo';
 import AntibrutishLeaders from './pages/Campaigns/AntibrutishLeaders';
@@ -38,6 +42,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/complete-profile" element={<CompleteProfile />} />
 
             <Route path="/dashboard" element={<MainLayout />}>
               <Route index element={<Dashboard />} />
@@ -60,10 +65,13 @@ function App() {
               <Route path="insights" element={<Insights />} />
               <Route path="admin" element={<AdminPortal />} />
               <Route path="admin/streams" element={<ManageStreams />} />
+              <Route path="admin/streams/:id" element={<StreamDetails />} />
               <Route path="admin/regions" element={<ManageRegions />} />
+              <Route path="admin/regions/:id" element={<RegionDetails />} />
               <Route path="admin/zones" element={<ManageZones />} />
               <Route path="admin/bacentas" element={<ManageBacentas />} />
               <Route path="admin/leaders" element={<ManageLeaders />} />
+              <Route path="admin/campaigns" element={<ManageCampaigns />} />
             </Route>
           </Routes>
         </Router>

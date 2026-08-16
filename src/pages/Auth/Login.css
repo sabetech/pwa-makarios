@@ -234,3 +234,10 @@
 .forgot-password:hover {
     text-decoration: underline;
 }
+
+.version-info {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
