@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchStream, fetchStreamRegions, Stream } from '../../api/streams';
+import { fetchStream, fetchStreamRegions, fetchStreamBacentas, fetchStreamMembers, Stream } from '../../api/streams';
+import { Bacenta } from '../../api/bacentas';
 import { Region } from '../../api/regions';
 import './StreamDetails.css';
 import './AdminShared.css';
@@ -10,6 +11,8 @@ const StreamDetails: React.FC = () => {
     const navigate = useNavigate();
     const [stream, setStream] = useState<Stream | null>(null);
     const [regions, setRegions] = useState<Region[]>([]);
+    const [bacentas, setBacentas] = useState<Bacenta[]>([]);
+    const [membersCount, setMembersCount] = useState<number>(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -18,12 +21,16 @@ const StreamDetails: React.FC = () => {
             if (!id) return;
             try {
                 setLoading(true);
-                const [streamData, regionsData] = await Promise.all([
+                const [streamData, regionsData, bacentasData, membersCountData] = await Promise.all([
                     fetchStream(id),
-                    fetchStreamRegions(id)
+                    fetchStreamRegions(id),
+                    fetchStreamBacentas(id),
+                    fetchStreamMembers(id)
                 ]);
                 setStream(streamData);
                 setRegions(regionsData);
+                setBacentas(bacentasData);
+                setMembersCount(membersCountData);
                 setError(null);
             } catch (err) {
                 console.error('Error loading stream details:', err);
@@ -151,15 +158,11 @@ const StreamDetails: React.FC = () => {
                                 <span className="stat-label-small">Regions</span>
                             </div>
                             <div className="details-stat-box">
-                                <span className="stat-value-large">
-                                    {regions.reduce((sum, r) => sum + (r.bacenta_count || 0), 0)}
-                                </span>
+                                <span className="stat-value-large">{bacentas.length}</span>
                                 <span className="stat-label-small">Bacentas</span>
                             </div>
                             <div className="details-stat-box">
-                                <span className="stat-value-large">
-                                    {regions.reduce((sum, r) => sum + (r.members_count || 0), 0)}
-                                </span>
+                                <span className="stat-value-large">{membersCount}</span>
                                 <span className="stat-label-small">Members</span>
                             </div>
                         </div>
