@@ -19,6 +19,7 @@ import MemberProfile from './pages/Members/MemberProfile';
 import Insights from './pages/Home/Insights';
 import AdminPortal from './pages/Admin/AdminPortal';
 import ManageStreams from './pages/Admin/ManageStreams';
+import StreamDetails from './pages/Admin/StreamDetails';
 import ManageRegions from './pages/Admin/ManageRegions';
 import RegionDetails from './pages/Admin/RegionDetails';
 import ManageZones from './pages/Admin/ManageZones';
@@ -64,6 +65,7 @@ function App() {
               <Route path="insights" element={<Insights />} />
               <Route path="admin" element={<AdminPortal />} />
               <Route path="admin/streams" element={<ManageStreams />} />
+              <Route path="admin/streams/:id" element={<StreamDetails />} />
               <Route path="admin/regions" element={<ManageRegions />} />
               <Route path="admin/regions/:id" element={<RegionDetails />} />
               <Route path="admin/zones" element={<ManageZones />} />

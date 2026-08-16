@@ -19,7 +19,16 @@ export interface StreamsResponse {
 }
 
 export const fetchStreams = async (): Promise<Stream[]> => {
-    // The user specified api/v2/streams. Our axios instance base URL is already .../api
     const response = await api.get<StreamsResponse>('/v2/streams');
+    return response.data.data;
+};
+
+export const fetchStream = async (id: number | string): Promise<Stream> => {
+    const response = await api.get<{ success: boolean; data: Stream }>(`/v2/streams/${id}`);
+    return response.data.data;
+};
+
+export const fetchStreamRegions = async (id: number | string): Promise<any[]> => {
+    const response = await api.get<{ success: boolean; data: any[] }>(`/v2/streams/${id}/regions`);
     return response.data.data;
 };
