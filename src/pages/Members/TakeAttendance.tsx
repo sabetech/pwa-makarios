@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Button,
@@ -25,6 +25,11 @@ const TakeAttendance: React.FC = () => {
     const [submitting, setSubmitting] = useState(false);
     const [loadingService, setLoadingService] = useState(false);
 
+    // Refs so background refetches never wipe unsaved edits
+    const membersRef = useRef(members);
+    membersRef.current = members;
+    const dirtyRef = useRef(false);
+
     useEffect(() => {
         const loadServices = async () => {
             try {
@@ -43,12 +48,16 @@ const TakeAttendance: React.FC = () => {
     useEffect(() => {
         if (!selectedServiceId) return;
 
+        dirtyRef.current = false;
+        let cancelled = false;
+
         const loadExisting = async () => {
             try {
                 setLoadingService(true);
                 const existing = await fetchServiceAttendance(selectedServiceId);
+                if (cancelled || dirtyRef.current) return;
                 const statusMap = new Map<number, boolean>();
-                members.forEach(m => statusMap.set(m.id, false));
+                membersRef.current.forEach(m => statusMap.set(m.id, false));
                 existing.forEach(record => {
                     statusMap.set(record.member_id, record.status === 'present');
                 });
@@ -56,13 +65,16 @@ const TakeAttendance: React.FC = () => {
             } catch (error) {
                 console.error('Error fetching service attendance:', error);
             } finally {
-                setLoadingService(false);
+                if (!cancelled) setLoadingService(false);
             }
         };
         loadExisting();
-    }, [selectedServiceId, members]);
+
+        return () => { cancelled = true; };
+    }, [selectedServiceId]);
 
     const toggleAttendance = (id: number) => {
+        dirtyRef.current = true;
         setAttendanceStatus(prev => {
             const next = new Map(prev);
             next.set(id, !next.get(id));
@@ -90,6 +102,7 @@ const TakeAttendance: React.FC = () => {
                 status: (attendanceStatus.get(m.id) ? 'present' : 'absent') as 'present' | 'absent',
             }));
             await markAttendance(selectedServiceId, attendances);
+            dirtyRef.current = false;
             Toast.show({
                 icon: 'success',
                 content: 'Attendance logged successfully',
