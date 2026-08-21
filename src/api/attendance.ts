@@ -60,6 +60,11 @@ export const markAttendance = async (serviceId: number, attendances: { member_id
     await api.post('/attendance', { service_id: serviceId, attendances });
 };
 
+export const fetchServiceAttendance = async (serviceId: number): Promise<{ member_id: number; status: 'present' | 'absent' }[]> => {
+    const response = await api.get<{ success: boolean; data: { member_id: number; status: 'present' | 'absent' }[] }>(`/attendance/service/${serviceId}`);
+    return response.data.data;
+};
+
 export const fetchAttendanceThresholds = async (): Promise<AttendanceThreshold[]> => {
     const response = await api.get<{ success: boolean; data: AttendanceThreshold[] }>('/attendance/thresholds');
     return response.data.data;

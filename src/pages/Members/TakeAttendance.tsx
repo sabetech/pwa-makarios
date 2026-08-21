@@ -1,88 +1,156 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Button,
     Switch,
-    Input,
     Toast,
-    Space,
-    DatePicker
+    DotLoading,
+    Picker,
 } from 'antd-mobile';
-import { FiSearch, FiChevronLeft, FiChevronRight, FiCheckCircle, FiCalendar } from 'react-icons/fi';
+import { FiSearch, FiCheckCircle, FiCalendar, FiChevronDown } from 'react-icons/fi';
 import PageHeader from '../../components/PageHeader/PageHeader';
+import { useMembers } from '../../hooks/useMembers';
+import { fetchServices, Service } from '../../api/services';
+import { markAttendance, fetchServiceAttendance } from '../../api/attendance';
 import './TakeAttendance.css';
 
 const TakeAttendance: React.FC = () => {
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-    const [datePickerVisible, setDatePickerVisible] = useState(false);
+    const { data: members = [], isLoading: loadingMembers } = useMembers();
+    const [services, setServices] = useState<Service[]>([]);
+    const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
+    const [pickerVisible, setPickerVisible] = useState(false);
+    const [attendanceStatus, setAttendanceStatus] = useState<Map<number, boolean>>(new Map());
+    const [submitting, setSubmitting] = useState(false);
+    const [loadingService, setLoadingService] = useState(false);
 
-    // Mock data for members
-    const [members, setMembers] = useState([
-        { id: 1, name: 'John Doe', role: 'Youth Member', initials: 'JD', present: true, color: 'primary' },
-        { id: 2, name: 'Jane Smith', role: 'Staff Leader', initials: 'JS', present: false, color: 'purple' },
-        { id: 3, name: 'Mike Johnson', role: 'New Volunteer', initials: 'MJ', present: true, color: 'emerald' },
-        { id: 4, name: 'Sarah Williams', role: 'Youth Member', initials: 'SW', present: false, color: 'orange' },
-        { id: 5, name: 'Alex Brown', role: 'Youth Member', initials: 'AB', present: false, color: 'primary' },
-    ]);
+    useEffect(() => {
+        const loadServices = async () => {
+            try {
+                const data = await fetchServices();
+                setServices(data);
+                if (data.length > 0) {
+                    setSelectedServiceId(data[0].id);
+                }
+            } catch (error) {
+                console.error('Error fetching services:', error);
+            }
+        };
+        loadServices();
+    }, []);
 
-    const presentCount = members.filter(m => m.present).length;
+    useEffect(() => {
+        if (!selectedServiceId) return;
+
+        const loadExisting = async () => {
+            try {
+                setLoadingService(true);
+                const existing = await fetchServiceAttendance(selectedServiceId);
+                const statusMap = new Map<number, boolean>();
+                members.forEach(m => statusMap.set(m.id, false));
+                existing.forEach(record => {
+                    statusMap.set(record.member_id, record.status === 'present');
+                });
+                setAttendanceStatus(statusMap);
+            } catch (error) {
+                console.error('Error fetching service attendance:', error);
+            } finally {
+                setLoadingService(false);
+            }
+        };
+        loadExisting();
+    }, [selectedServiceId, members]);
 
     const toggleAttendance = (id: number) => {
-        setMembers(members.map(m =>
-            m.id === id ? { ...m, present: !m.present } : m
-        ));
+        setAttendanceStatus(prev => {
+            const next = new Map(prev);
+            next.set(id, !next.get(id));
+            return next;
+        });
     };
 
-    const handleSubmit = () => {
-        Toast.show({
-            icon: 'success',
-            content: 'Attendance logged successfully',
-        });
-        setTimeout(() => navigate('/dashboard/members'), 1500);
+    const selectedService = services.find(s => s.id === selectedServiceId);
+
+    const presentCount = useMemo(
+        () => Array.from(attendanceStatus.values()).filter(Boolean).length,
+        [attendanceStatus]
+    );
+
+    const handleSubmit = async () => {
+        if (!selectedServiceId) {
+            Toast.show({ icon: 'fail', content: 'Please select a service' });
+            return;
+        }
+
+        try {
+            setSubmitting(true);
+            const attendances = members.map(m => ({
+                member_id: m.id,
+                status: (attendanceStatus.get(m.id) ? 'present' : 'absent') as 'present' | 'absent',
+            }));
+            await markAttendance(selectedServiceId, attendances);
+            Toast.show({
+                icon: 'success',
+                content: 'Attendance logged successfully',
+            });
+            setTimeout(() => navigate('/dashboard/members'), 1500);
+        } catch (error) {
+            console.error('Error submitting attendance:', error);
+            Toast.show({ icon: 'fail', content: 'Failed to log attendance. Please try again.' });
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     const filteredMembers = members.filter(m =>
         m.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    const pickerColumns = [
+        services.map(s => ({
+            label: `${s.service_type?.service_type || 'Service'} - ${new Date(s.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`,
+            value: s.id,
+        })),
+    ];
+
     return (
         <div className="attendance-page">
             <PageHeader title="Log Attendance" />
 
             <div className="attendance-content">
-                {/* Date Selector Card */}
-                <div className="calendar-card" onClick={() => setDatePickerVisible(true)}>
+                {/* Service Selector Card */}
+                <div className="calendar-card" onClick={() => setPickerVisible(true)}>
                     <div className="date-selector-display">
                         <div className="date-info">
                             <FiCalendar className="calendar-icon" />
                             <div className="date-text-group">
-                                <span className="date-label">Attendance Date</span>
+                                <span className="date-label">Select Service</span>
                                 <span className="selected-date-text">
-                                    {selectedDate.toLocaleDateString('en-US', {
-                                        weekday: 'long',
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric'
-                                    })}
+                                    {selectedService
+                                        ? `${selectedService.service_type?.service_type || 'Service'} - ${new Date(selectedService.date).toLocaleDateString('en-US', {
+                                            weekday: 'long',
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        })}`
+                                        : loadingMembers ? 'Loading...' : 'No services found'}
                                 </span>
                             </div>
                         </div>
                         <div className="change-date-btn">
                             <span>Change</span>
-                            <FiChevronRight />
+                            <FiChevronDown />
                         </div>
                     </div>
 
-                    <DatePicker
-                        title='Select Attendance Date'
-                        visible={datePickerVisible}
-                        onClose={() => setDatePickerVisible(false)}
-                        defaultValue={selectedDate}
-                        max={new Date()}
-                        onConfirm={val => {
-                            setSelectedDate(val);
+                    <Picker
+                        columns={pickerColumns}
+                        visible={pickerVisible}
+                        onClose={() => setPickerVisible(false)}
+                        value={[selectedServiceId]}
+                        onConfirm={(val) => {
+                            if (val[0] !== null) setSelectedServiceId(val[0] as number);
                         }}
                     />
                 </div>
@@ -108,31 +176,34 @@ const TakeAttendance: React.FC = () => {
                 </div>
 
                 <div className="attendance-list">
-                    {filteredMembers.map(member => (
-                        <div key={member.id} className="attendance-item">
-                            <div className="member-avatar" style={{
-                                backgroundColor: member.color === 'primary' ? 'var(--adm-color-primary-light)' : `var(--color-${member.color}-light)`,
-                                color: member.color === 'primary' ? 'var(--adm-color-primary)' : `var(--color-${member.color})`
-                            }}>
-                                {member.initials}
+                    {loadingMembers ? (
+                        <div className="end-of-list"><DotLoading color="primary" /> Loading members...</div>
+                    ) : filteredMembers.length === 0 ? (
+                        <div className="end-of-list">No members found</div>
+                    ) : (
+                        filteredMembers.map(member => (
+                            <div key={member.id} className="attendance-item">
+                                <div className="member-avatar">
+                                    {member.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase()}
+                                </div>
+                                <div className="member-info">
+                                    <div className="member-name">{member.name}</div>
+                                    <div className="member-role">{member.phone || 'Member'}</div>
+                                </div>
+                                <div className="attendance-toggle">
+                                    <Switch
+                                        checked={!!attendanceStatus.get(member.id)}
+                                        onChange={() => toggleAttendance(member.id)}
+                                        style={{
+                                            '--checked-color': 'var(--adm-color-primary)',
+                                            '--height': '31px',
+                                            '--width': '51px',
+                                        }}
+                                    />
+                                </div>
                             </div>
-                            <div className="member-info">
-                                <div className="member-name">{member.name}</div>
-                                <div className="member-role">{member.role}</div>
-                            </div>
-                            <div className="attendance-toggle">
-                                <Switch
-                                    checked={member.present}
-                                    onChange={() => toggleAttendance(member.id)}
-                                    style={{
-                                        '--checked-color': 'var(--adm-color-primary)',
-                                        '--height': '31px',
-                                        '--width': '51px',
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                     <div className="end-of-list">END OF LIST</div>
                 </div>
             </div>
@@ -144,9 +215,16 @@ const TakeAttendance: React.FC = () => {
                     size="large"
                     className="submit-attendance-btn"
                     onClick={handleSubmit}
+                    disabled={submitting || !selectedServiceId || members.length === 0}
                 >
-                    <FiCheckCircle style={{ marginRight: 8 }} />
-                    Submit Attendance
+                    {submitting ? (
+                        <>Submitting... <DotLoading color="white" /></>
+                    ) : (
+                        <>
+                            <FiCheckCircle style={{ marginRight: 8 }} />
+                            Submit Attendance
+                        </>
+                    )}
                 </Button>
             </div>
         </div>
