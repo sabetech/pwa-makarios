@@ -23,6 +23,7 @@ import ManageRegions from './pages/Admin/ManageRegions';
 import RegionDetails from './pages/Admin/RegionDetails';
 import ManageZones from './pages/Admin/ManageZones';
 import ManageBacentas from './pages/Admin/ManageBacentas';
+import BacentaDetails from './pages/Admin/BacentaDetails';
 import ManageLeaders from './pages/Admin/ManageLeaders';
 import ManageCampaigns from './pages/Admin/ManageCampaigns';
 import Campaigns from './pages/Campaigns/Campaigns';
@@ -68,6 +69,7 @@ function App() {
               <Route path="admin/regions/:id" element={<RegionDetails />} />
               <Route path="admin/zones" element={<ManageZones />} />
               <Route path="admin/bacentas" element={<ManageBacentas />} />
+              <Route path="admin/bacentas/:id" element={<BacentaDetails />} />
               <Route path="admin/leaders" element={<ManageLeaders />} />
               <Route path="admin/campaigns" element={<ManageCampaigns />} />
             </Route>
