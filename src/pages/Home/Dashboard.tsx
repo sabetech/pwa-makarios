@@ -165,7 +165,9 @@ const Dashboard: React.FC = () => {
                                         label={member.severity.label}
                                         color={member.severity.color}
                                         consecutiveAbsences={member.consecutive_absences}
+                                        memberId={member.id}
                                         size="small"
+                                        showCount
                                     />
                                 )}
                             </div>

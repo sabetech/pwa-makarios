@@ -174,7 +174,9 @@ const Members: React.FC = () => {
                                                                     label={memberSeverity.severity.label}
                                                                     color={memberSeverity.severity.color}
                                                                     consecutiveAbsences={memberSeverity.consecutive_absences}
+                                                                    memberId={member.id}
                                                                     size="small"
+                                                                    showCount
                                                                 />
                                                             </div>
                                                         )}

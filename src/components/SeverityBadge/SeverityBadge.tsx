@@ -1,34 +1,64 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './SeverityBadge.css';
+
+const LABEL_COLOR_TOKENS: Record<string, string> = {
+    active: 'var(--severity-green)',
+    mild: 'var(--severity-yellow)',
+    moderate: 'var(--severity-amber)',
+    severe: 'var(--severity-red)',
+};
 
 interface SeverityBadgeProps {
     label: string;
-    color: string;
+    color?: string;
     consecutiveAbsences: number;
+    memberId?: number;
     size?: 'small' | 'medium' | 'large';
-    showTooltip?: boolean;
+    showCount?: boolean;
 }
 
 const SeverityBadge: React.FC<SeverityBadgeProps> = ({
     label,
     color,
     consecutiveAbsences,
+    memberId,
     size = 'medium',
-    showTooltip = true
+    showCount = false
 }) => {
-    const getTooltipText = () => {
-        if (consecutiveAbsences === 0) return 'Active - Present in last service';
-        return `Absent ${consecutiveAbsences} consecutive week${consecutiveAbsences > 1 ? 's' : ''}`;
+    const navigate = useNavigate();
+
+    const resolvedColor = color ?? LABEL_COLOR_TOKENS[label.toLowerCase()] ?? 'var(--adm-color-slate)';
+    const detail = consecutiveAbsences === 0
+        ? 'Present in last service'
+        : `Absent ${consecutiveAbsences} consecutive week${consecutiveAbsences > 1 ? 's' : ''}`;
+    const ariaLabel = `${label} severity: ${detail}`;
+
+    const handleClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (memberId) {
+            navigate(`/members/${memberId}`);
+        }
     };
 
     return (
-        <div className={`severity-badge severity-badge--${size}`} style={{ '--badge-color': color } as React.CSSProperties}>
-            <span className="severity-dot" />
+        <button
+            type="button"
+            className={`severity-badge severity-badge--${size} ${memberId ? 'severity-badge--clickable' : ''}`}
+            style={{ '--badge-color': resolvedColor } as React.CSSProperties}
+            onClick={handleClick}
+            aria-label={ariaLabel}
+            title={detail}
+            disabled={!memberId}
+        >
+            <span className="severity-dot" aria-hidden="true" />
             <span className="severity-label">{label}</span>
-            {showTooltip && (
-                <span className="severity-tooltip">{getTooltipText()}</span>
+            {showCount && consecutiveAbsences > 0 && (
+                <span className="severity-count">
+                    · Absent {consecutiveAbsences} wk{consecutiveAbsences > 1 ? 's' : ''}
+                </span>
             )}
-        </div>
+        </button>
     );
 };
 
