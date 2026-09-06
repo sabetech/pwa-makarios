@@ -115,6 +115,7 @@
     overflow: hidden;
     transition: all 0.3s ease;
     border: 1px solid var(--admin-border);
+    cursor: pointer;
 }
 
 .stream-card:hover {

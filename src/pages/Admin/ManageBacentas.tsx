@@ -72,21 +72,49 @@ const ManageBacentas: React.FC = () => {
         const loadInitialData = async () => {
             try {
                 setLoading(true);
-                const [bacentasData, streamsData, regionsData, leadersData, zonesData] = await Promise.all([
+                const results = await Promise.allSettled([
                     fetchBacentas(),
                     fetchStreams(),
                     fetchRegions(),
                     fetchLeaders(),
                     fetchZones()
                 ]);
-                setBacentas(bacentasData);
-                setStreams(streamsData);
-                setRegions(regionsData);
-                setLeaders(leadersData);
-                setZones(zonesData);
-                setError(null);
+
+                const [bacentasResult, streamsResult, regionsResult, leadersResult, zonesResult] = results;
+
+                if (bacentasResult.status === 'fulfilled') {
+                    setBacentas(bacentasResult.value);
+                    setError(null);
+                } else {
+                    setError('Failed to load data. Please try again later.');
+                    console.error('Error fetching bacentas:', bacentasResult.reason);
+                }
+
+                if (streamsResult.status === 'fulfilled') {
+                    setStreams(streamsResult.value);
+                } else {
+                    console.error('Error fetching streams:', streamsResult.reason);
+                }
+
+                if (regionsResult.status === 'fulfilled') {
+                    setRegions(regionsResult.value);
+                } else {
+                    console.error('Error fetching regions:', regionsResult.reason);
+                }
+
+                if (leadersResult.status === 'fulfilled') {
+                    setLeaders(leadersResult.value);
+                } else {
+                    console.error('Error fetching leaders:', leadersResult.reason);
+                }
+
+                if (zonesResult.status === 'fulfilled') {
+                    setZones(zonesResult.value);
+                } else {
+                    console.error('Error fetching zones:', zonesResult.reason);
+                }
             } catch (err) {
-                console.error('Error fetching data:', err);
+                console.error('Unexpected error:', err);
                 setError('Failed to load data. Please try again later.');
             } finally {
                 setLoading(false);
@@ -697,10 +725,6 @@ const ManageBacentas: React.FC = () => {
                             </button>
                         </div>
                         <div className="modal-body">
-                            <p className="modal-description" style={{ fontSize: '0.875rem', color: 'var(--admin-text-muted)', marginBottom: '1rem', opacity: 0.7 }}>
-                                Update the bacenta details, assign a new leader to oversee this bacenta and guide its strategic growth within the regional landscape.
-                            </p>
-
                             <div className="form-group">
                                 <label htmlFor="edit-bacenta-name">Bacenta Name</label>
                                 <input

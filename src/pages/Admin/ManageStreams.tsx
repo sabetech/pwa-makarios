@@ -121,7 +121,7 @@ const ManageStreams: React.FC = () => {
                         const days = stream.meeting_day.split(',');
 
                         return (
-                            <div key={stream.id} className={`stream-card ${type}-tier`}>
+                            <div key={stream.id} className={`stream-card ${type}-tier`} onClick={() => navigate(`/dashboard/admin/streams/${stream.id}`)}>
                                 <div className="stream-accent"></div>
                                 <div className="stream-identity">
                                     <div className="stream-icon-box">
