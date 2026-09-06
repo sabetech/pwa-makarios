@@ -407,7 +407,12 @@ const ManageBacentas: React.FC = () => {
 
                 <div className="bacenta-list">
                     {filteredBacentas.map((bacenta) => (
-                        <div key={bacenta.id} className="bacenta-card">
+                        <div
+                            key={bacenta.id}
+                            className="bacenta-card"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => navigate(`/dashboard/admin/bacentas/${bacenta.id}`)}
+                        >
                             <div className="bacenta-accent"></div>
                             <div className="bacenta-identity">
                                 <div className="bacenta-icon-box">
@@ -453,10 +458,16 @@ const ManageBacentas: React.FC = () => {
                             </div>
 
                             <div className="bacenta-actions">
-                                <button className="action-btn" onClick={() => handleEditClick(bacenta)}>
+                                <button
+                                    className="action-btn"
+                                    onClick={(e) => { e.stopPropagation(); handleEditClick(bacenta); }}
+                                >
                                     <span className="material-symbols-outlined">edit</span>
                                 </button>
-                                <button className="action-btn delete" onClick={() => handleDelete(bacenta.id)}>
+                                <button
+                                    className="action-btn delete"
+                                    onClick={(e) => { e.stopPropagation(); handleDelete(bacenta.id); }}
+                                >
                                     <span className="material-symbols-outlined">delete</span>
                                 </button>
                             </div>

@@ -185,3 +185,91 @@
     text-transform: uppercase;
     letter-spacing: 1px;
 }
+
+/* Members Needing Attention Card */
+.attention-card {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 1.25rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] .attention-card {
+    background-color: var(--adm-color-slate);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+}
+
+.attention-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.attention-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+[data-theme='dark'] .attention-title {
+    color: white;
+}
+
+.attention-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.attention-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: #f8fafc;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.attention-item:hover {
+    background-color: #f1f5f9;
+}
+
+[data-theme='dark'] .attention-item {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .attention-item:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.attention-member-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
+}
+
+.attention-member-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+[data-theme='dark'] .attention-member-name {
+    color: white;
+}
+
+.attention-member-bacenta {
+    font-size: 12px;
+    color: #64748b;
+}
