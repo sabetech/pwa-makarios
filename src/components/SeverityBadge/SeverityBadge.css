@@ -1,0 +1,86 @@
+.severity-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, var(--badge-color) 15%, transparent);
+    border: none;
+    font-family: inherit;
+}
+
+.severity-badge--clickable {
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.severity-badge--clickable:active {
+    transform: scale(0.96);
+}
+
+.severity-badge--clickable:focus-visible {
+    outline: 2px solid var(--badge-color);
+    outline-offset: 2px;
+}
+
+.severity-badge:disabled {
+    cursor: default;
+}
+
+.severity-badge--small {
+    padding: 2px 8px;
+    gap: 4px;
+}
+
+.severity-badge--small .severity-dot {
+    width: 6px;
+    height: 6px;
+}
+
+.severity-badge--small .severity-label {
+    font-size: 10px;
+}
+
+.severity-badge--small .severity-count {
+    font-size: 10px;
+}
+
+.severity-badge--large {
+    padding: 6px 14px;
+    gap: 8px;
+}
+
+.severity-badge--large .severity-dot {
+    width: 10px;
+    height: 10px;
+}
+
+.severity-badge--large .severity-label {
+    font-size: 13px;
+}
+
+.severity-badge--large .severity-count {
+    font-size: 12px;
+}
+
+.severity-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--badge-color);
+    flex-shrink: 0;
+}
+
+.severity-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--badge-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.severity-count {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--adm-text-primary);
+}

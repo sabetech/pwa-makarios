@@ -24,12 +24,15 @@ import ManageRegions from './pages/Admin/ManageRegions';
 import RegionDetails from './pages/Admin/RegionDetails';
 import ManageZones from './pages/Admin/ManageZones';
 import ManageBacentas from './pages/Admin/ManageBacentas';
+import BacentaDetails from './pages/Admin/BacentaDetails';
 import ManageLeaders from './pages/Admin/ManageLeaders';
 import ManageCampaigns from './pages/Admin/ManageCampaigns';
 import Campaigns from './pages/Campaigns/Campaigns';
 import UpdateCampaignInfo from './pages/Campaigns/UpdateCampaignInfo';
 import AntibrutishLeaders from './pages/Campaigns/AntibrutishLeaders';
 import SheepSeekingRecords from './pages/Campaigns/SheepSeekingRecords';
+import ArrivalsDashboard from './pages/Arrivals/ArrivalsDashboard';
+import FillArrivalsForm from './pages/Arrivals/FillArrivalsForm';
 import './App.css';
 
 const queryClient = new QueryClient();
@@ -60,7 +63,8 @@ function App() {
               <Route path="members/edit/:id" element={<EditMember />} />
               <Route path="members/attendance" element={<TakeAttendance />} />
               <Route path="members/:id" element={<MemberProfile />} />
-              <Route path="arrivals" element={<div>Arrivals Page</div>} />
+              <Route path="arrivals" element={<ArrivalsDashboard />} />
+              <Route path="arrivals/fill" element={<FillArrivalsForm />} />
               <Route path="settings" element={<Settings />} />
               <Route path="insights" element={<Insights />} />
               <Route path="admin" element={<AdminPortal />} />
@@ -70,6 +74,7 @@ function App() {
               <Route path="admin/regions/:id" element={<RegionDetails />} />
               <Route path="admin/zones" element={<ManageZones />} />
               <Route path="admin/bacentas" element={<ManageBacentas />} />
+              <Route path="admin/bacentas/:id" element={<BacentaDetails />} />
               <Route path="admin/leaders" element={<ManageLeaders />} />
               <Route path="admin/campaigns" element={<ManageCampaigns />} />
             </Route>
