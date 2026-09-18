@@ -173,6 +173,8 @@
     font-weight: 700;
     font-size: 14px;
     margin-right: 16px;
+    background-color: var(--adm-color-primary-light);
+    color: var(--adm-color-primary);
 }
 
 .member-info {

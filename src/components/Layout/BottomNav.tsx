@@ -13,6 +13,7 @@ const BottomNav: React.FC = () => {
 
     const actions: Action[] = [
         { text: 'Fill Service Form', key: 'service-form' },
+        { text: 'Fill Arrivals Form', key: 'arrivals-form' },
         { text: 'Update Campaign Info', key: 'campaign-info' },
     ];
 
@@ -20,6 +21,8 @@ const BottomNav: React.FC = () => {
         setVisible(false);
         if (action.key === 'service-form') {
             navigate('/dashboard/service-selection');
+        } else if (action.key === 'arrivals-form') {
+            navigate('/dashboard/arrivals/fill');
         } else if (action.key === 'campaign-info') {
             navigate('/dashboard/campaigns/update');
         }

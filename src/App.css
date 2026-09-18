@@ -8,6 +8,12 @@
   --adm-text-primary: #121212;
   --adm-bg-main: #FFFFFF;
   --adm-button-border-radius: 12px;
+
+  /* Attendance severity tokens (mirrored in attendance_severity_thresholds seeder) */
+  --severity-green: #22c55e;
+  --severity-yellow: #eab308;
+  --severity-amber: #f97316;
+  --severity-red: #ef4444;
 }
 
 [data-theme='dark'] {
