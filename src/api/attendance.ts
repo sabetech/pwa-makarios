@@ -47,17 +47,17 @@ export interface AttendanceThreshold {
 }
 
 export const fetchMembersWithSeverity = async (params?: { bacenta_id?: number; region_id?: number; sort?: string }): Promise<MemberWithSeverity[]> => {
-    const response = await api.get<{ success: boolean; data: MemberWithSeverity[] }>('/attendance/members', { params });
+    const response = await api.get<{ success: boolean; data: MemberWithSeverity[] }>('v2/attendance/members', { params });
     return response.data.data;
 };
 
 export const fetchMemberAttendanceHistory = async (memberId: string, params?: { from?: string; to?: string }): Promise<MemberAttendanceHistory> => {
-    const response = await api.get<{ success: boolean; data: MemberAttendanceHistory }>(`/attendance/member/${memberId}`, { params });
+    const response = await api.get<{ success: boolean; data: MemberAttendanceHistory }>(`v2/attendance/member/${memberId}`, { params });
     return response.data.data;
 };
 
 export const markAttendance = async (serviceId: number, attendances: { member_id: number; status: 'present' | 'absent' }[]): Promise<void> => {
-    await api.post('/attendance', { service_id: serviceId, attendances });
+    await api.post('v2/attendance', { service_id: serviceId, attendances });
 };
 
 export const fetchServiceAttendance = async (serviceId: number): Promise<{ member_id: number; status: 'present' | 'absent' }[]> => {
@@ -66,6 +66,6 @@ export const fetchServiceAttendance = async (serviceId: number): Promise<{ membe
 };
 
 export const fetchAttendanceThresholds = async (): Promise<AttendanceThreshold[]> => {
-    const response = await api.get<{ success: boolean; data: AttendanceThreshold[] }>('/attendance/thresholds');
+    const response = await api.get<{ success: boolean; data: AttendanceThreshold[] }>('v2/attendance/thresholds');
     return response.data.data;
 };

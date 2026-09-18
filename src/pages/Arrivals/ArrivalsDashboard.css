@@ -1,0 +1,322 @@
+.arrivals-dashboard-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  position: relative;
+  padding-bottom: 5rem;
+}
+
+.arrivals-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.date-picker-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.date-icon {
+  position: absolute;
+  left: 1rem;
+  color: #64748b;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+.date-input {
+  width: 100%;
+  padding: 0.875rem 1rem 0.875rem 2.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #0f172a;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  outline: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.date-input:focus {
+  border-color: var(--adm-color-primary, #3b82f6);
+}
+
+.btn-fill-arrivals {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.875rem 1.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: #0f172a;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.btn-fill-arrivals:active {
+  transform: scale(0.98);
+  background-color: #f8fafc;
+}
+
+/* Stats Row - matching BacentaServicesList / Dashboard stat cards */
+.arrivals-stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.arrivals-stat-card {
+  background-color: #ffffff;
+  padding: 1rem 0.5rem;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.25rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.arrivals-stat-card .stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.arrivals-stat-card .stat-label {
+  font-size: 9px;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Breakdown Section */
+.arrivals-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  margin-bottom: 0.25rem;
+}
+
+.section-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.bacenta-breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 90%;
+}
+
+.breakdown-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s;
+  text-align: left;
+  width: 100%;
+  gap: 0.75rem;
+}
+
+.breakdown-card-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.bacenta-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.breakdown-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.bacenta-name {
+  font-size: calc(0.9375rem - 3pt);
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bacenta-meta {
+  font-size: 0.7rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.breakdown-card-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.bussed-count-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.bussed-count-badge .count {
+  font-size: 0.875rem;
+}
+
+.bussed-count-badge .label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.pending-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+
+.empty-arrivals {
+  text-align: center;
+  padding: 40px 0;
+  color: #64748b;
+  font-size: 0.9375rem;
+}
+
+.arrivals-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.skeleton-card {
+  height: 70px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* Dark Mode Overrides */
+[data-theme='dark'] .date-input {
+  background-color: var(--adm-color-slate, #1e2126);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+}
+
+[data-theme='dark'] .btn-fill-arrivals {
+  background-color: var(--adm-color-slate, #1e2126);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+}
+
+[data-theme='dark'] .btn-fill-arrivals:active {
+  background-color: #2a2d31;
+}
+
+[data-theme='dark'] .arrivals-stat-card {
+  background-color: var(--adm-color-slate, #1e2126);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .arrivals-stat-card .stat-value {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .arrivals-stat-card .stat-label {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .section-header {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .section-title {
+  color: #f1f5f9;
+}
+
+[data-theme='dark'] .breakdown-card {
+  background-color: var(--adm-color-slate, #1e2126);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+}
+
+[data-theme='dark'] .bacenta-name {
+  color: #f1f5f9;
+}
+
+[data-theme='dark'] .bacenta-meta {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .skeleton-card {
+  background-color: var(--adm-color-slate, #1e2126);
+  border-color: rgba(255, 255, 255, 0.08);
+}
