@@ -73,7 +73,7 @@ const StreamDetails: React.FC = () => {
         );
     }
 
-    const days = stream.meeting_day.split(',');
+    const days = (stream.meeting_day || '').split(',').map((d) => d.trim()).filter(Boolean);
 
     return (
         <div className="stream-details-container">

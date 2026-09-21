@@ -25,6 +25,19 @@ export const fetchStreams = async (): Promise<Stream[]> => {
     return response.data.data;
 };
 
+export interface CreateStreamPayload {
+    name: string;
+    description?: string;
+    meeting_day: string;
+    meeting_time: string;
+    overseer_id?: number;
+}
+
+export const createStream = async (payload: CreateStreamPayload): Promise<Stream> => {
+    const response = await api.post<{ success: boolean; data: Stream }>('/v2/streams', payload);
+    return response.data.data;
+};
+
 export const fetchStream = async (id: number | string): Promise<Stream> => {
     const response = await api.get<{ success: boolean; data: Stream }>(`/v2/streams/${id}`);
     return response.data.data;
