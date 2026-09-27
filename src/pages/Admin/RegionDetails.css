@@ -56,6 +56,79 @@
     margin: 0;
 }
 
+.transfer-stream-btn {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: 1px solid var(--admin-border);
+    border-radius: 0.75rem;
+    padding: 0.625rem 1rem;
+    color: var(--admin-text-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    align-self: center;
+}
+
+.transfer-stream-btn:hover {
+    border-color: var(--admin-secondary);
+    color: var(--admin-secondary);
+}
+
+.transfer-stream-btn .material-symbols-outlined {
+    font-size: 20px;
+}
+
+.transfer-current {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--admin-border);
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+}
+
+.transfer-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--admin-text-muted);
+}
+
+.transfer-current-name {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--admin-text);
+}
+
+.transfer-impact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.transfer-impact ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    color: var(--admin-text);
+    font-size: 0.9375rem;
+}
+
+.transfer-warning {
+    margin: 0.25rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--admin-text-muted);
+}
+
 @media (min-width: 1024px) {
     .region-details-title {
         font-size: 3rem;

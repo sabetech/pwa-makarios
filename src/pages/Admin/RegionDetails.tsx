@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchRegion, fetchRegions, fetchRegionBacentas, Region, RegionBacenta, RegionMember } from '../../api/regions';
+import { fetchRegion, fetchRegions, fetchRegionBacentas, transferRegion, Region, RegionBacenta, RegionMember } from '../../api/regions';
 import { createBacenta, updateBacenta, deleteBacenta } from '../../api/bacentas';
 import { fetchLeaders, Leader } from '../../api/leaders';
 import { fetchZones, Zone } from '../../api/zones';
+import { fetchStreams, Stream } from '../../api/streams';
 import './RegionDetails.css';
 import './AdminShared.css';
 
@@ -20,6 +21,11 @@ const RegionDetails: React.FC = () => {
 
     const [leaders, setLeaders] = useState<Leader[]>([]);
     const [zones, setZones] = useState<Zone[]>([]);
+    const [streams, setStreams] = useState<Stream[]>([]);
+
+    const [showTransferModal, setShowTransferModal] = useState(false);
+    const [selectedStreamId, setSelectedStreamId] = useState<number | ''>('');
+    const [transferring, setTransferring] = useState(false);
 
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
@@ -74,48 +80,74 @@ const RegionDetails: React.FC = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    useEffect(() => {
-        const loadRegionData = async () => {
-            if (!id) return;
+    const loadRegionData = async () => {
+        if (!id) return;
+        try {
+            setLoading(true);
+            let regionData: Region;
             try {
-                setLoading(true);
-                let regionData: Region;
-                try {
-                    regionData = await fetchRegion(id);
-                } catch (e) {
-                    const allRegions = await fetchRegions();
-                    const found = allRegions.find(r => String(r.id) === String(id));
-                    if (!found) throw new Error("Region not found");
-                    regionData = found;
-                }
-                setRegion(regionData);
-                setError(null);
-            } catch (err) {
-                console.error("Error loading region details:", err);
-                setError("Failed to load region details. Please try again later.");
-            } finally {
-                setLoading(false);
+                regionData = await fetchRegion(id);
+            } catch (e) {
+                const allRegions = await fetchRegions();
+                const found = allRegions.find(r => String(r.id) === String(id));
+                if (!found) throw new Error("Region not found");
+                regionData = found;
             }
-        };
+            setRegion(regionData);
+            setError(null);
+        } catch (err) {
+            console.error("Error loading region details:", err);
+            setError("Failed to load region details. Please try again later.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         loadRegionData();
     }, [id]);
 
     useEffect(() => {
-        const loadLeadersAndZones = async () => {
+        const loadLeadersZonesAndStreams = async () => {
             try {
-                const [leadersData, zonesData] = await Promise.all([
+                const [leadersData, zonesData, streamsData] = await Promise.all([
                     fetchLeaders(),
-                    fetchZones()
+                    fetchZones(),
+                    fetchStreams().catch((err) => {
+                        console.error('Error loading streams:', err);
+                        return [] as Stream[];
+                    }),
                 ]);
                 setLeaders(leadersData);
                 setZones(zonesData);
+                setStreams(streamsData);
             } catch (err) {
                 console.error('Error loading leaders/zones:', err);
             }
         };
-        loadLeadersAndZones();
+        loadLeadersZonesAndStreams();
     }, []);
+
+    const handleTransfer = async () => {
+        if (!id || selectedStreamId === '') return;
+        try {
+            setTransferring(true);
+            const result = await transferRegion(Number(id), selectedStreamId);
+            setShowTransferModal(false);
+            setSelectedStreamId('');
+            setRegion(result.region);
+            showToast(
+                `Region moved to ${result.to_stream.name}: ${result.bacentas_moved} bacentas, ${result.members_updated} members updated.`,
+                'success'
+            );
+        } catch (err: any) {
+            console.error('Error transferring region:', err);
+            const message = err?.response?.data?.message || 'Failed to transfer region. Please try again.';
+            showToast(message, 'error');
+        } finally {
+            setTransferring(false);
+        }
+    };
 
     const showToast = (message: string, type: 'success' | 'error') => {
         setToast({ message, type });
@@ -311,6 +343,8 @@ const RegionDetails: React.FC = () => {
     }
 
     const bacentasCount = region.bacentas?.length ?? region.bacenta_count;
+    const zonesCount = zones.filter((z) => z.region?.id === region.id).length;
+    const membersCount = region.members_through?.length ?? region.members_count ?? 0;
 
     return (
         <div className="region-details-container">
@@ -338,6 +372,16 @@ const RegionDetails: React.FC = () => {
                             <span className="stream-badge-large">{region.stream?.name || 'General Stream'}</span>
                             <h2 className="region-details-title">{region.name}</h2>
                         </div>
+                        <button
+                            className="transfer-stream-btn"
+                            onClick={() => {
+                                setSelectedStreamId('');
+                                setShowTransferModal(true);
+                            }}
+                        >
+                            <span className="material-symbols-outlined">swap_horiz</span>
+                            Transfer stream
+                        </button>
                     </div>
                 </header>
 
@@ -477,6 +521,60 @@ const RegionDetails: React.FC = () => {
                     </section>
                 )}
             </div>
+
+            {/* Transfer Region Modal */}
+            {showTransferModal && (
+                <div className="modal-overlay" onClick={() => setShowTransferModal(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>Transfer {region.name}</h3>
+                            <button className="modal-close" onClick={() => setShowTransferModal(false)}>
+                                <span className="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="transfer-current">
+                                <span className="transfer-label">Current stream</span>
+                                <span className="transfer-current-name">{region.stream?.name || 'General Stream'}</span>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="transfer-stream">Destination stream</label>
+                                <select
+                                    id="transfer-stream"
+                                    value={selectedStreamId}
+                                    onChange={(e) => setSelectedStreamId(e.target.value ? Number(e.target.value) : '')}
+                                >
+                                    <option value="">Select a stream</option>
+                                    {streams
+                                        .filter((s) => s.id !== region.stream?.id)
+                                        .map((s) => (
+                                            <option key={s.id} value={s.id}>{s.name}</option>
+                                        ))}
+                                </select>
+                            </div>
+                            <div className="transfer-impact">
+                                <span className="transfer-label">What moves with it</span>
+                                <ul>
+                                    <li>{bacentasCount} bacenta{(bacentasCount === 1) ? '' : 's'} (follow automatically)</li>
+                                    <li>{zonesCount} zone{(zonesCount === 1) ? '' : 's'} (follow automatically)</li>
+                                    <li>{membersCount} member{(membersCount === 1) ? '' : 's'}, services and micro-churches will be re-pointed</li>
+                                </ul>
+                                <p className="transfer-warning">This cannot be undone automatically — moving back requires another transfer.</p>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn-cancel" onClick={() => setShowTransferModal(false)} disabled={transferring}>Cancel</button>
+                            <button
+                                className="btn-submit"
+                                onClick={handleTransfer}
+                                disabled={selectedStreamId === '' || transferring}
+                            >
+                                {transferring ? 'Transferring...' : 'Transfer region'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* FAB */}
             <button

@@ -1,0 +1,201 @@
+/* FAB */
+.add-region-fab {
+    position: fixed;
+    bottom: 110px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--admin-primary), #a0003f);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 30px rgba(128, 0, 32, 0.4);
+    border: none;
+    cursor: pointer;
+    z-index: 100;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fabPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.add-region-fab span {
+    font-size: 28px;
+    transition: transform 0.3s ease;
+}
+
+.add-region-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 40px rgba(128, 0, 32, 0.5);
+}
+
+.add-region-fab:hover span {
+    transform: rotate(90deg);
+}
+
+.add-region-fab:active {
+    transform: scale(0.95);
+}
+
+@keyframes fabPop {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(-45deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    animation: overlayFadeIn 0.25s ease;
+    padding: 1.5rem;
+}
+
+@keyframes overlayFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background-color: var(--admin-card-bg, #1a1a2e);
+    border-radius: 1.5rem;
+    width: 100%;
+    max-width: 480px;
+    border: 1px solid var(--admin-border);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+    animation: modalSlideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.75rem 2rem 1rem;
+}
+
+.modal-header h3 {
+    font-family: 'Manrope', sans-serif;
+    font-size: 1.375rem;
+    font-weight: 800;
+    color: var(--admin-text);
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--admin-text-muted);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--admin-text);
+}
+
+.modal-body {
+    padding: 1rem 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--admin-text-muted);
+}
+
+.form-group input,
+.form-group select {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--admin-border);
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    color: var(--admin-text);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8.825L.675 3.5l.85-.85L6 7.125l4.475-4.475.85.85z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1.25rem center;
+    padding-right: 2.5rem;
+}
+
+.form-group input::placeholder {
+    color: var(--admin-text-muted);
+    opacity: 0.5;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--admin-primary);
+    box-shadow: 0 0 0 4px rgba(128, 0, 32, 0.15);
+}
+
+.modal-footer {
+    display: flex;
+    gap: 1rem;
+    padding: 0.5rem 2rem 1.75rem;
+    justify-content: flex-end;
+}
+
+.btn-cancel {
+    background: none;
+    border: 1px solid var(--admin-border);
+    border-radius: 1rem;
+    padding: 0.875rem 1.5rem;

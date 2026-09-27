@@ -29,6 +29,7 @@ export interface Region {
         img_url?: string;
     };
     stream?: {
+        id?: number;
         name: string;
     }
 }
@@ -54,6 +55,21 @@ export const createRegion = async (data: { name: string; stream_id?: number; lea
 
 export const updateRegion = async (id: number, data: Partial<Region>): Promise<Region> => {
     const response = await api.put<{ success: boolean; data: Region }>(`/v2/regions/${id}`, data);
+    return response.data.data;
+};
+
+export interface TransferResult {
+    region: Region;
+    from_stream_id: number;
+    to_stream: { id: number; name: string };
+    bacentas_moved: number;
+    members_updated: number;
+    services_updated: number;
+    microchurches_updated: number;
+}
+
+export const transferRegion = async (id: number, stream_id: number): Promise<TransferResult> => {
+    const response = await api.post<{ success: boolean; data: TransferResult }>(`/v2/regions/${id}/transfer`, { stream_id });
     return response.data.data;
 };
 
