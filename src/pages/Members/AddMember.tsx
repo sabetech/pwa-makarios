@@ -65,13 +65,25 @@ const AddMember: React.FC = () => {
 
     const onFinish = async (values: any) => {
         try {
-            await api.post('/v2/members', values);
+            // Mirror EditMember formatting: Picker values arrive as arrays and must be
+            // unwrapped, otherwise the backend stores no bacenta link and the member
+            // falls outside every leader's scope (invisible to region leads).
+            const payload = {
+                ...values,
+                dob: values.dob ? new Date(values.dob).toISOString().split('T')[0] : null,
+                img_url: image,
+                bacenta: Array.isArray(values.bacenta) ? values.bacenta[0] : values.bacenta,
+                basonta: Array.isArray(values.basonta) ? values.basonta[0] : values.basonta,
+            };
+            delete payload.picture;
+            await api.post('/v2/members', payload);
             Toast.show({
                 content: 'Member added successfully',
                 position: 'bottom',
             });
             setTimeout(() => navigate('/dashboard/members'), 1500);
         } catch (error) {
+            console.error('Failed to add member:', error);
             Toast.show({
                 content: 'Failed to add member',
                 position: 'bottom',
