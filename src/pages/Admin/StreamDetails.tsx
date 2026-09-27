@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchStream, fetchStreamRegions, fetchStreamBacentas, fetchStreamMembers, Stream } from '../../api/streams';
+import { fetchStream, fetchStreamRegions, fetchStreamBacentas, fetchStreamMembers, deleteStream, Stream } from '../../api/streams';
 import { Bacenta } from '../../api/bacentas';
 import { Region } from '../../api/regions';
 import './StreamDetails.css';
@@ -15,6 +15,9 @@ const StreamDetails: React.FC = () => {
     const [membersCount, setMembersCount] = useState<number>(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [toast, setToast] = useState<{message: string, type: 'success' | 'error'} | null>(null);
 
     useEffect(() => {
         const loadStreamData = async () => {
@@ -46,6 +49,27 @@ const StreamDetails: React.FC = () => {
     const getInitials = (name: string) => {
         if (!name) return '?';
         return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+    };
+
+    const showToast = (message: string, type: 'success' | 'error') => {
+        setToast({ message, type });
+        setTimeout(() => setToast(null), 4000);
+    };
+
+    const performDelete = async () => {
+        if (!id) return;
+        try {
+            setIsDeleting(true);
+            await deleteStream(Number(id));
+            navigate('/dashboard/admin/streams');
+        } catch (err: any) {
+            console.error('Error deleting stream:', err);
+            const message = err?.response?.data?.message || 'Failed to delete stream.';
+            showToast(message, 'error');
+            setDeleteModalVisible(false);
+        } finally {
+            setIsDeleting(false);
+        }
     };
 
     if (loading) {
@@ -85,6 +109,9 @@ const StreamDetails: React.FC = () => {
                     <h1 className="admin-logo">MAKARIOS</h1>
                 </div>
                 <div className="header-right">
+                    <button className="icon-btn" onClick={() => setDeleteModalVisible(true)} aria-label="Delete stream">
+                        <span className="material-symbols-outlined">delete</span>
+                    </button>
                     <button className="icon-btn" onClick={() => navigate('/dashboard/settings')}>
                         <span className="material-symbols-outlined">settings</span>
                     </button>
@@ -218,6 +245,44 @@ const StreamDetails: React.FC = () => {
                     )}
                 </section>
             </div>
+
+            {/* Delete Confirmation Modal */}
+            {deleteModalVisible && (
+                <div className="modal-overlay" onClick={() => setDeleteModalVisible(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>Confirm Deletion</h3>
+                            <button className="modal-close" onClick={() => setDeleteModalVisible(false)}>
+                                <span className="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <div className="modal-body text-center">
+                            <span className="material-symbols-outlined delete-warning-icon" style={{ fontSize: '48px', color: '#ef4444', marginBottom: '1rem' }}>warning</span>
+                            <p style={{ fontSize: '1.125rem', marginBottom: '0.5rem' }}>Are you sure you want to delete the stream <strong>{stream.name}</strong>?</p>
+                            <p style={{ color: 'var(--admin-text-muted)', fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+                                This stream currently has {regions.length} region(s), {bacentas.length} bacenta(s) and {membersCount} member(s).
+                            </p>
+                            <p className="delete-subtext" style={{ color: 'var(--admin-text-muted)', fontSize: '0.875rem' }}>This action cannot be undone.</p>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn-cancel" onClick={() => setDeleteModalVisible(false)} disabled={isDeleting}>Cancel</button>
+                            <button className="btn-submit" style={{ background: '#ef4444', boxShadow: '0 4px 16px rgba(239, 68, 68, 0.3)', borderColor: 'transparent' }} onClick={performDelete} disabled={isDeleting}>
+                                {isDeleting ? 'Deleting...' : 'Delete Stream'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Toast Notification */}
+            {toast && (
+                <div className={`toast-notification ${toast.type}`}>
+                    <span className="material-symbols-outlined">
+                        {toast.type === 'success' ? 'check_circle' : 'error'}
+                    </span>
+                    <p>{toast.message}</p>
+                </div>
+            )}
         </div>
     );
 };
