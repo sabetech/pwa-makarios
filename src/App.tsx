@@ -9,6 +9,8 @@ import Settings from './pages/Settings/Settings';
 import Services from './pages/Services/Services';
 import ServiceSelection from './pages/Services/ServiceSelection';
 import BacentaServiceForm from './pages/Services/BacentaServiceForm';
+import StreamSelect from './pages/Services/StreamSelect';
+import StreamServiceForm from './pages/Services/StreamServiceForm';
 import BacentaServicesList from './pages/Services/BacentaServicesList';
 import BacentaSelect from './pages/Services/BacentaSelect';
 import Members from './pages/Members/Members';
@@ -54,6 +56,8 @@ function App() {
               <Route path="bacenta-select" element={<BacentaSelect />} />
               <Route path="bacenta-services" element={<BacentaServicesList />} />
               <Route path="bacenta-service" element={<BacentaServiceForm />} />
+              <Route path="stream-select" element={<StreamSelect />} />
+              <Route path="stream-service" element={<StreamServiceForm />} />
               <Route path="campaigns" element={<Campaigns />} />
               <Route path="campaigns/update" element={<UpdateCampaignInfo />} />
               <Route path="campaigns/antibrutish" element={<AntibrutishLeaders />} />

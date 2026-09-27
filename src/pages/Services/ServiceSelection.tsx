@@ -43,7 +43,9 @@ const ServiceSelection: React.FC = () => {
                 state: { serviceTypeId: serviceId }
             });
         } else {
-            console.log('Selected service:', serviceId);
+            navigate('/dashboard/stream-select', {
+                state: { serviceTypeId: serviceId }
+            });
         }
     };
 

@@ -47,7 +47,8 @@ const Services: React.FC = () => {
             schedule: serviceType.description || 'Service',
             icon: iconInfo.icon,
             iconClass: iconInfo.iconClass,
-            route: isBacenta ? '/dashboard/bacenta-services' : undefined
+            route: isBacenta ? '/dashboard/bacenta-services' : '/dashboard/stream-select',
+            serviceTypeId: serviceType.id
         };
     });
 
@@ -66,7 +67,14 @@ const Services: React.FC = () => {
                         <div
                             key={category.id}
                             className={`category-card${category.route ? ' category-card--clickable' : ''}`}
-                            onClick={() => category.route && navigate(category.route)}
+                            onClick={() => {
+                                if (!category.route) return;
+                                if (category.route === '/dashboard/stream-select') {
+                                    navigate(category.route, { state: { serviceTypeId: category.serviceTypeId } });
+                                } else {
+                                    navigate(category.route);
+                                }
+                            }}
                         >
                             <div className={`category-icon ${category.iconClass}`}>
                                 {category.icon}
