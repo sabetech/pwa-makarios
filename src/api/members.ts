@@ -41,3 +41,7 @@ export const updateMember = async (id: string, data: Partial<Member>): Promise<M
     const response = await api.put<MemberResponse>(`/members/${id}`, data);
     return response.data.data;
 };
+
+export const deleteMember = async (id: number | string): Promise<void> => {
+    await api.delete(`/members/${id}`);
+};

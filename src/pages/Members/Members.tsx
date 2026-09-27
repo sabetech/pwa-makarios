@@ -1,11 +1,13 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiSearch, FiFilter } from 'react-icons/fi';
-import { ActionSheet } from 'antd-mobile';
+import { ActionSheet, Dialog, Toast } from 'antd-mobile';
 import type { Action } from 'antd-mobile/es/components/action-sheet';
 import { List } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import { useMembers } from '../../hooks/useMembers';
+import { useDeleteMember } from '../../hooks/useDeleteMember';
+import type { Member } from '../../api/members';
 import { useMembersWithSeverity } from '../../hooks/useAttendance';
 import SeverityBadge from '../../components/SeverityBadge/SeverityBadge';
 import PageHeader from '../../components/PageHeader/PageHeader';
@@ -13,9 +15,11 @@ import './Members.css';
 
 const Members: React.FC = () => {
     const [visible, setVisible] = useState(false);
+    const [selectedMember, setSelectedMember] = useState<Member | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [severityFilter, setSeverityFilter] = useState<string>('all');
     const { data: members = [], isLoading, isError } = useMembers();
+    const deleteMutation = useDeleteMember();
     const { data: membersWithSeverity = [] } = useMembersWithSeverity();
     const severityMap = new Map(membersWithSeverity.map(m => [m.id, m]));
     const listRef = useRef<HTMLDivElement>(null);
@@ -38,6 +42,68 @@ const Members: React.FC = () => {
             console.log('Action selected:', action.key);
         }
     };
+
+    const confirmDeleteMember = (member: Member) => {
+        Dialog.confirm({
+            title: `Delete ${member.name}?`,
+            content: 'This action cannot be undone.',
+            confirmText: 'Delete',
+            cancelText: 'Cancel',
+            onConfirm: async () => {
+                try {
+                    await deleteMutation.mutateAsync(member.id);
+                    Toast.show({
+                        icon: 'success',
+                        content: 'Member deleted',
+                        position: 'bottom',
+                    });
+                } catch {
+                    Toast.show({
+                        icon: 'fail',
+                        content: 'Failed to delete member',
+                    });
+                }
+            },
+        });
+    };
+
+    const handleMemberAction = (action: Action) => {
+        const member = selectedMember;
+        if (!member) return;
+        if (action.key === 'delete') {
+            setSelectedMember(null);
+            confirmDeleteMember(member);
+            return;
+        }
+        setSelectedMember(null);
+        if (action.key === 'view-profile') {
+            navigate(`/dashboard/members/${member.id}`);
+        } else if (action.key === 'call' && member.phone) {
+            window.location.href = `tel:${member.phone}`;
+        } else if (action.key === 'whatsapp') {
+            const raw = member.whatsapp || member.phone || '';
+            const digits = raw.replace(/\D/g, '');
+            if (digits) {
+                window.open(`https://wa.me/${digits}`, '_blank', 'noopener,noreferrer');
+            }
+        } else if (action.key === 'transfer') {
+            navigate(`/dashboard/members/edit/${member.id}`);
+        }
+    };
+
+    const memberActions: Action[] = selectedMember
+        ? [
+            { text: 'View Profile', key: 'view-profile' },
+            ...(selectedMember.phone
+                ? [{ text: `Call ${selectedMember.phone}`, key: 'call' } as Action]
+                : []),
+            ...((selectedMember.whatsapp || selectedMember.phone)
+                ? [{ text: 'WhatsApp', key: 'whatsapp' } as Action]
+                : []),
+            { text: 'Transfer Member', key: 'transfer', description: 'Change bacenta / basonta' },
+            { text: 'Delete Member', key: 'delete', danger: true, description: 'This cannot be undone' },
+        ]
+        : [];
 
     const filteredMembers = members.filter(member => {
         const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -181,7 +247,7 @@ const Members: React.FC = () => {
                                                             </div>
                                                         )}
                                                     </div>
-                                                    <button className="member-action-button" aria-label="More options" onClick={(e) => { e.stopPropagation(); console.log('options clicked'); }}>
+                                                    <button className="member-action-button" aria-label={`More options for ${member.name}`} aria-haspopup="menu" onClick={(e) => { e.stopPropagation(); setSelectedMember(member); }}>
                                                         <span className="material-symbols-outlined">more_vert</span>
                                                     </button>
                                                 </div>
@@ -204,6 +270,14 @@ const Members: React.FC = () => {
                 actions={actions}
                 onClose={() => setVisible(false)}
                 onAction={handleAction}
+            />
+
+            <ActionSheet
+                visible={!!selectedMember}
+                extra={selectedMember?.name}
+                actions={memberActions}
+                onClose={() => setSelectedMember(null)}
+                onAction={handleMemberAction}
             />
         </div>
     );
