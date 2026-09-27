@@ -66,3 +66,7 @@ export const fetchStreamMembers = async (id: number | string): Promise<number> =
     const response = await api.get<StreamMembersResponse>(`/v2/streams/${id}/members`);
     return response.data.data.total;
 };
+
+export const deleteStream = async (id: number): Promise<void> => {
+    await api.delete(`/v2/streams/${id}`);
+};

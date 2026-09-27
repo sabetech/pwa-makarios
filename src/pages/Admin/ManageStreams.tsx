@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchStreams, createStream, Stream } from '../../api/streams';
+import { fetchStreams, createStream, deleteStream, Stream } from '../../api/streams';
 import { fetchLeaders, Leader } from '../../api/leaders';
 import './ManageStreams.css';
 import './AdminShared.css';
@@ -23,6 +23,9 @@ const ManageStreams: React.FC = () => {
     const [showLeaderDropdown, setShowLeaderDropdown] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [toast, setToast] = useState<{message: string, type: 'success' | 'error'} | null>(null);
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+    const [streamToDelete, setStreamToDelete] = useState<Stream | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const leaderDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -107,6 +110,29 @@ const ManageStreams: React.FC = () => {
     const filteredLeaders = leaders.filter(leader =>
         leader.name.toLowerCase().includes(leaderSearch.toLowerCase())
     );
+
+    const confirmDelete = (stream: Stream) => {
+        setStreamToDelete(stream);
+        setDeleteModalVisible(true);
+    };
+
+    const performDelete = async () => {
+        if (!streamToDelete) return;
+        try {
+            setIsDeleting(true);
+            await deleteStream(streamToDelete.id);
+            setStreams(streams.filter(s => s.id !== streamToDelete.id));
+            showToast('Stream deleted successfully.', 'success');
+            setDeleteModalVisible(false);
+            setStreamToDelete(null);
+        } catch (err: any) {
+            console.error('Error deleting stream:', err);
+            const message = err?.response?.data?.message || 'Failed to delete stream.';
+            showToast(message, 'error');
+        } finally {
+            setIsDeleting(false);
+        }
+    };
 
     const isFormValid = newStreamName.trim() !== '' && meetingDay !== '' && meetingTime !== '';
 
@@ -203,7 +229,10 @@ const ManageStreams: React.FC = () => {
                         const days = (stream.meeting_day || '').split(',').map((d) => d.trim()).filter(Boolean);
 
                         return (
-                            <div key={stream.id} className={`stream-card ${type}-tier`} onClick={() => navigate(`/dashboard/admin/streams/${stream.id}`)}>
+                            <div key={stream.id} className={`stream-card ${type}-tier`} onClick={(e) => {
+                                if ((e.target as HTMLElement).closest('.stream-actions')) return;
+                                navigate(`/dashboard/admin/streams/${stream.id}`);
+                            }}>
                                 <div className="stream-accent"></div>
                                 <div className="stream-identity">
                                     <div className="stream-icon-box">
@@ -247,7 +276,10 @@ const ManageStreams: React.FC = () => {
                                     <button className="action-btn">
                                         <span className="material-symbols-outlined">edit</span>
                                     </button>
-                                    <button className="action-btn delete">
+                                    <button className="action-btn delete" onClick={(e) => {
+                                        e.stopPropagation();
+                                        confirmDelete(stream);
+                                    }}>
                                         <span className="material-symbols-outlined">delete</span>
                                     </button>
                                 </div>
@@ -265,6 +297,31 @@ const ManageStreams: React.FC = () => {
             >
                 <span className="material-symbols-outlined">add</span>
             </button>
+
+            {/* Delete Confirmation Modal */}
+            {deleteModalVisible && streamToDelete && (
+                <div className="modal-overlay" onClick={() => setDeleteModalVisible(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>Confirm Deletion</h3>
+                            <button className="modal-close" onClick={() => setDeleteModalVisible(false)}>
+                                <span className="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <div className="modal-body text-center">
+                            <span className="material-symbols-outlined delete-warning-icon" style={{ fontSize: '48px', color: '#ef4444', marginBottom: '1rem' }}>warning</span>
+                            <p style={{ fontSize: '1.125rem', marginBottom: '0.5rem' }}>Are you sure you want to delete the stream <strong>{streamToDelete.name}</strong>?</p>
+                            <p className="delete-subtext" style={{ color: 'var(--admin-text-muted)', fontSize: '0.875rem' }}>This action cannot be undone.</p>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn-cancel" onClick={() => setDeleteModalVisible(false)} disabled={isDeleting}>Cancel</button>
+                            <button className="btn-submit" style={{ background: '#ef4444', boxShadow: '0 4px 16px rgba(239, 68, 68, 0.3)', borderColor: 'transparent' }} onClick={performDelete} disabled={isDeleting}>
+                                {isDeleting ? 'Deleting...' : 'Delete Stream'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Add Stream Modal */}
             {showAddModal && (
