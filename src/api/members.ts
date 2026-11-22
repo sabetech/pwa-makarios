@@ -15,6 +15,8 @@ export interface Member {
     gps_location?: string | null;
     bacenta?: string | { id: number; name: string; [key: string]: any } | null;
     basonta?: string | { id: number; name: string; [key: string]: any } | null;
+    bacenta_id?: number | null;
+    basonta_id?: number | null;
 }
 
 export interface MembersResponse {
@@ -28,7 +30,8 @@ export interface MemberResponse {
 }
 
 export const fetchMembers = async (): Promise<Member[]> => {
-    const response = await api.get<MembersResponse>('/members');
+    // v2 uses the same role scoping as member creation (ScopesByRole).
+    const response = await api.get<MembersResponse>('/v2/members');
     return response.data.data;
 };
 

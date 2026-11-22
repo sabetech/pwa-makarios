@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
 import {
     Form,
     Input,
@@ -15,10 +16,12 @@ import { FiCamera, FiMapPin, FiArrowLeft } from 'react-icons/fi';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import ImageUpload from '../../components/ImageUpload/ImageUpload';
 import api from '../../api/axios';
+import { renderPickerLabel } from '../../utils/pickerLabel';
 import './AddMember.css';
 
 const AddMember: React.FC = () => {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const [form] = Form.useForm();
     const [image, setImage] = useState<string | null>(null);
     const [dateVisible, setDateVisible] = useState(false);
@@ -77,6 +80,7 @@ const AddMember: React.FC = () => {
             };
             delete payload.picture;
             await api.post('/v2/members', payload);
+            queryClient.invalidateQueries('members');
             Toast.show({
                 content: 'Member added successfully',
                 position: 'bottom',
@@ -231,7 +235,7 @@ const AddMember: React.FC = () => {
                             onClose={() => setBacentaVisible(false)}
                             onConfirm={() => setBacentaVisible(false)}
                         >
-                            {value => value[0] ? value[0].label : <span style={{ color: '#94a3b8' }}>Select Bacenta</span>}
+                            {items => renderPickerLabel(items, bacentas[0], 'Select Bacenta')}
                         </Picker>
                     </Form.Item>
 
@@ -247,7 +251,7 @@ const AddMember: React.FC = () => {
                             onClose={() => setBasontaVisible(false)}
                             onConfirm={() => setBasontaVisible(false)}
                         >
-                            {value => value[0] ? value[0].label : <span style={{ color: '#94a3b8' }}>Select Basonta</span>}
+                            {items => renderPickerLabel(items, basontas[0], 'Select Basonta')}
                         </Picker>
                     </Form.Item>
                 </Form>

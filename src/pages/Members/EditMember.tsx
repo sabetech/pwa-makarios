@@ -18,6 +18,7 @@ import ImageUpload from '../../components/ImageUpload/ImageUpload';
 import { useMember } from '../../hooks/useMembers';
 import { useUpdateMember } from '../../hooks/useUpdateMember';
 import api from '../../api/axios';
+import { renderPickerLabel } from '../../utils/pickerLabel';
 import './EditMember.css';
 
 const EditMember: React.FC = () => {
@@ -58,12 +59,17 @@ const EditMember: React.FC = () => {
 
     useEffect(() => {
         if (member) {
-            const bacentaVal = member.bacenta 
-                ? (typeof member.bacenta === 'object' ? String((member.bacenta as any).id) : String(member.bacenta))
-                : undefined;
-            const basontaVal = member.basonta 
-                ? (typeof member.basonta === 'object' ? String((member.basonta as any).id) : String(member.basonta))
-                : undefined;
+            // Picker values must be string ids. The API may return the
+            // relation as an object, a bare id, or only the *_id column
+            // (Member has no basonta relation), so accept all three.
+            const toId = (rel: unknown, fallbackId?: number | null): string | undefined => {
+                if (rel && typeof rel === 'object' && 'id' in rel) return String((rel as { id: number }).id);
+                if (rel !== null && rel !== undefined && rel !== '') return String(rel);
+                if (fallbackId !== null && fallbackId !== undefined) return String(fallbackId);
+                return undefined;
+            };
+            const bacentaVal = toId(member.bacenta, member.bacenta_id);
+            const basontaVal = toId(member.basonta, member.basonta_id);
             form.setFieldsValue({
                 ...member,
                 dob: member.dob ? new Date(member.dob) : undefined,
@@ -276,14 +282,7 @@ const EditMember: React.FC = () => {
                             onClose={() => setBacentaVisible(false)}
                             onConfirm={() => setBacentaVisible(false)}
                         >
-                            {value => {
-                                if (Array.isArray(value) && value.length > 0 && value[0] !== null) {
-                                    const item = value[0] as any;
-                                    const selected = bacentas[0]?.find(b => b.value === String(item));
-                                    return selected ? selected.label : String(item);
-                                }
-                                return <span style={{ color: '#94a3b8' }}>Select Bacenta</span>;
-                            }}
+                            {items => renderPickerLabel(items, bacentas[0], 'Select Bacenta')}
                         </Picker>
                     </Form.Item>
 
@@ -299,14 +298,7 @@ const EditMember: React.FC = () => {
                             onClose={() => setBasontaVisible(false)}
                             onConfirm={() => setBasontaVisible(false)}
                         >
-                            {value => {
-                                if (Array.isArray(value) && value.length > 0 && value[0] !== null) {
-                                    const item = value[0] as any;
-                                    const selected = basontas[0]?.find(b => b.value === String(item));
-                                    return selected ? selected.label : String(item);
-                                }
-                                return <span style={{ color: '#94a3b8' }}>Select Basonta</span>;
-                            }}
+                            {items => renderPickerLabel(items, basontas[0], 'Select Basonta')}
                         </Picker>
                     </Form.Item>
                 </Form>
