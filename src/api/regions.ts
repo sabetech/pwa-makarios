@@ -28,6 +28,7 @@ export interface Region {
         name: string;
         img_url?: string;
     };
+    stream_id?: number | null;
     stream?: {
         id?: number;
         name: string;

@@ -16,6 +16,8 @@ const ManageRegions: React.FC = () => {
     const [newRegionName, setNewRegionName] = useState('');
     const [selectedStreamId, setSelectedStreamId] = useState<number | ''>('');
     const [streams, setStreams] = useState<Stream[]>([]);
+    // List filter; separate from selectedStreamId, which belongs to the Add Region modal.
+    const [filterStreamId, setFilterStreamId] = useState<number | null>(null);
     const [leaders, setLeaders] = useState<Leader[]>([]);
     const [leaderSearch, setLeaderSearch] = useState('');
     const [selectedLeader, setSelectedLeader] = useState<Leader | null>(null);
@@ -148,10 +150,19 @@ const ManageRegions: React.FC = () => {
         return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
     };
 
-    const filteredRegions = regions.filter(region => 
-        region.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (region.leader?.name && region.leader.name.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+    const filteredRegions = regions.filter(region => {
+        const term = searchTerm.toLowerCase();
+        const matchesSearch =
+            region.name.toLowerCase().includes(term) ||
+            (region.leader?.name && region.leader.name.toLowerCase().includes(term));
+
+        const regionStreamId = region.stream?.id ?? region.stream_id;
+        const matchesStream =
+            filterStreamId === null ||
+            (regionStreamId !== null && regionStreamId !== undefined && Number(regionStreamId) === filterStreamId);
+
+        return matchesSearch && matchesStream;
+    });
 
     if (loading) {
         return (
@@ -217,6 +228,26 @@ const ManageRegions: React.FC = () => {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
+
+                        {streams.length > 0 && (
+                            <div className="filter-chips-row">
+                                <button
+                                    className={`filter-chip ${filterStreamId === null ? 'active' : ''}`}
+                                    onClick={() => setFilterStreamId(null)}
+                                >
+                                    All Streams
+                                </button>
+                                {streams.map(stream => (
+                                    <button
+                                        key={stream.id}
+                                        className={`filter-chip ${filterStreamId === stream.id ? 'active' : ''}`}
+                                        onClick={() => setFilterStreamId(stream.id)}
+                                    >
+                                        {stream.name}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </section>
 

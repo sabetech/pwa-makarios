@@ -9,6 +9,8 @@ export interface Leader {
         name: string;
         type: string;
     };
+    /** Streams this leader's assignments fall under (may be several). */
+    streams?: { id: number; name: string }[];
 }
 
 export interface LeadersResponse {

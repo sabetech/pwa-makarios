@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchLeaders, Leader, deleteLeader, updateLeader } from '../../api/leaders';
 import { fetchRoles, Role } from '../../api/roles';
+import { fetchStreams, Stream } from '../../api/streams';
 import './ManageLeaders.css';
 import './AdminShared.css';
 
@@ -20,6 +21,8 @@ const ManageLeaders: React.FC = () => {
     const [roles, setRoles] = useState<Role[]>([]);
     const [selectedRoleId, setSelectedRoleId] = useState<number | ''>('');
     const [isUpdating, setIsUpdating] = useState(false);
+    const [streams, setStreams] = useState<Stream[]>([]);
+    const [selectedStreamId, setSelectedStreamId] = useState<number | null>(null);
 
 
     useEffect(() => {
@@ -29,6 +32,10 @@ const ManageLeaders: React.FC = () => {
                 const [leadersData, rolesData] = await Promise.all([fetchLeaders(), fetchRoles()]);
                 setLeaders(leadersData);
                 setRoles(rolesData);
+                // Streams only power the filter; don't fail the page without them.
+                fetchStreams()
+                    .then(setStreams)
+                    .catch(err => console.error('Error fetching streams:', err));
                 setError(null);
             } catch (err) {
                 console.error('Error fetching data:', err);
@@ -127,11 +134,19 @@ const ManageLeaders: React.FC = () => {
         }
     };
 
-    const filteredLeaders = leaders.filter(leader =>
-        leader.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        leader.role?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        leader?.leading?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredLeaders = leaders.filter(leader => {
+        const term = searchTerm.toLowerCase();
+        const matchesSearch =
+            leader.name.toLowerCase().includes(term) ||
+            leader.role?.toLowerCase().includes(term) ||
+            leader?.leading?.name?.toLowerCase().includes(term);
+
+        const matchesStream =
+            selectedStreamId === null ||
+            (leader.streams ?? []).some(s => s.id === selectedStreamId);
+
+        return matchesSearch && matchesStream;
+    });
 
     if (loading) {
         return (
@@ -197,6 +212,26 @@ const ManageLeaders: React.FC = () => {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
+
+                        {streams.length > 0 && (
+                            <div className="filter-chips-row">
+                                <button
+                                    className={`filter-chip ${selectedStreamId === null ? 'active' : ''}`}
+                                    onClick={() => setSelectedStreamId(null)}
+                                >
+                                    All Streams
+                                </button>
+                                {streams.map(stream => (
+                                    <button
+                                        key={stream.id}
+                                        className={`filter-chip ${selectedStreamId === stream.id ? 'active' : ''}`}
+                                        onClick={() => setSelectedStreamId(stream.id)}
+                                    >
+                                        {stream.name}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </section>
 
