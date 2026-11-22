@@ -396,7 +396,7 @@
 }
 
 .modal-body {
-    padding: 1rem 2rem 1.5rem;
+    padding: 1rem 2rem 120px;
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
