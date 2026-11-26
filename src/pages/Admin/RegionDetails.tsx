@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchRegion, fetchRegions, fetchRegionBacentas, transferRegion, changeRegionLeader, Region, RegionBacenta, RegionMember } from '../../api/regions';
-import { createBacenta, updateBacenta, deleteBacenta } from '../../api/bacentas';
+import { createBacenta, updateBacenta, deleteBacenta, fetchBacentaMembers, Member as BacentaMember } from '../../api/bacentas';
 import { fetchLeaders, Leader } from '../../api/leaders';
 import { fetchZones, Zone } from '../../api/zones';
 import { fetchStreams, Stream } from '../../api/streams';
@@ -31,6 +31,12 @@ const RegionDetails: React.FC = () => {
     const [regionLeaderSearch, setRegionLeaderSearch] = useState('');
     const [newRegionLeader, setNewRegionLeader] = useState<Leader | null>(null);
     const [changingLeader, setChangingLeader] = useState(false);
+
+    const [membersBacenta, setMembersBacenta] = useState<RegionBacenta | null>(null);
+    const [bacentaMembers, setBacentaMembers] = useState<BacentaMember[]>([]);
+    const [bacentaMembersLoading, setBacentaMembersLoading] = useState(false);
+    const [bacentaMembersError, setBacentaMembersError] = useState<string | null>(null);
+    const membersRequestRef = useRef(0);
 
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
@@ -198,6 +204,30 @@ const RegionDetails: React.FC = () => {
         } finally {
             setBacentaLoading(false);
         }
+    };
+
+    const openBacentaMembers = async (bacenta: RegionBacenta) => {
+        const requestId = ++membersRequestRef.current;
+        setMembersBacenta(bacenta);
+        setBacentaMembers([]);
+        setBacentaMembersError(null);
+        setBacentaMembersLoading(true);
+        try {
+            const data = await fetchBacentaMembers(bacenta.id);
+            if (requestId === membersRequestRef.current) setBacentaMembers(data);
+        } catch (err) {
+            console.error('Error loading bacenta members:', err);
+            if (requestId === membersRequestRef.current) {
+                setBacentaMembersError('Failed to load members. Please try again.');
+            }
+        } finally {
+            if (requestId === membersRequestRef.current) setBacentaMembersLoading(false);
+        }
+    };
+
+    const closeBacentaMembers = () => {
+        membersRequestRef.current++;
+        setMembersBacenta(null);
     };
 
     const handleToggleMembers = () => {
@@ -483,7 +513,20 @@ const RegionDetails: React.FC = () => {
                         </div>
                         <div className="bacentas-grid-list">
                             {bacentaList.map((bacenta) => (
-                                <div key={bacenta.id} className="bacenta-summary-card">
+                                <div
+                                    key={bacenta.id}
+                                    className="bacenta-summary-card clickable"
+                                    role="button"
+                                    tabIndex={0}
+                                    aria-label={`Show members of ${bacenta.name}`}
+                                    onClick={() => openBacentaMembers(bacenta)}
+                                    onKeyDown={(e) => {
+                                        if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
+                                            e.preventDefault();
+                                            openBacentaMembers(bacenta);
+                                        }
+                                    }}
+                                >
                                     <div className="bacenta-card-accent"></div>
                                     <div className="bacenta-header">
                                         <h4 className="bacenta-card-title">{bacenta.name}</h4>
@@ -502,12 +545,24 @@ const RegionDetails: React.FC = () => {
                                                 <span className="metric-num">{bacenta.members_count}</span>
                                                 <span className="metric-lbl">Members</span>
                                             </div>
+                                            <span className="view-members-hint">
+                                                View
+                                                <span className="material-symbols-outlined">chevron_right</span>
+                                            </span>
                                         </div>
                                         <div className="bacenta-card-actions">
-                                            <button className="action-btn" onClick={() => handleEditClick(bacenta)}>
+                                            <button
+                                                className="action-btn"
+                                                aria-label={`Edit ${bacenta.name}`}
+                                                onClick={(e) => { e.stopPropagation(); handleEditClick(bacenta); }}
+                                            >
                                                 <span className="material-symbols-outlined">edit</span>
                                             </button>
-                                            <button className="action-btn delete" onClick={() => confirmDelete(bacenta)}>
+                                            <button
+                                                className="action-btn delete"
+                                                aria-label={`Delete ${bacenta.name}`}
+                                                onClick={(e) => { e.stopPropagation(); confirmDelete(bacenta); }}
+                                            >
                                                 <span className="material-symbols-outlined">delete</span>
                                             </button>
                                         </div>
@@ -608,6 +663,64 @@ const RegionDetails: React.FC = () => {
                             >
                                 {transferring ? 'Transferring...' : 'Transfer region'}
                             </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Bacenta Members Modal */}
+            {membersBacenta && (
+                <div className="modal-overlay" onClick={closeBacentaMembers}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>Members of {membersBacenta.name}</h3>
+                            <button className="modal-close" onClick={closeBacentaMembers} aria-label="Close">
+                                <span className="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            {bacentaMembersLoading ? (
+                                <div className="inline-loading">
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                                    <p>Loading members...</p>
+                                </div>
+                            ) : bacentaMembersError ? (
+                                <div className="empty-state">
+                                    <span className="material-symbols-outlined">error</span>
+                                    <p>{bacentaMembersError}</p>
+                                    <button className="btn-cancel" onClick={() => openBacentaMembers(membersBacenta)}>Retry</button>
+                                </div>
+                            ) : bacentaMembers.length === 0 ? (
+                                <div className="empty-state">
+                                    <span className="material-symbols-outlined">people_outline</span>
+                                    <p>No members in this bacenta yet.</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <span className="transfer-label">
+                                        {bacentaMembers.length} member{bacentaMembers.length === 1 ? '' : 's'}
+                                    </span>
+                                    <ul className="bacenta-members-list">
+                                        {bacentaMembers.map((member) => (
+                                            <li key={member.id} className="bacenta-member-row">
+                                                {member.img_url ? (
+                                                    <img src={member.img_url} alt={member.name} className="bacenta-leader-img" />
+                                                ) : (
+                                                    <div className="bacenta-leader-initials">{getInitials(member.name)}</div>
+                                                )}
+                                                <div className="bacenta-member-info">
+                                                    <span className="bacenta-member-name">{member.name}</span>
+                                                    {member.phone ? (
+                                                        <a className="bacenta-member-phone" href={`tel:${member.phone}`}>{member.phone}</a>
+                                                    ) : (
+                                                        <span className="bacenta-member-phone muted">No phone</span>
+                                                    )}
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
