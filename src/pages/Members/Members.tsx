@@ -208,7 +208,13 @@ const Members: React.FC = () => {
                 {!isLoading && !isError && (
                     filteredMembers.length === 0 ? (
                         <div className="no-results" style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
-                            <p>No members found matching "{searchTerm}"</p>
+                            <p>
+                                {members.length === 0
+                                    ? 'No members to show yet. Members added to bacentas you oversee will appear here.'
+                                    : searchTerm.trim()
+                                        ? `No members found matching "${searchTerm.trim()}"`
+                                        : `No members match the "${severityFilter}" filter`}
+                            </p>
                         </div>
                     ) : (
                         <div className="members-list" ref={listRef}>
