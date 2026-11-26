@@ -25,6 +25,7 @@ export interface Region {
     bacentas: any[];
     members_through: RegionMember[];
     leader?: {
+        id?: number;
         name: string;
         img_url?: string;
     };
@@ -56,6 +57,11 @@ export const createRegion = async (data: { name: string; stream_id?: number; lea
 
 export const updateRegion = async (id: number, data: Partial<Region>): Promise<Region> => {
     const response = await api.put<{ success: boolean; data: Region }>(`/v2/regions/${id}`, data);
+    return response.data.data;
+};
+
+export const changeRegionLeader = async (id: number, leader_id: number): Promise<Region> => {
+    const response = await api.put<{ success: boolean; data: Region }>(`/v2/regions/${id}/leader`, { leader_id });
     return response.data.data;
 };
 

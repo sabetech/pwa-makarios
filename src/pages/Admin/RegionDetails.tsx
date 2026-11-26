@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchRegion, fetchRegions, fetchRegionBacentas, transferRegion, Region, RegionBacenta, RegionMember } from '../../api/regions';
+import { fetchRegion, fetchRegions, fetchRegionBacentas, transferRegion, changeRegionLeader, Region, RegionBacenta, RegionMember } from '../../api/regions';
 import { createBacenta, updateBacenta, deleteBacenta } from '../../api/bacentas';
 import { fetchLeaders, Leader } from '../../api/leaders';
 import { fetchZones, Zone } from '../../api/zones';
@@ -26,6 +26,11 @@ const RegionDetails: React.FC = () => {
     const [showTransferModal, setShowTransferModal] = useState(false);
     const [selectedStreamId, setSelectedStreamId] = useState<number | ''>('');
     const [transferring, setTransferring] = useState(false);
+
+    const [showChangeLeaderModal, setShowChangeLeaderModal] = useState(false);
+    const [regionLeaderSearch, setRegionLeaderSearch] = useState('');
+    const [newRegionLeader, setNewRegionLeader] = useState<Leader | null>(null);
+    const [changingLeader, setChangingLeader] = useState(false);
 
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
@@ -146,6 +151,29 @@ const RegionDetails: React.FC = () => {
             showToast(message, 'error');
         } finally {
             setTransferring(false);
+        }
+    };
+
+    const openChangeLeaderModal = () => {
+        setNewRegionLeader(null);
+        setRegionLeaderSearch('');
+        setShowChangeLeaderModal(true);
+    };
+
+    const handleChangeLeader = async () => {
+        if (!id || !newRegionLeader) return;
+        try {
+            setChangingLeader(true);
+            const updated = await changeRegionLeader(Number(id), newRegionLeader.id);
+            setRegion(prev => (prev ? { ...prev, leader: updated.leader } : updated));
+            setShowChangeLeaderModal(false);
+            showToast(`${newRegionLeader.name} is now leading ${region?.name ?? 'this region'}.`, 'success');
+        } catch (err: any) {
+            console.error('Error changing region leader:', err);
+            const message = err?.response?.data?.message || 'Failed to change the region leader. Please try again.';
+            showToast(message, 'error');
+        } finally {
+            setChangingLeader(false);
         }
     };
 
@@ -305,6 +333,11 @@ const RegionDetails: React.FC = () => {
     const filteredZones = zones.filter(zone =>
         zone.name.toLowerCase().includes(zoneSearch.toLowerCase())
     );
+    const filteredRegionLeaders = leaders.filter(leader =>
+        leader.name.toLowerCase().includes(regionLeaderSearch.toLowerCase()) &&
+        leader.id !== region?.leader?.id
+    );
+
     const filteredEditLeaders = leaders.filter(leader =>
         leader.name.toLowerCase().includes(editLeaderSearch.toLowerCase())
     );
@@ -399,6 +432,10 @@ const RegionDetails: React.FC = () => {
                                 <p className="details-leader-role">Regional Overseer</p>
                             </div>
                         </div>
+                        <button className="change-leader-btn" onClick={openChangeLeaderModal}>
+                            <span className="material-symbols-outlined">manage_accounts</span>
+                            {region.leader ? 'Change leader' : 'Assign leader'}
+                        </button>
                     </div>
 
                     <div className="details-card stats-summary-card">
@@ -570,6 +607,101 @@ const RegionDetails: React.FC = () => {
                                 disabled={selectedStreamId === '' || transferring}
                             >
                                 {transferring ? 'Transferring...' : 'Transfer region'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Change Region Leader Modal */}
+            {showChangeLeaderModal && (
+                <div className="modal-overlay" onClick={() => !changingLeader && setShowChangeLeaderModal(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>Change leader of {region.name}</h3>
+                            <button className="modal-close" onClick={() => setShowChangeLeaderModal(false)} disabled={changingLeader}>
+                                <span className="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="transfer-current">
+                                <span className="transfer-label">Current leader</span>
+                                <span className="transfer-current-name">{region.leader?.name || 'No Leader Assigned'}</span>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="region-new-leader">New leader</label>
+                                {newRegionLeader ? (
+                                    <div className="selected-item-chip">
+                                        {newRegionLeader.img_url ? (
+                                            <img src={newRegionLeader.img_url} alt={newRegionLeader.name} className="chip-avatar" />
+                                        ) : (
+                                            <div className="chip-initials">{getInitials(newRegionLeader.name)}</div>
+                                        )}
+                                        <div className="chip-info">
+                                            <span className="chip-name">{newRegionLeader.name}</span>
+                                            <span className="chip-role">{newRegionLeader.role}</span>
+                                        </div>
+                                        <button className="chip-remove" onClick={() => setNewRegionLeader(null)}>
+                                            <span className="material-symbols-outlined">close</span>
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <div className="search-wrapper">
+                                            <span className="material-symbols-outlined search-icon">search</span>
+                                            <input
+                                                id="region-new-leader"
+                                                type="text"
+                                                placeholder="Search for a leader..."
+                                                value={regionLeaderSearch}
+                                                onChange={(e) => setRegionLeaderSearch(e.target.value)}
+                                                autoFocus
+                                            />
+                                        </div>
+                                        <div className="custom-dropdown">
+                                            {filteredRegionLeaders.length === 0 ? (
+                                                <div className="dropdown-empty">
+                                                    <p>No leaders found</p>
+                                                </div>
+                                            ) : (
+                                                filteredRegionLeaders.slice(0, 8).map((leader) => (
+                                                    <div
+                                                        key={leader.id}
+                                                        className="dropdown-item"
+                                                        onClick={() => setNewRegionLeader(leader)}
+                                                    >
+                                                        {leader.img_url ? (
+                                                            <img src={leader.img_url} alt={leader.name} className="dropdown-avatar" />
+                                                        ) : (
+                                                            <div className="dropdown-initials">{getInitials(leader.name)}</div>
+                                                        )}
+                                                        <div className="dropdown-info">
+                                                            <span className="dropdown-name">{leader.name}</span>
+                                                            <span className="dropdown-role">
+                                                                {leader.leading ? `${leader.role} · ${leader.leading.name}` : leader.role}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                            {region.leader && (
+                                <p className="transfer-warning">
+                                    {region.leader.name} will lose the Region Lead role unless they lead another region.
+                                </p>
+                            )}
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn-cancel" onClick={() => setShowChangeLeaderModal(false)} disabled={changingLeader}>Cancel</button>
+                            <button
+                                className="btn-submit"
+                                onClick={handleChangeLeader}
+                                disabled={!newRegionLeader || changingLeader}
+                            >
+                                {changingLeader ? 'Saving...' : 'Change leader'}
                             </button>
                         </div>
                     </div>

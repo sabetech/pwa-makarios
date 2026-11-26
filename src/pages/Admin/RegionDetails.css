@@ -917,3 +917,29 @@
         transform: translate(-50%, -50%) scale(1);
     }
 }
+
+.change-leader-btn {
+    margin-top: 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: 1px solid var(--admin-border);
+    border-radius: 0.75rem;
+    padding: 0.5rem 0.875rem;
+    color: var(--admin-text-muted);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.change-leader-btn:hover {
+    border-color: var(--admin-secondary);
+    color: var(--admin-secondary);
+}
+
+.change-leader-btn .material-symbols-outlined {
+    font-size: 18px;
+}
