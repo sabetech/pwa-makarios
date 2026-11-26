@@ -943,3 +943,73 @@
 .change-leader-btn .material-symbols-outlined {
     font-size: 18px;
 }
+
+.bacenta-summary-card.clickable {
+    cursor: pointer;
+}
+
+.bacenta-summary-card.clickable:focus-visible {
+    outline: 2px solid var(--admin-secondary);
+    outline-offset: 2px;
+}
+
+.view-members-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--admin-secondary);
+}
+
+.view-members-hint .material-symbols-outlined {
+    font-size: 18px;
+}
+
+.bacenta-members-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.bacenta-member-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--admin-border);
+    border-radius: 0.875rem;
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.bacenta-member-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.bacenta-member-name {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bacenta-member-phone {
+    font-size: 0.8125rem;
+    color: var(--admin-secondary);
+    text-decoration: none;
+}
+
+.bacenta-member-phone.muted {
+    color: var(--admin-text-muted);
+}
+
+.bacenta-card-footer .bacenta-card-metrics {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
