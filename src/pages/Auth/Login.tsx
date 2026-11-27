@@ -4,6 +4,7 @@ import { FiSun, FiMoon } from 'react-icons/fi';
 import { useLogin } from '../../hooks/useLogin';
 import { useGoogleLogin } from '@react-oauth/google';
 import { loginWithGoogle } from '../../api/auth';
+import { saveSession } from '../../utils/authStorage';
 import { useMutation } from 'react-query';
 import logo from '../../assets/makarios_log_trans_bg.png';
 import packageJson from '../../../package.json';
@@ -49,10 +50,7 @@ const Login: React.FC = () => {
             if (data.success && data.data) {
                 const { token, user, is_new_user } = data.data;
 
-                localStorage.setItem('token', token);
-                const role = user.roles?.[0]?.name || 'User';
-                const permissions = user.roles?.[0]?.permissions?.map(p => p.name) || [];
-                localStorage.setItem('user', JSON.stringify({ ...user, role, permissions }));
+                saveSession(token, user);
 
                 if (is_new_user) {
                     

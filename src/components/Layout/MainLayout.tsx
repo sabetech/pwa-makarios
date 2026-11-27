@@ -6,19 +6,12 @@ import type { Action } from 'antd-mobile/es/components/action-sheet';
 import BottomNav from './BottomNav';
 import ImageUpload from '../ImageUpload/ImageUpload';
 import { updateProfilePicture } from '../../api/profile';
+import GhostBanner from '../GhostBanner/GhostBanner';
+import { exitGhost } from '../GhostBanner/exitGhost';
+import { clearSession, getStoredUser as readStoredUser, isGhosting } from '../../utils/authStorage';
 import './MainLayout.css';
 
-const getStoredUser = () => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser && storedUser !== 'undefined') {
-        try {
-            return JSON.parse(storedUser);
-        } catch (e) {
-            console.error('Error parsing user data:', e);
-        }
-    }
-    return { name: 'Admin', role: 'SUPER ADMIN', img_url: '' };
-};
+const getStoredUser = () => readStoredUser() ?? { name: 'Admin', role: 'SUPER ADMIN', img_url: '' };
 
 const dataURLtoFile = (dataurl: string, filename: string): File => {
     const arr = dataurl.split(',');
@@ -47,15 +40,25 @@ const MainLayout: React.FC = () => {
         { text: 'Insights', key: 'insights' },
         { text: 'Admin Portal', key: 'admin' },
         { text: 'Settings', key: 'settings' },
-        { text: 'Logout', key: 'logout', danger: true },
+        isGhosting()
+            ? { text: 'Exit ghost mode', key: 'logout', danger: true }
+            : { text: 'Logout', key: 'logout', danger: true },
     ];
+
+    const logout = () => {
+        // While ghosting, "logout" returns to the admin's own session.
+        if (isGhosting()) {
+            exitGhost();
+            return;
+        }
+        clearSession();
+        navigate('/login', { replace: true });
+    };
 
     const handleAction = (action: Action) => {
         setActionSheetVisible(false);
         if (action.key === 'logout') {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            navigate('/login', { replace: true });
+            logout();
         } else if (action.key === 'admin') {
             navigate('/dashboard/admin');
         } else if (action.key === 'settings') {
@@ -67,9 +70,7 @@ const MainLayout: React.FC = () => {
 
     const handleLogout = (e: React.MouseEvent) => {
         e.preventDefault();
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        navigate('/login', { replace: true });
+        logout();
     };
 
     const handleProfileImageChange = async (imageData: string) => {
@@ -113,12 +114,13 @@ const MainLayout: React.FC = () => {
                 </nav>
                 <div className="sidebar-footer">
                     <button className="nav-item logout-button" onClick={handleLogout} style={{ width: '100%', background: 'none', border: 'none', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                        <FiLogOut /> Logout
+                        <FiLogOut /> {isGhosting() ? 'Exit ghost mode' : 'Logout'}
                     </button>
                 </div>
             </aside>
 
             <main className="main-area">
+                <GhostBanner />
                 {!shouldHideHeader && (
                     <header className="main-header">
                         <div className="header-left">
