@@ -94,10 +94,13 @@ const EditMember: React.FC = () => {
     ];
 
     const onFinish = (values: any) => {
+        const { picture: _picture, ...rest } = values;
         const formattedValues = {
-            ...values,
+            ...rest,
             dob: values.dob ? values.dob.toISOString().split('T')[0] : null,
-            img_url: image,
+            // Only a newly picked photo (a data URL) is sent; the backend
+            // uploads it. An unchanged photo is left as it is.
+            ...(image?.startsWith('data:') ? { picture: image } : {}),
             bacenta: Array.isArray(values.bacenta) ? values.bacenta[0] : values.bacenta,
             basonta: Array.isArray(values.basonta) ? values.basonta[0] : values.basonta
         };
