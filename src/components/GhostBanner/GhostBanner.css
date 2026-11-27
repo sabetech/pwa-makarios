@@ -1,0 +1,55 @@
+.ghost-banner {
+    --ghost-bg: #f59e0b;
+    --ghost-fg: #1f1300;
+
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    padding-top: max(8px, env(safe-area-inset-top));
+    background: var(--ghost-bg);
+    color: var(--ghost-fg);
+    font-size: 13px;
+    z-index: 1000;
+}
+
+[data-theme='dark'] .ghost-banner {
+    --ghost-bg: #fbbf24;
+    --ghost-fg: #1f1300;
+}
+
+.ghost-banner-icon {
+    font-size: 18px;
+}
+
+.ghost-banner-text {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ghost-banner-exit {
+    flex-shrink: 0;
+    border: none;
+    border-radius: 9999px;
+    padding: 4px 14px;
+    background: var(--ghost-fg);
+    color: var(--ghost-bg);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.ghost-banner-exit:disabled {
+    opacity: 0.6;
+}
+
+@media (max-width: 420px) {
+    .ghost-banner-admin {
+        display: none;
+    }
+}

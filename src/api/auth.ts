@@ -94,3 +94,36 @@ export const completeProfile = async (data: CompleteProfilePayload): Promise<Com
     });
     return response.data;
 };
+
+export interface ImpersonationResponse {
+    success: boolean;
+    data: {
+        token: string;
+        user: {
+            id: number;
+            name: string;
+            email: string;
+            phone?: string;
+            img_url?: string;
+            roles: Array<{
+                name: string;
+                permissions: Array<{
+                    name: string;
+                }>;
+            }>;
+        };
+        impersonating: true;
+        expires_at: string;
+    };
+}
+
+/** Super Admin only: get a short-lived token to act as another user. */
+export const startImpersonation = async (userId: number | string): Promise<ImpersonationResponse> => {
+    const response = await api.post<ImpersonationResponse>(`/v2/leaders/${userId}/impersonate`);
+    return response.data;
+};
+
+/** Ends the ghost session; must be called while the ghost token is active. */
+export const stopImpersonation = async (): Promise<void> => {
+    await api.post('/v2/impersonate/stop');
+};

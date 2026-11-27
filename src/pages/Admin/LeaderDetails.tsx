@@ -14,6 +14,8 @@ import {
     LeaderProfile,
 } from '../../api/leaders';
 import { fetchRoles } from '../../api/roles';
+import { startImpersonation } from '../../api/auth';
+import { getStoredUser, startGhost } from '../../utils/authStorage';
 import './BacentaDetails.css';
 import './LeaderDetails.css';
 
@@ -71,6 +73,28 @@ const LeaderDetails = () => {
         () => fetchAssignableEntities(assignTarget!.type),
         { enabled: !!assignTarget }
     );
+
+    const canGhost = getStoredUser()?.role === 'Super Admin';
+
+    const ghostMutation = useMutation(() => startImpersonation(leaderId), {
+        onSuccess: (res) => {
+            startGhost(res.data.token, res.data.user);
+            // Full reload: react-query keys and layout state aren't scoped per user.
+            window.location.assign('/dashboard');
+        },
+        onError: (err) => {
+            Toast.show({ icon: 'fail', content: errorMessage(err, 'Could not ghost into this account') });
+        },
+    });
+
+    const confirmGhost = (name: string) => {
+        Dialog.confirm({
+            title: `Ghost in as ${name}?`,
+            content: 'You will see and act as this user until you exit ghost mode. Anything you do is done as them, and the session is logged.',
+            confirmText: 'Ghost in',
+            onConfirm: () => ghostMutation.mutate(),
+        });
+    };
 
     const applyProfile = (profile: LeaderProfile) => {
         queryClient.setQueryData(['leader', leaderId], profile);
@@ -311,6 +335,16 @@ const LeaderDetails = () => {
                 )}
                 {(leader.email || leader.phone) && (
                     <p className="ld-contact">{[leader.phone, leader.email].filter(Boolean).join(' • ')}</p>
+                )}
+                {canGhost && leader.role !== 'Super Admin' && (
+                    <button
+                        className="ld-chip-btn ghost ld-ghost-btn"
+                        onClick={() => confirmGhost(leader.name)}
+                        disabled={ghostMutation.isLoading}
+                    >
+                        <span className="material-symbols-outlined">visibility</span>
+                        {ghostMutation.isLoading ? 'Ghosting in...' : 'Ghost in'}
+                    </button>
                 )}
             </section>
 

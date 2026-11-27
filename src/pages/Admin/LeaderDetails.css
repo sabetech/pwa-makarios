@@ -309,3 +309,13 @@
     color: var(--adm-text-primary);
     outline: none;
 }
+
+.ld-ghost-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ld-ghost-btn .material-symbols-outlined {
+    font-size: 18px;
+}
