@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchLeaders, Leader, deleteLeader } from '../../api/leaders';
 import { fetchStreams, Stream } from '../../api/streams';
+import { isAdmin } from '../../utils/authStorage';
 import './ManageLeaders.css';
 import './AdminShared.css';
 
 const ManageLeaders: React.FC = () => {
     const navigate = useNavigate();
+    // Region Leads get a read-only list of the leaders in their region.
+    const [admin] = useState(isAdmin);
     const [searchTerm, setSearchTerm] = useState('');
     const [leaders, setLeaders] = useState<Leader[]>([]);
     const [loading, setLoading] = useState(true);
@@ -24,10 +27,12 @@ const ManageLeaders: React.FC = () => {
             try {
                 setLoading(true);
                 setLeaders(await fetchLeaders());
-                // Streams only power the filter; don't fail the page without them.
-                fetchStreams()
-                    .then(setStreams)
-                    .catch(err => console.error('Error fetching streams:', err));
+                // Streams only power the admin filter; don't fail the page without them.
+                if (admin) {
+                    fetchStreams()
+                        .then(setStreams)
+                        .catch(err => console.error('Error fetching streams:', err));
+                }
                 setError(null);
             } catch (err) {
                 console.error('Error fetching data:', err);
@@ -37,7 +42,7 @@ const ManageLeaders: React.FC = () => {
             }
         };
         loadData();
-    }, []);
+    }, [admin]);
 
     const loadLeaders = async () => {
         try {
@@ -131,7 +136,7 @@ const ManageLeaders: React.FC = () => {
         <div className="manage-leaders-container">
             <header className="admin-header">
                 <div className="header-left">
-                    <button className="back-button" onClick={() => navigate('/dashboard/admin')}>
+                    <button className="back-button" onClick={() => navigate(admin ? '/dashboard/admin' : '/dashboard')}>
                         <span className="material-symbols-outlined">arrow_back</span>
                     </button>
                     <div className="admin-profile-img">
@@ -151,9 +156,11 @@ const ManageLeaders: React.FC = () => {
 
             <div className="leaders-content-wrapper">
                 <header className="leaders-header">
-                    <h2 className="leaders-title">Manage Leaders</h2>
+                    <h2 className="leaders-title">{admin ? 'Manage Leaders' : 'My Leaders'}</h2>
                     <p className="leaders-subtitle">
-                        Track leadership development, oversee ministerial assignments, and manage the ecclesiastical hierarchy of the Makarios community.
+                        {admin
+                            ? 'Track leadership development, oversee ministerial assignments, and manage the ecclesiastical hierarchy of the Makarios community.'
+                            : 'Zone and bacenta leaders in your region.'}
                     </p>
                 </header>
 
@@ -206,7 +213,7 @@ const ManageLeaders: React.FC = () => {
                 <div className="leader-list-header">
                     <div>Leader Profile</div>
                     <div>Assignment</div>
-                    <div style={{ textAlign: 'right' }}>Actions</div>
+                    <div style={{ textAlign: 'right' }}>{admin ? 'Actions' : ''}</div>
                 </div>
 
                 <div className="leader-list">
@@ -258,12 +265,14 @@ const ManageLeaders: React.FC = () => {
                             </div>
 
                             <div className="leader-actions">
+                                {admin && (<>
                                 <button className="action-btn" aria-label={`Edit ${leader.name}`} onClick={(e) => { e.stopPropagation(); navigate(`/dashboard/admin/leaders/${leader.id}`); }}>
                                     <span className="material-symbols-outlined">edit</span>
                                 </button>
                                 <button className="action-btn delete" aria-label={`Delete ${leader.name}`} onClick={(e) => { e.stopPropagation(); confirmDelete(leader); }}>
                                     <span className="material-symbols-outlined">delete</span>
                                 </button>
+                                </>)}
                             </div>
                         </div>
                     ))}
@@ -271,7 +280,7 @@ const ManageLeaders: React.FC = () => {
             </div>
 
             {/* Delete Confirmation Modal */}
-            {deleteModalVisible && leaderToDelete && (
+            {admin && deleteModalVisible && leaderToDelete && (
                 <div className="modal-overlay" onClick={() => setDeleteModalVisible(false)}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-header">

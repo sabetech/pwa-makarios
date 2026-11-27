@@ -15,7 +15,7 @@ import {
 } from '../../api/leaders';
 import { fetchRoles } from '../../api/roles';
 import { startImpersonation } from '../../api/auth';
-import { getStoredUser, startGhost } from '../../utils/authStorage';
+import { getStoredUser, isAdmin, startGhost } from '../../utils/authStorage';
 import './BacentaDetails.css';
 import './LeaderDetails.css';
 
@@ -75,6 +75,8 @@ const LeaderDetails = () => {
     );
 
     const canGhost = getStoredUser()?.role === 'Super Admin';
+    // Region Leads can view leaders in their region but not change anything.
+    const [canEdit] = useState(isAdmin);
 
     const ghostMutation = useMutation(() => startImpersonation(leaderId), {
         onSuccess: (res) => {
@@ -272,6 +274,7 @@ const LeaderDetails = () => {
                     ) : (
                         <div className="ld-avatar ld-avatar-initials">{getInitials(leader.name)}</div>
                     )}
+                    {canEdit && (<>
                     <button
                         className="ld-avatar-edit"
                         aria-label="Change picture"
@@ -295,6 +298,7 @@ const LeaderDetails = () => {
                             e.target.value = '';
                         }}
                     />
+                    </>)}
                 </div>
 
                 {editingName ? (
@@ -321,6 +325,7 @@ const LeaderDetails = () => {
                 ) : (
                     <div className="ld-name-row">
                         <h1>{leader.name}</h1>
+                        {canEdit && (
                         <button
                             className="ld-icon-btn"
                             aria-label="Edit name"
@@ -331,6 +336,7 @@ const LeaderDetails = () => {
                         >
                             <span className="material-symbols-outlined">edit</span>
                         </button>
+                        )}
                     </div>
                 )}
                 {(leader.email || leader.phone) && (
@@ -352,6 +358,7 @@ const LeaderDetails = () => {
                 <h3 className="bd-section-title">Role</h3>
                 <div className="ld-role-row">
                     <span className={`ld-role-chip ${leader.role ? '' : 'none'}`}>{leader.role || 'No role'}</span>
+                    {canEdit && (
                     <div className="ld-row-actions">
                         <button className="ld-text-btn" onClick={() => setShowRolePicker(true)} disabled={roleMutation.isLoading}>
                             {leader.role ? 'Change' : 'Assign role'}
@@ -362,6 +369,7 @@ const LeaderDetails = () => {
                             </button>
                         )}
                     </div>
+                    )}
                 </div>
             </section>
 
@@ -384,6 +392,7 @@ const LeaderDetails = () => {
                                         {TYPE_LABEL[entity.type]}{entity.context ? ` • ${entity.context}` : ''}
                                     </span>
                                 </div>
+                                {canEdit && (
                                 <div className="ld-row-actions">
                                     {entity.type === leader.role_entity_type && (
                                         <button
@@ -405,11 +414,12 @@ const LeaderDetails = () => {
                                         <span className="material-symbols-outlined">link_off</span>
                                     </button>
                                 </div>
+                                )}
                             </li>
                         ))}
                     </ul>
                 )}
-                {canAssignMore && leader.role_entity_type && (
+                {canEdit && canAssignMore && leader.role_entity_type && (
                     <button className="bd-view-members-btn ld-assign-btn" onClick={() => openAssign({ type: leader.role_entity_type! })}>
                         <span className="material-symbols-outlined">add</span>
                         Assign {TYPE_LABEL[leader.role_entity_type].toLowerCase()}

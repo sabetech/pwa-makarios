@@ -30,6 +30,11 @@ const parse = (raw: string | null) => {
 
 export const getStoredUser = () => parse(localStorage.getItem(USER));
 
+export const ADMIN_ROLES = ['Super Admin', 'General Admin', 'Bishop'];
+
+/** Top-level admins; everyone else gets read-only, scoped views. */
+export const isAdmin = () => ADMIN_ROLES.includes(getStoredUser()?.role);
+
 export const isGhosting = () => localStorage.getItem(IMPERSONATOR_TOKEN) !== null;
 
 export const getImpersonator = () => parse(localStorage.getItem(IMPERSONATOR_USER));
