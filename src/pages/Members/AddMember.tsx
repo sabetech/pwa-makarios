@@ -74,11 +74,12 @@ const AddMember: React.FC = () => {
             const payload = {
                 ...values,
                 dob: values.dob ? new Date(values.dob).toISOString().split('T')[0] : null,
-                img_url: image,
+                // The backend uploads `picture` (a data URL) to Cloudinary and
+                // sets img_url itself; an `img_url` field here is ignored.
+                picture: image,
                 bacenta: Array.isArray(values.bacenta) ? values.bacenta[0] : values.bacenta,
                 basonta: Array.isArray(values.basonta) ? values.basonta[0] : values.basonta,
             };
-            delete payload.picture;
             await api.post('/v2/members', payload);
             queryClient.invalidateQueries('members');
             Toast.show({
